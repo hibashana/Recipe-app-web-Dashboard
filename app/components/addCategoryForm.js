@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from 'react';
 import axios from 'axios'; // Import Axios
+import NavBar from '../NavBar';
 
 const CreateCategory = () => {
   const [formData, setFormData] = useState({
@@ -38,6 +39,7 @@ const CreateCategory = () => {
   };
 
   return (
+
     <form className='absolute right-20 top-20 shadow-2xl bg-sky-200' onSubmit={handleSubmit} >
       <div>
         <label>name:</label>

@@ -1,6 +1,6 @@
 
 import Head from 'next/head';
-import CreateCategory from '../component/addCategoryForm';
+import CreateCategory from '../components/addCategoryForm';
 
 const AddCategory = () => {
   return (

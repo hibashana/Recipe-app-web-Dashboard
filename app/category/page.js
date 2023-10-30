@@ -4,6 +4,7 @@ import 'tailwindcss/tailwind.css';
 import { AiFillDelete } from "react-icons/ai";
 import { AiTwotoneEdit } from "react-icons/ai"; 
 import Link from 'next/link';
+import NavBar from '../NavBar';
 
 
 
@@ -21,8 +22,8 @@ const category = async () => {
       </Link>
      
       {/* <h1 className="text-center absolute top-14 left-40">Category</h1> */}
-      <div className="max-w-screen-md"> {/* Limit the table width */}
-        <table className="w-full table-fixed border p-2"> {/* Set table width to full and add a thin border */}
+      <div className="max-w-screen-md m-20"> {/* Limit the table width */}
+        <table className="w-full table-fixed  border p-2"> {/* Set table width to full and add a thin border */}
           <thead>
             <tr className="border p-2">
               {/* <th className="border p-2">Image</th>  */}
@@ -50,6 +51,7 @@ const category = async () => {
           </tbody>  
         </table>
       </div>
+      <NavBar/>
     </div>
   );
 };

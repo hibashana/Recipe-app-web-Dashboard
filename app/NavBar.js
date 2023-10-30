@@ -23,9 +23,9 @@ const NavBar = () => {
 
   return (
 
-    <nav className='flex flex-col space-y-6 border-b-1  mb-5 px-5 h-14'>
+    <nav className='flex flex-col space-y-6 border-b-1  mb-5 px-5 h-16'>
      
-      <div className='p-6 w-1/2 h-screen bg-cyan-700 z-20 fixed top-0 left-96 lg:w-60 lg:left-0 peer:transition '>
+      <div className='p-10 w-1/2 h-screen bg-cyan-700 z-20 fixed top-0 left-96 lg:w-60 lg:left-0 peer:transition '>
         
         <div className='flex flex-col justify-start items-center'>
        

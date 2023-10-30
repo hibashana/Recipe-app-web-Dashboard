@@ -1,9 +1,12 @@
-import Image from 'next/image'
 
-export default function Home() {
+
+import LoginForm from "./components/login";
+
+export default function LoginPage() {
   return (
-    <main>
-      <div><h1>Home page</h1></div>
-    </main>
-  )
+    <div >
+      <h1 className="text-center text-xl ">Login</h1>
+      <LoginForm />
+    </div>
+  );
 }

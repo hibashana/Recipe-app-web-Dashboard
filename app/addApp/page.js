@@ -1,6 +1,6 @@
 
 import Head from 'next/head';
-import CreateApp from '../component/addApplistForm';
+import CreateApp from '../components/addApplistForm';
 
 const AddApp= () => {
   return (
@@ -8,7 +8,7 @@ const AddApp= () => {
       <Head>
         <title>Create Applist</title>
       </Head>
-      <h1>Create App</h1>
+      {/* <h1>Create App</h1> */}
       <CreateApp/>
     </div>
   );
