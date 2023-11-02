@@ -7,6 +7,7 @@ import {baseURL} from '../utils/constants'
 export default function LoginForm() {
   const router = useRouter(); // Create a router object
   const [formData, setFormData] = useState({ username: '', password: '' });
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,6 +39,7 @@ export default function LoginForm() {
         // Redirect to the appList page
         router.push('/appList');
       } else {
+        setErrorMessage('Incorrect username or password.');
         console.error('Login failed');
       }
     } catch (error) {
@@ -50,6 +52,7 @@ export default function LoginForm() {
       <div className="grid place-items-center h-screen">
         <div className="shadow-lg p-5 rounded-lg border-t-4  border-green-400">
           <h1 className="text-xl font-bold my-4">Login</h1>
+          
           <form onSubmit={handleLogin} className="flex flex-col gap-3">
             <input
               type="text"
@@ -71,6 +74,9 @@ export default function LoginForm() {
               Login
             </button>
           </form>
+          {errorMessage && (
+            <p className="text-red-500 mb-2">{errorMessage}</p> // Display error message
+          )}
         </div>
       </div>
     </main>

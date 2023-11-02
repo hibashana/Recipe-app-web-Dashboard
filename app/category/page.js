@@ -5,13 +5,14 @@ import { AiFillDelete } from "react-icons/ai";
 import { AiTwotoneEdit } from "react-icons/ai"; 
 import Link from 'next/link';
 import NavBar from '../NavBar';
+import {baseURL,imageURL } from '../utils/constants';
 
 
 
 const category = async () => {
 
   
-  const res = await fetch('http://localhost:3002/api/v1/category/getall ', { cache: 'no-store' });
+  const res = await fetch(`${baseURL}/category/getall`, { cache: 'no-store' });
   console.log(res);
   const categoryData = await res.json();
  
@@ -34,7 +35,7 @@ const category = async () => {
           </thead>
           <tbody className="border p-2">
              {categoryData.map((data) => (
-              <tr  className="border p-2" key={data.id}>
+              <tr className="border p-2" key={data.ctgyid}>
                  {/* <td className="border p-2"><img src={"http://localhost:3001"+data.image}  width="100" height="100" /></td> */}
                 <td className="border p-2">{data.name}</td>
                
@@ -43,7 +44,7 @@ const category = async () => {
     <AiFillDelete />
   </div>
   <div className="hover:text-sky-500">
-    <AiTwotoneEdit />
+  <Link className='transition-colors p-2' href={`/editCategory/${data.ctgyid}`}> <AiTwotoneEdit /></Link>
   </div>
 </td>        
    </tr>

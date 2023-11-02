@@ -7,19 +7,27 @@ import Link from 'next/link';
 import axios from 'axios';
 import { AiFillDelete, AiTwotoneEdit } from 'react-icons/ai';
 import {baseURL,imageURL } from '../utils/constants';
+import { useRouter } from 'next/navigation';
 
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-// import { useRouter } from 'next/navigation';
 
 
 
 const AppList = () => {
   const [appData, setAppData] = useState([]);
-  // const router = useRouter();
+ 
+  const router = useRouter();
 
 
+  const handleOnClick = (appModel) => {
+    localStorage.setItem('appId', appModel.id); // Store app.id in local storage
+   // console.log(id);
+    // Navigate to the desired page or perform any other actions
+    router.push(`/home?id=${appModel.id}&&name=${appModel.name}`);
+  };
+
+  
   const fetchAppData = async () => {
     try {
       const URL=`${baseURL}/app/all`
@@ -50,13 +58,19 @@ const AppList = () => {
   //   router.push(`/home?id=${id}`);
   // };
 
- 
 
   const deleteApp= async (id,name) => {
     try {
-      //const URL= `${baseURL}/app/${id}`;
+
+      const token = localStorage.getItem('token');
+
+      const URL=`${baseURL}/app/${id}`;
       console.log(`${id}`);
-      const response = await axios.delete(`https://b384-2405-201-f00a-810f-c1c2-e732-e9c5-f564.ngrok-free.app/app/${id}`);
+      const response = await axios.delete(`${URL}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
       console.log(`res=${response.status}`);
       if (response.status === 200) {
        
@@ -84,7 +98,9 @@ const AppList = () => {
         {appObjects.map((app) => (
           // <div onClick={() => handleOnClick(app.id)} key={app.id} className="max-w-sm rounded overflow-hidden shadow-lg m-4 w-60">
          
-            <div  key={app.id} className="max-w-sm rounded overflow-hidden shadow-lg m-4 w-60">
+            <div 
+              onClick={() => handleOnClick(app)}
+             key={app.id} className="max-w-sm rounded overflow-hidden shadow-lg m-4 w-60">
                <Link
           href={{
             pathname: '/home',
@@ -98,11 +114,11 @@ const AppList = () => {
             </div>
             <div></div>
             </Link>
-            <button className="hover:text-red-700" onClick={() => deleteApp(app.id, app.name)}>
+            <div className="hover:text-red-700" onClick={() => deleteApp(app.id, app.name)}>
               
               <AiFillDelete />
     
-            </button>
+            </div>
             {/* <div className="hover:text-sky-500"> */}
             <Link  className='hover:text-sky-400 transition-colors p-2'href={`/editapp/${app.id}`}> <AiTwotoneEdit /></Link>
 

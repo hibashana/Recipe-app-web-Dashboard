@@ -3,13 +3,15 @@ import React from 'react';
 import 'tailwindcss/tailwind.css';
 import { AiFillDelete } from "react-icons/ai";
 import { AiTwotoneEdit } from "react-icons/ai";
+import {baseURL,imageURL } from '../utils/constants';
+import NavBar from '../NavBar';
 
 
 
 const banner = async () => {
 
   
-  const res = await fetch('http://localhost:3001/api/banner/getall', { cache: 'no-store' });
+  const res = await fetch(`${baseURL}/banner/getall`, { cache: 'no-store' });
   console.log(res);
   const bannerData = await res.json();
  
@@ -33,7 +35,7 @@ const banner = async () => {
           <tbody className="border p-2">
              {bannerData.map((data) => (
               <tr  className="border p-2 " key={data.id}>
-                 <td className="border p-2"><img src={"http://localhost:3001"+data.image}  width="100" height="100" /></td>
+                 <td className="border p-2"><img    src={`${imageURL}${data.image}`}  width="100" height="100" /></td>
                 <td className="border p-2">{data.name}</td>
                
                 <td colSpan={2} className="flex items-center justify-center gap-4 p-6">
@@ -49,6 +51,7 @@ const banner = async () => {
           </tbody>
         </table>
       </div>
+      <NavBar/>
     </div>
   );
 };

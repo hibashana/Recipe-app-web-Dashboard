@@ -11,11 +11,13 @@ const Home = () => {
   const [appList, setAppList] = useState([]);
   const [selectedApp, setSelectedApp] = useState('');
 
-  const searchParams=useSearchParams();
-  const appObjects=searchParams.get('appObject');
-  const results=JSON.parse(appObjects);
-  console.log(results);
+  // const searchParams=useSearchParams();
+  // const appObjects=searchParams.get('appObject');
+  // const results=JSON.parse(appObjects);
+  // console.log(results);
 
+  const searchParams = useSearchParams(); // Retrieve query parameters
+  const name = searchParams.get('name');
 
   // const params=useParams();
   
@@ -46,23 +48,23 @@ const Home = () => {
     <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-7">
       <div className="w-full flex justify-end items-end">
         <div className="relative inline-block text-left">
-          <button
+          {/* <button
             type="button"
             className="justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-gray-300 hover.bg-gray-50"
-          >
-            <select
+          > */} 
+            {/* <select
               value={selectedApp || results.name} // Set the default value to results.name
               onChange={handleAppChange}
             >
               <option value={results.name}>{results.name}</option> {/* Set the default option */}
-              <option value="">Select an app</option>
+              {/* <option value="">Select an app</option>
               {appList.map((app) => (
                 <option key={app.id} value={app.name}>
                   {app.name}
                 </option>
               ))}
-            </select>
-          </button>
+            </select>  */}
+          {/* </button> */}
         </div>
       </div>
       {/* { */}
@@ -71,7 +73,16 @@ const Home = () => {
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
           
         <div style={{ fontWeight: 'bold', fontSize: '40px' }}>
-    {selectedApp || results.name}
+        <div>
+        {name && (
+          <p>
+           <strong>{name}</strong>
+          </p>
+        )}
+        {/* Rest of your Home component */}
+      </div>
+    {/* {selectedApp || results.name} */}
+    
   </div>
         </div>
       {/* )} */}

@@ -5,13 +5,14 @@ import { AiFillDelete } from "react-icons/ai";
 import { AiTwotoneEdit } from "react-icons/ai"; 
 import Link from 'next/link';
 import NavBar from '../NavBar';
+import {baseURL} from '../utils/constants';
 
 
 
 const recipes = async () => {
 
   
-  const res = await fetch('http://localhost:3002/api/v1/recipes/getall', { cache: 'no-store' });
+  const res = await fetch(`${baseURL}/recipes/getall`, { cache: 'no-store' });
   console.log(res);
   const recipeData = await res.json();
 

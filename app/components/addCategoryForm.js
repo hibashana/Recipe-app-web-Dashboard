@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios'; // Import Axios
 import NavBar from '../NavBar';
+import {baseURL,imageURL } from '../utils/constants';
 
 const CreateCategory = () => {
   const [formData, setFormData] = useState({
@@ -18,12 +19,18 @@ const CreateCategory = () => {
     e.preventDefault();
 
     const token = localStorage.getItem('token');
+     const appId = localStorage.getItem('appId');
+    // console.log(appId);
 
     // Send a POST request to your API to create the agent using Axios
-    axios.post('http://localhost:3002/api/v1/category/addcategory', formData, {
+    axios.post(`${baseURL}/category/addcategory`, {
+      name:formData.name,
+      appID:appId
+    }, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
+          // 'app-id': appId,
 
         },
         
