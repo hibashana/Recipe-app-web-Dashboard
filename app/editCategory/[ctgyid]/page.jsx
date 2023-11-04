@@ -23,7 +23,7 @@ const getCategoryById = async (idn) => {
 
     const URL=`${baseURL}/category/${idn}`;
 
-    // const url = `http://localhost:3002/api/v1//app/${idn}`;
+   
     const res = await axios.get(`${URL}`, {
       headers: {
         'Content-Type': 'multipart/form-data',

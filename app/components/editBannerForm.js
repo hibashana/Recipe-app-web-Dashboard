@@ -5,47 +5,49 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { baseURL } from "../utils/constants";
 
-export default function EditCategorylist({
-  ctgyid,
+export default function EditaBanner({
+  id,
   name,
- 
+  image,
 }) {
   const [newName, setnewName] = useState(name);
-  const [newID, setId] = useState(ctgyid);
+  const [newImage, setnewImage] = useState(image);
+  const [newID, setId] = useState(id);
   const router = useRouter(); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+
     const token = localStorage.getItem('token');
     console.log(token);
 
 
-    const URL=`${baseURL}/category/updatecategory/${ctgyid}`;
+    const URL=`${baseURL}/banner/updatebanner/${id}`;
 
-    // Send a PUT request to your API to Update the app using Axios
     try {
       const result = await axios.put(
         `${URL}`,
         {
           name: newName,
+          image: newImage,
         },
         {
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'multipart/form-data',
              'Authorization': `Bearer ${token}`,
           },
         }
       );
       console.log(`Response status: ${result.status}`);
 
-      console.log(`Updated category name: ${result.data.name}`);
+      console.log(`Updated banner name: ${result.data.name}`);
 
-      toast.success("Category has been updated");
-      router.push("/category"); 
+      toast.success("banner has been updated");
+      router.push("/banner"); 
     } catch (error) {
-      console.error("Error updating category:", error);
-      toast.error("Error updating category");
+      console.error("Error updating banner:", error);
+      toast.error("Error updating banner");
     }
   };
 
@@ -66,8 +68,18 @@ export default function EditCategorylist({
         />
       </div>
       
+      <div>
+  <label>Image:</label>
+  {/* <img src={imageUrl} alt="App Image" /> */}
+  <input
+    type="file"
+    accept=".png, .jpg, .jpeg"
+    onChange={(e) => setnewImage(e.target.files[0])}
+    // onChange={handleImageChange}
+  />
+</div>
       <button className="bg-sky-700" type="submit">
-        Update Category
+        Update Banner
       </button>
     </form>
   );

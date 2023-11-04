@@ -5,6 +5,7 @@ import NavBar from '../NavBar'
 // import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 
+
 // import { useParams } from 'react-router-dom';
 
 const Home = () => {
@@ -23,9 +24,9 @@ const Home = () => {
   
 
   useEffect(() => {
-    fetch('http://localhost:3002/api/v1/app/all')
-      .then((response) => response.json())
-      .then((data) => setAppList(data));
+    // fetch('http://localhost:3002/api/v1/app/all')
+    //   .then((response) => response.json())
+    //   .then((data) => setAppList(data));
 
      
     // Use optional chaining to access the 'id' query parameter
