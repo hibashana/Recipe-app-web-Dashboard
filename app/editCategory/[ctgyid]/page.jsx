@@ -26,7 +26,7 @@ const getCategoryById = async (idn) => {
    
     const res = await axios.get(`${URL}`, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        'Content-Type': 'application/json',
         "Cache-Control": "no-store",
        
       },
