@@ -14,7 +14,7 @@ const CreateRecipe = () => {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    image: null, // Initialize image as null
+    image: null, 
     appID:localStorage.getItem('appId'),
     CategoryID:localStorage.getItem('CategoryId'),
   });

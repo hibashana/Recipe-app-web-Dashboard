@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -13,8 +12,11 @@ import { baseURL, imageURL } from '../utils/constants';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const recipes = () => {
-  const [recipesData, setrecipesData] = useState([]);
+
+
+const Recipes = () => {
+  const [recipesData, setRecipesData] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('');
 
   useEffect(() => {
     fetchData();
@@ -24,19 +26,18 @@ const recipes = () => {
     try {
       const response = await fetch(`${baseURL}/recipes/getall`, { cache: 'no-store' });
       const data = await response.json();
-      setrecipesData(data);
-      localStorage.setItem("dataId", data.rcpid);
-      console.log()
+      setRecipesData(data);
+      localStorage.setItem('dataId', data.rcpid);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
 
-  // const handlerecipesClick = (rcpid) => {
-  //   localStorage.setItem('recipesId', rcpid);
-  // };
+  const handleRecipesClick = (rcpid) => {
+    localStorage.setItem('recipesId', rcpid);
+  };
 
-  const deleterecipes = async (rcpid, name) => {
+  const deleteRecipes = async (rcpid, name) => {
     try {
       const token = localStorage.getItem('token');
       const URL = `${baseURL}/recipes/${rcpid}`;
@@ -46,15 +47,15 @@ const recipes = () => {
         },
       });
       if (response.status === 200) {
-        toast.success(`recipes ${name} has been deleted.`);
-        console.log(`recipes ${name} has been deleted.`);
+        toast.success(`Recipes ${name} has been deleted.`);
+        console.log(`Recipes ${name} has been deleted.`);
         setTimeout(() => {
           window.location.reload();
         }, 3000); // Reload the page after 3 seconds
       } else {
         // Handle any errors that occur during the API call.
-        toast.error(`Failed to delete recipes ${name}`);
-        console.error(`Failed to delete recipes ${name}`);
+        toast.error(`Failed to delete Recipes ${name}`);
+        console.error(`Failed to delete Recipes ${name}`);
       }
     } catch (error) {
       // Handle network errors or other exceptions.
@@ -63,13 +64,12 @@ const recipes = () => {
     }
   };
 
- const handlePremiumChange = async (rcpid, isPremium) => {
+  const handlePremiumChange = async (rcpid, isPremium) => {
     try {
       const token = localStorage.getItem('token');
       const URL = `${baseURL}/recipes/change_premium_status/?id=${rcpid}`;
       const response = await axios.get(
         URL,
-        // { isPremium: !isPremium }, // Toggle the premium status
         {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -89,13 +89,28 @@ const recipes = () => {
     }
   };
 
+  const handleCategoryChange = (e) => {
+    const selectedValue = e.target.value;
+    setSelectedCategory(selectedValue);
+    localStorage.setItem('selectedCategory', selectedValue);
+    // Additional logic to filter and fetch recipes based on the selected category can be added here.
+  };
 
   return (
     <div className="flex flex-col items-center">
+      <div className='p-4  right-40"'>
+        <label>Select a Category: </label>
+        <select value={selectedCategory} onChange={handleCategoryChange}>
+          <option value="">All Categories</option>
+          {/* Add options for categories here based on your data */}
+        </select>
+      </div>
       <Link href="/addRecipes" className="bg-sky-600 text-black p-2 rounded-lg hover:text-white transition-colors absolute top-4 right-40">
         Add new
       </Link>
-      <div className="max-w-screen-md m-20">
+      <div className="max-w-screen-md m-10">
+      
+      
         <table className="w-full table-fixed border p-2">
           <thead>
             <tr className="border p-2">
@@ -104,6 +119,8 @@ const recipes = () => {
               <th>Description</th>
               <th>Premium</th>
               <th>Action</th>
+              <th></th>
+              <th></th>
             </tr>
           </thead>
           <tbody className="border p-2">
@@ -112,21 +129,21 @@ const recipes = () => {
                 <td className="border p-2">
                   <img src={`${imageURL}${data.image}`} width="100" height="100" />
                 </td>
-                <td className="border p-2" onClick={() => handlerecipesClick(data.rcpid)}>
+                <td className="border p-2" onClick={() => handleRecipesClick(data.rcpid)}>
                   {data.name}
                 </td>
-                <td className="border p-2" onClick={() => handlerecipesClick(data.rcpid)}>
+                <td className="border p-2" >
                   {data.description}
-                </td>    
-                <td className="border p-2">
+                </td>
+                <td className="border ">
                   <input
                     type="checkbox"
                     checked={data.premium}
                     onChange={() => handlePremiumChange(data.rcpid, data.premium)}
                   />
                 </td>
-                <td colSpan={2} className="flex items-center justify-center gap-4 p-6">
-                  <div className="hover:text-red-700" onClick={() => deleterecipes(data.rcpid, data.name)}>
+                <td colSpan={2} className="flex items-center justify-center gap-4 p-6 border">
+                  <div className="hover:text-red-700" onClick={() => deleteRecipes(data.rcpid, data.name)}>
                     <AiFillDelete />
                   </div>
                   <div className="hover:text-sky-500">
@@ -134,91 +151,27 @@ const recipes = () => {
                       <AiTwotoneEdit />
                     </Link>
                   </div>
-                </td>
+                  </td>
+                  <td onClick={() => handleRecipesClick(data.rcpid)}>
+                  <div className="colSpan={2} flex items-center justify-center  hover:text-sky-500" >
+                    <Link href={`/ingredients`}>Ingredients</Link>
+                  </div>
+                  
+                  <div className="hover:text-sky-500">
+                    <Link href={`/step`}>Steps</Link>
+                  </div>
+                  </td>
               </tr>
             ))}
           </tbody>
         </table>
+  
       </div>
+      
       <NavBar />
+      <ToastContainer autoClose={3000} />
     </div>
   );
 };
 
-export default recipes;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import React from 'react';
-// import 'tailwindcss/tailwind.css';
-// import { AiFillDelete } from "react-icons/ai";
-// import { AiTwotoneEdit } from "react-icons/ai"; 
-// import Link from 'next/link';
-// import NavBar from '../NavBar';
-// import {baseURL} from '../utils/constants';
-
-
-
-// const recipes = async () => {
-
-  
-//   const res = await fetch(`${baseURL}/recipes/getall`, { cache: 'no-store' });
-//   console.log(res);
-//   const recipeData = await res.json();
-
-  
- 
-//   return (
-//     <div className="flex flex-col items-center"> {/* Center the content */}
-//       <Link href='/' className="bg-sky-600 text-black p-2 rounded-lg hover:text-white transition-colors absolute top-4 right-40">
-//         Add new
-//       </Link>
-      
-//       <div className="max-w-screen-md m-20">
-//         <table className="w-full table-fixed  border p-2">
-//           <thead>
-//             <tr className="border p-2">
-             
-//               <th>Name</th>
-//               <th></th> 
-              
-//             </tr>
-//           </thead>
-//           <tbody className="border p-2">
-//              {recipeData.map((data) => (
-//               <tr  className="border p-2" key={data.id}>
-//                 <td className="border p-2">{data.name}</td>
-//                 <td colSpan={2} className="flex items-center justify-center gap-4 p-6">
-//   <div className="hover:text-red-700">
-//     <AiFillDelete />
-//   </div>
-//   <div className="hover:text-sky-500">
-//     <AiTwotoneEdit />
-//   </div>
-// </td>        
-//    </tr>
-//             ))}
-//           </tbody>  
-//         </table>
-//       </div>
-//       <NavBar/>
-//     </div>
-//   );
-// };
-
-
-// export default recipes;
-
-
-
+export default Recipes;

@@ -49,7 +49,7 @@ export default function EditRecipes({
       console.log(`Updated recipes name: ${result.data.name}`);
 
       toast.success("Recipes has been updated");
-      router.push("/banner"); 
+      router.push("/recipes"); 
     } catch (error) {
       console.error("Error updating recipe:", error);
       toast.error("Error updating recipe");

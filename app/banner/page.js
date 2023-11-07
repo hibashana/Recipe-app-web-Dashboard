@@ -14,7 +14,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const banner = () => {
-  const [bannerData, setBannerData] = useState([]);
+  const [bannerData,setBannerData] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -101,6 +101,7 @@ const banner = () => {
         </table>
       </div>
       <NavBar />
+      <ToastContainer autoClose={3000} />
     </div>
   );
 };
