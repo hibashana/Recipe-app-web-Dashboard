@@ -17,9 +17,11 @@ import 'react-toastify/dist/ReactToastify.css';
 const Recipes = () => {
   const [recipesData, setRecipesData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [categories, setCategories] = useState([]); // State to store categories
 
   useEffect(() => {
     fetchData();
+    fetchCategories();
   }, []);
 
   const fetchData = async () => {
@@ -33,8 +35,27 @@ const Recipes = () => {
     }
   };
 
+  const fetchCategories = async () => {
+    try {
+      
+      const response = await fetch(`${baseURL}/category/getall`, { cache: 'no-store' });
+      const data = await response.json();
+      setCategories(data);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+
   const handleRecipesClick = (rcpid) => {
     localStorage.setItem('recipesId', rcpid);
+  };
+
+  const handleCategoryChange = (e) => {
+    const selectedValue = e.target.value;
+    setSelectedCategory(selectedValue);
+    localStorage.setItem('CategoryId', selectedValue);
+    console.log(selectedValue);
+    // Additional logic to filter and fetch recipes based on the selected category can be added here.
   };
 
   const deleteRecipes = async (rcpid, name) => {
@@ -89,20 +110,18 @@ const Recipes = () => {
     }
   };
 
-  const handleCategoryChange = (e) => {
-    const selectedValue = e.target.value;
-    setSelectedCategory(selectedValue);
-    localStorage.setItem('selectedCategory', selectedValue);
-    // Additional logic to filter and fetch recipes based on the selected category can be added here.
-  };
 
   return (
     <div className="flex flex-col items-center">
-      <div className='p-4  right-40"'>
+      <div className='p-4 right-40"'>
         <label>Select a Category: </label>
         <select value={selectedCategory} onChange={handleCategoryChange}>
           <option value="">All Categories</option>
-          {/* Add options for categories here based on your data */}
+          {categories.map((category) => (
+            <option key={category.ctgyid} value={category.ctgyid}>
+            {category.name}
+          </option>
+          ))}
         </select>
       </div>
       <Link href="/addRecipes" className="bg-sky-600 text-black p-2 rounded-lg hover:text-white transition-colors absolute top-4 right-40">
