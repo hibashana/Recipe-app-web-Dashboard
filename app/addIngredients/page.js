@@ -8,7 +8,7 @@ const AddIngredients = () => {
       <Head>
         <title>Create Ingredient</title>
       </Head>
-      <h1>Create Ingredient</h1>
+      {/* <h1>Create Ingredient</h1> */}
       <CreateIngredient />
     </div>
   );

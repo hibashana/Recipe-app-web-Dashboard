@@ -17,11 +17,13 @@ import 'react-toastify/dist/ReactToastify.css';
 const Recipes = () => {
   const [recipesData, setRecipesData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [categories, setCategories] = useState([]); // State to store categories
+  const [token, setToken] = useState('');
+  // const [categories, setCategories] = useState([]); 
 
   useEffect(() => {
     fetchData();
-    fetchCategories();
+    const tokenFromStorage = localStorage.getItem('token');
+    setToken(tokenFromStorage);
   }, []);
 
   const fetchData = async () => {
@@ -35,30 +37,33 @@ const Recipes = () => {
     }
   };
 
-  const fetchCategories = async () => {
-    try {
+  // const fetchCategories = async () => {
+  //   try {
       
-      const response = await fetch(`${baseURL}/category/getall`, { cache: 'no-store' });
-      const data = await response.json();
-      setCategories(data);
-    } catch (error) {
-      console.error('Error fetching categories:', error);
-    }
-  };
+  //     const response = await fetch(`${baseURL}/category/getall`, { cache: 'no-store' });
+  //     const data = await response.json();
+  //     setCategories(data);
+  //   } catch (error) {
+  //     console.error('Error fetching categories:', error);
+  //   }
+  // };
 
   const handleRecipesClick = (rcpid) => {
     localStorage.setItem('recipesId', rcpid);
+    console.log(rcpid);
   };
 
-  const handleCategoryChange = (e) => {
-    const selectedValue = e.target.value;
-    setSelectedCategory(selectedValue);
-    localStorage.setItem('CategoryId', selectedValue);
-    console.log(selectedValue);
-    // Additional logic to filter and fetch recipes based on the selected category can be added here.
-  };
+  // const handleCategoryChange = (e) => {
+  //   const selectedValue = e.target.value;
+  //   setSelectedCategory(selectedValue);
+  //   localStorage.setItem('CategoryId', selectedValue);
+  //   console.log(selectedValue);
+    
+  // };
 
   const deleteRecipes = async (rcpid, name) => {
+    const confirmDelete = window.confirm(`Are you sure you want to delete the recipe "${name}"?`);
+    if (confirmDelete) {
     try {
       const token = localStorage.getItem('token');
       const URL = `${baseURL}/recipes/${rcpid}`;
@@ -83,6 +88,7 @@ const Recipes = () => {
       toast.error(`An error occurred: ${error.message}`);
       console.error(`An error occurred: ${error.message}`);
     }
+  }
   };
 
   const handlePremiumChange = async (rcpid, isPremium) => {
@@ -113,18 +119,16 @@ const Recipes = () => {
 
   return (
     <div className="flex flex-col items-center">
-      <div className='p-4 right-40"'>
-        <label>Select a Category: </label>
-        <select value={selectedCategory} onChange={handleCategoryChange}>
-          <option value="">All Categories</option>
-          {categories.map((category) => (
-            <option key={category.ctgyid} value={category.ctgyid}>
-            {category.name}
-          </option>
-          ))}
-        </select>
+      {!token ? (
+        <div className='m-7'>
+        <p className='text-2xl'>You are not logged in. Please log in.</p>
+        <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('http://localhost:3000/')}>
+          Go to Login
+        </button>
       </div>
-      <Link href="/addRecipes" className="bg-sky-600 text-black p-2 rounded-lg hover:text-white transition-colors absolute top-4 right-40">
+    ) : (
+      <>  
+      <Link href="/addRecipes" className="bg-emerald-600 hover:bg-green-700 text-white p-2 rounded-lg  first-letter:transition-colors absolute top-4 right-40">
         Add new
       </Link>
       <div className="max-w-screen-md m-10">
@@ -136,8 +140,9 @@ const Recipes = () => {
               <th>Image</th>
               <th>Name</th>
               <th>Description</th>
-              <th>Premium</th>
+              {/* <th>Premium</th> */}
               <th>Action</th>
+              <th></th>
               <th></th>
               <th></th>
             </tr>
@@ -148,38 +153,44 @@ const Recipes = () => {
                 <td className="border p-2">
                   <img src={`${imageURL}${data.image}`} width="100" height="100" />
                 </td>
-                <td className="border p-2" onClick={() => handleRecipesClick(data.rcpid)}>
+                {/* <td className="border p-2" onClick={() => handleRecipesClick(data.rcpid)}> */}
+                <td className="border p-2">
                   {data.name}
                 </td>
                 <td className="border p-2" >
                   {data.description}
                 </td>
-                <td className="border ">
-                  <input
+                {/* <td className="border  ">
+                 
+                </td> */}
+                <td colSpan={3} className="flex flex-row items-center justify-center gap-4 p-6 ">
+                <input className=''
                     type="checkbox"
                     checked={data.premium}
                     onChange={() => handlePremiumChange(data.rcpid, data.premium)}
                   />
-                </td>
-                <td colSpan={2} className="flex items-center justify-center gap-4 p-6 border">
-                  <div className="hover:text-red-700" onClick={() => deleteRecipes(data.rcpid, data.name)}>
+                  <div className="hover:text-red-700 cursor-pointer " onClick={() => deleteRecipes(data.rcpid, data.name)}>
                     <AiFillDelete />
                   </div>
                   <div className="hover:text-sky-500">
-                    <Link className="transition-colors p-2" href={`/editRecipe/${data.rcpid}`}>
+                    <Link className="transition-colors p-3 " href={`/editRecipe/${data.rcpid}`}>
                       <AiTwotoneEdit />
                     </Link>
-                  </div>
-                  </td>
-                  <td onClick={() => handleRecipesClick(data.rcpid)}>
-                  <div className="colSpan={2} flex items-center justify-center  hover:text-sky-500" >
-                    <Link href={`/ingredients`}>Ingredients</Link>
+                    
                   </div>
                   
-                  <div className="hover:text-sky-500">
-                    <Link href={`/step`}>Steps</Link>
-                  </div>
                   </td>
+                  <td></td>
+                  
+                  <td className="flex justify-center flex-row gap-14 " colSpan={3} onClick={() => handleRecipesClick(data.rcpid)}  >
+              <div className=" hover:text-sky-500 ">
+              <Link href={`/ingredients`}>Ingredients</Link>
+              </div>
+               <div className=" hover:text-sky-500  ">
+                <Link href={`/step`}>Steps</Link>
+              </div>
+                  </td>
+                  
               </tr>
             ))}
           </tbody>
@@ -189,6 +200,8 @@ const Recipes = () => {
       
       <NavBar />
       <ToastContainer autoClose={3000} />
+      </>
+      )}
     </div>
   );
 };

@@ -1,17 +1,33 @@
 'use client';
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation';
+import { usePathname ,useRouter} from 'next/navigation';
 import React from 'react'
 import {MdOutlineLogout } from "react-icons/md";
 import classnames from 'classnames';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const NavBar = () => {
 
-  const currentPath=  usePathname()
+  const currentPath=  usePathname();
+  const router = useRouter();
 //   console.log(currentPath);
   
-
+const handleLogout = () => {
+  const shouldLogout = window.confirm("Are you sure you want to logout?");
+  
+  if (shouldLogout) {
+    // Clear the authentication token from local storage
+    localStorage.removeItem('token');
+    toast.success('Logged Out');
+    console.log('Logged Out');
+    // Redirect the user to the login page
+    setTimeout(() => {
+      router.push('/');
+    }, 2000);
+  }
+};
         const links=[
           
             { label: 'Home', href:'/home'},
@@ -25,7 +41,7 @@ const NavBar = () => {
 
     <nav className='flex flex-col space-y-6 border-b-1  mb-5 px-5 h-16'>
      
-      <div className='p-10 w-1/2 h-screen bg-cyan-700 z-10 fixed top-0 left-96 lg:w-60 lg:left-0 peer:transition '>
+      <div className='p-10 w-1/2 h-screen bg-emerald-600 z-10 fixed top-0 left-96 lg:w-60 lg:left-0 peer:transition '>
         
         <div className='flex flex-col justify-start items-center'>
        
@@ -41,7 +57,7 @@ const NavBar = () => {
           className={classnames({
             // 'hover:bg-gray-500 rounded-md cursor-pointer hover:shadow-lg m-auto': link.href === currentPath,
             'text-zinc-900': link.href === currentPath,
-            'text-zinc-300': link.href !== currentPath,
+            'text-white': link.href !== currentPath,
             'hover:text-zinc-800 transition-colors': true
           })}
           href={link.href}
@@ -54,10 +70,12 @@ const NavBar = () => {
     ))}
 
 <li>
-    <div className=" mt-60 flex items-center gap-4 px-5 border border-gray-100 hover:bg-gray-900 p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto">
+     
+    <div className=" mt-60 flex items-center gap-4 bg-white px-5 border border-gray-100 hover:bg-gray-900 p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto" onClick={handleLogout}>
       <MdOutlineLogout className="text-2xl text-gray-100 group-hover:text-white" />
-      <h3 className="text-base text-gray-100 group-hover:text-white font-semibold">Logout</h3>
+      <h3 className="text-base text-emerald-600  group-hover:text-white font-semibold">Logout</h3> 
     </div>
+   
   </li>
   </ul>
   

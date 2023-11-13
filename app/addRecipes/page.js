@@ -6,7 +6,7 @@ const AddRecipes = () => {
       <Head>
         <title>Create Recipes</title>
       </Head>
-      <h1>Create Recipes</h1>
+      {/* <h1>Create Recipes</h1> */}
       <CreateRecipe/>
     </div>
   );

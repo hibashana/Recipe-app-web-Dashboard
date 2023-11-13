@@ -6,7 +6,7 @@ const AddStep = () => {
       <Head>
         <title>Create Step</title>
       </Head>
-      <h1>Create Step</h1>
+      {/* <h1>Create Step</h1> */}
       <CreateStep/>
     </div>
   );

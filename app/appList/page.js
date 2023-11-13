@@ -16,6 +16,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const AppList = () => {
   const [appData, setAppData] = useState([]);
+  const [token, setToken] = useState('');
  
   const router = useRouter();
 
@@ -23,7 +24,6 @@ const AppList = () => {
   const handleOnClick = (appModel) => {
     localStorage.setItem('appId', appModel.id); // Store app.id in local storage
    // console.log(id);
-    // Navigate to the desired page or perform any other actions
     router.push(`/home?id=${appModel.id}&&name=${appModel.name}`);
   };
 
@@ -47,19 +47,25 @@ const AppList = () => {
 
   useEffect(() => {
     fetchAppData();
+    const tokenFromStorage = localStorage.getItem('token');
+    setToken(tokenFromStorage);
   }, []);
 
   const appObjects = appData.map((app) => ({
     name: app.name,
     id: app.id,
     image:app.image,
+    // description:app.description,
   }));
+
   // const handleOnClick = (id) => {
   //   router.push(`/home?id=${id}`);
   // };
 
 
   const deleteApp= async (id,name) => {
+    const confirmDelete = window.confirm(`Are you sure you want to delete the  "${name}"?`);
+    if (confirmDelete) {
     try {
 
       const token = localStorage.getItem('token');
@@ -80,65 +86,61 @@ const AppList = () => {
           window.location.reload();
         }, 3000); // Reload the page after 3 seconds
       } else {
-        // Handle any errors that occur during the API call.
+        
         toast.error(`Failed to delete App${name}`);
         console.error(`Failed to delete App ${name}`);
       }
     } catch (error) {
-      // Handle network errors or other exceptions.
+     
       toast.error(`An error occurred: ${error.message}`);
       console.error(`An error occurred: ${error.message}`);
     }
+  }
   };
  
   return (
     <div>
-      <h1 className="text-center text-xl font-bold">App List</h1>
-      <div className="flex flex-wrap justify-center p-4">
-        {appObjects.map((app) => (
-          // <div onClick={() => handleOnClick(app.id)} key={app.id} className="max-w-sm rounded overflow-hidden shadow-lg m-4 w-60">
-         
-            <div 
-              onClick={() => handleOnClick(app)}
-             key={app.id} className="max-w-sm rounded overflow-hidden shadow-lg m-4 w-60">
-               <Link
-          href={{
-            pathname: '/home',
-            query: { appObject: JSON.stringify(app) }, // Pass the object as a JSON string
-          }}
-        >
-            <img src={`${imageURL}${app.image}`} width="30" height="30" className="w-full" />
-            <div className="px-6 py-4">
-              <div className="font-bold text-xl mb-2">{app.name}</div>
-              <p className="text-gray-700 text-base">{app.description}</p>  
-            </div>
-            <div></div>
-            </Link>
-            <div className="hover:text-red-700" onClick={() => deleteApp(app.id, app.name)}>
-              
-              <AiFillDelete />
-    
-            </div>
-            {/* <div className="hover:text-sky-500"> */}
-            <Link  className='hover:text-sky-400 transition-colors p-2'href={`/editapp/${app.id}`}> <AiTwotoneEdit /></Link>
-
-            {/* </div> */}
-            </div>   
-       
-          
-        ))}
-        <div className="rounded overflow-hidden m-4">
-          <div className="flex items-center justify-center h-40">
-            <Link href="/addApp">
-              <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                Add
-              </button>
-            </Link>
-          </div>
+     {!token ? (
+        <div className='m-7 flex flex-col items-center'>
+          <p className='text-2xl'>You are not logged in. Please log in.</p>
+          <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('http://localhost:3000/')}>
+            Go to Login
+          </button>
         </div>
-      </div>
+      ) : (
+        <>
+          <h1 className="text-center text-xl font-bold">App List</h1>
+          <div className="rounded overflow-hidden m-4">
+            <div className="flex justify-end">
+              <Link href="/addApp">
+                <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                  Add
+                </button>
+              </Link>
+            </div>
+          </div>
+          <div className="flex flex-wrap justify-center p-4">
+            {appObjects.map((app) => (
+              <div key={app.id} className="max-w-sm rounded overflow-hidden shadow-lg m-4 w-60">
+                <img src={`${imageURL}${app.image}`} width="30" height="30" className="w-full" onClick={() => handleOnClick(app)} />
+                <div className="px-6 py-4">
+                  <div className="font-bold text-xl mb-2" onClick={() => handleOnClick(app)}>{app.name}</div>
+                  <p className="font-bold text-xl mb-2" onClick={() => handleOnClick(app)}>{app.description}</p>
+                </div>
+                <div className="hover:text-red-700" onClick={() => deleteApp(app.id, app.name)}>
+                  <AiFillDelete />
+                </div>
+                <Link className='hover:text-sky-400 transition-colors p-2' href={`/editapp/${app.id}`}>
+                  <AiTwotoneEdit />
+                </Link>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
+  
 };
 
 export default AppList;

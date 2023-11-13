@@ -1,23 +1,41 @@
-
 'use client';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import {baseURL} from '../utils/constants'
+import { useState, useEffect } from 'react';
+import { baseURL } from '../utils/constants';
+import { FaRegCircleUser } from 'react-icons/fa6';
+import { RiEyeCloseFill, RiEyeFill, RiLockPasswordLine } from 'react-icons/ri';
+import { FaEyeSlash } from 'react-icons/fa';
+import { ClipLoader } from 'react-spinners';
 
 export default function LoginForm() {
+  const [loading, setLoading] = useState(false);
+  const [showLoading, setShowLoading] = useState(false); // New state for showing loading spinner
+  useEffect(() => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setShowLoading(false); // Turn off loading spinner after loading
+    }, 5000);
+  }, []);
+
   const router = useRouter(); // Create a router object
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [errorMessage, setErrorMessage] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const URL=`${baseURL}/user/admin-login`;
+      const URL = `${baseURL}/user/admin-login`;
       console.log(`url=${URL}`);
       const response = await fetch(`${URL}`, {
         method: 'POST',
@@ -37,6 +55,7 @@ export default function LoginForm() {
         console.log('Successful login', data);
 
         // Redirect to the appList page
+        setShowLoading(true); // Show loading spinner when redirecting
         router.push('/appList');
       } else {
         setErrorMessage('Incorrect username or password.');
@@ -50,34 +69,51 @@ export default function LoginForm() {
   return (
     <main>
       <div className="grid place-items-center h-screen">
-        <div className="shadow-lg p-5 rounded-lg border-t-4  border-green-400">
-          <h1 className="text-xl font-bold my-4">Login</h1>
-          
-          <form onSubmit={handleLogin} className="flex flex-col gap-3">
-            <input
-              type="text"
-              name="username"
-              placeholder="Username"
-              value={formData.username}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              placeholder="Password"
-            />
-            <button className="bg-green-600 text-white font-bold cursor-pointer px-6 py-2" type="submit">
-              Login
-            </button>
-          </form>
-          {errorMessage && (
-            <p className="text-red-500 mb-2">{errorMessage}</p> // Display error message
-          )}
-        </div>
+        {!showLoading ? (
+          <div className="shadow-lg p-5 rounded-lg border-t-4  border-green-400">
+            <h1 className="text-xl font-bold my-4">Login</h1>
+
+            <form onSubmit={handleLogin} className="flex flex-col gap-3">
+              <div className="input-container">
+                <input
+                  type="text"
+                  name="username"
+                  placeholder="Username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  required
+                />
+                <FaRegCircleUser className="input-icon " />
+              </div>
+              <div className="input-container">
+                <RiLockPasswordLine className="input-icon " />
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                  placeholder="Password"
+                />
+
+                <label className="">
+                  {showPassword ? (
+                    <RiEyeFill onClick={togglePasswordVisibility} />
+                  ) : (
+                    <FaEyeSlash onClick={togglePasswordVisibility} />
+                  )}
+                </label>
+              </div>
+              <button className="bg-green-600 text-white font-bold rounded-full cursor-pointer px-12 py-2" type="submit">
+                Login
+              </button>
+            </form>
+
+            {errorMessage && <p className="text-red-500 mb-2">{errorMessage}</p>}
+          </div>
+        ) : (
+          <ClipLoader color={'#36d7b7'}size={100} />
+        )}
       </div>
     </main>
   );

@@ -9,15 +9,20 @@ import axios from 'axios';
 import Link from 'next/link';
 import NavBar from '../NavBar';
 import { baseURL, imageURL } from '../utils/constants';
+import { useRouter } from 'next/navigation';
 
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const banner = () => {
   const [bannerData,setBannerData] = useState([]);
+  const [token, setToken] = useState('');
+  const router = useRouter();
 
   useEffect(() => {
     fetchData();
+    const tokenFromStorage = localStorage.getItem('token');
+    setToken(tokenFromStorage);
   }, []);
 
   const fetchData = async () => {
@@ -36,6 +41,8 @@ const banner = () => {
   };
 
   const deleteBanner = async (id, name) => {
+    const confirmDelete = window.confirm(`Are you sure you want to delete the  "${name}"?`);
+    if (confirmDelete) {
     try {
       const token = localStorage.getItem('token');
       const URL = `${baseURL}/banner/${id}`;
@@ -60,51 +67,64 @@ const banner = () => {
       toast.error(`An error occurred: ${error.message}`);
       console.error(`An error occurred: ${error.message}`);
     }
+  }
   };
 
   return (
     <div className="flex flex-col items-center">
-      <Link href="/addBanner" className="bg-sky-600 text-black p-2 rounded-lg hover:text-white transition-colors absolute top-4 right-40">
-        Add new
-      </Link>
-      <div className="max-w-screen-md m-20">
-        <table className="w-full table-fixed border p-2">
-          <thead>
-            <tr className="border p-2">
-              <th>Image</th>
-              <th>Name</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody className="border p-2">
-            {bannerData.map((data) => (
-              <tr className="border p-2" key={data.id}>
-                <td className="border p-2">
-                  <img src={`${imageURL}${data.image}`} width="100" height="100" />
-                </td>
-                <td className="border p-2" onClick={() => handleBannerClick(data.id)}>
-                  {data.name}
-                </td>
-                <td colSpan={2} className="flex items-center justify-center gap-4 p-6">
-                  <div className="hover:text-red-700" onClick={() => deleteBanner(data.id, data.name)}>
-                    <AiFillDelete />
-                  </div>
-                  <div className="hover:text-sky-500">
-                    <Link className="transition-colors p-2" href={`/editBanner/${data.id}`}>
-                      <AiTwotoneEdit />
-                    </Link>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <NavBar />
-      <ToastContainer autoClose={3000} />
+       {!token ? (
+        <div className='m-7'>
+          <p className='text-2xl'>You are not logged in. Please log in.</p>
+          <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('http://localhost:3000/')}>
+            Go to Login
+          </button>
+        </div>
+      ) : (
+        <>
+          <Link href="/addBanner" className="bg-emerald-600 text-white hover:text-black p-2 rounded-lg transition-colors absolute top-4 right-40">
+            Add new
+          </Link>
+          <div className="max-w-screen-md m-20">
+            <table className="w-full table-fixed border p-2">
+              <thead>
+                <tr className="border p-2">
+                  <th>Image</th>
+                  <th>Name</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody className="border p-2">
+                {bannerData.map((data) => (
+                  <tr className="border p-2" key={data.id}>
+                    <td className="border p-2">
+                      <img src={`${imageURL}${data.image}`} width="100" height="100" alt={data.name} />
+                    </td>
+                    <td className="border p-2" onClick={() => handleBannerClick(data.id)}>
+                      {data.name}
+                    </td>
+                    <td colSpan={2} className="flex items-center justify-center gap-4 p-6">
+                      <div className="hover:text-red-700" onClick={() => deleteBanner(data.id, data.name)}>
+                        <AiFillDelete />
+                      </div>
+                      <div className="hover:text-sky-500">
+                        <Link className="transition-colors p-2" href={`/editBanner/${data.id}`}>
+                          <AiTwotoneEdit />
+                        </Link>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <NavBar />
+          <ToastContainer autoClose={3000} />
+        </>
+      )}
     </div>
   );
 };
+  
 
 export default banner;
 

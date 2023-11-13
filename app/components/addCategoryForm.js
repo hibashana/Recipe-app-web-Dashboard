@@ -138,6 +138,7 @@ import NavBar from '../NavBar';
 import {baseURL,imageURL } from '../utils/constants';
 import { useRouter } from 'next/navigation';
 
+
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -194,21 +195,30 @@ const CreateCategory = () => {
   };
 
   return (
-
-    <form className='absolute right-20 top-20 shadow-2xl bg-sky-200' onSubmit={handleSubmit} >
-      <div>
-        <label>name:</label>
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-        />
-      </div>
-      <button className='bg-sky-700' type="submit">Create category</button>
+<div className="flex flex-col items-center h-screen justify-center bg-gray-100">
+      <form
+        className="shadow-2xl bg-white p-8 rounded-md"
+        onSubmit={handleSubmit}
+      >
+        <div className="mb-4">
+          <label className="text-gray-800">Name:</label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:border-gray-400"
+          />
+        </div>
+        <button className="block mx-auto bg-emerald-600  text-white px-4 py-2 rounded-md" type="submit">
+          Create category
+        </button>
+      </form>
       <ToastContainer autoClose={3000} />
-    </form>
+      <NavBar />
+    </div>
   );
+ 
 };
 
 export default CreateCategory;  

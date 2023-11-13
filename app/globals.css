@@ -19,6 +19,30 @@
   @apply w-[400px] border border-gray-200 py-2 px-6 bg-zinc-100/40
  }
 
+ .input-container {
+  position: relative;
+  display: flex;
+  /* left: 10px; */
+  
+  /* align-items: center; */
+  /* margin-bottom: 10px; */
+}
+
+.input-container input {
+  padding-left: 40px; /* Adjust the padding as needed based on your icon's size */
+}
+
+.input-icon {
+   /* margin-right: 10px; */
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9CA3AF; /* Customize the icon color */
+}
+
+
+
 body {
   color: rgb(var(--foreground-rgb));
   /* background: linear-gradient(

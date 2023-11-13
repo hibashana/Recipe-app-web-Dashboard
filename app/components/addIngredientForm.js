@@ -64,19 +64,28 @@ const CreateIngredient = () => {
     };
   
     return (
-      <form className='absolute right-20 top-20 shadow-2xl bg-sky-200' onSubmit={handleSubmit}>
-        <div>
-          <label>Name and Quality :</label>
-          <input
-            type="text"
-            name="name_qnty"
-            value={formData.name_qnty}
-            onChange={handleChange}
-          />
-        </div>
-        <button className='bg-sky-700' type="submit">Create Ingredient</button>
-        <ToastContainer autoClose={3000} />
-      </form>
+      // <div className="absolute top-20 right-20 shadow-2xl bg-sky-200 p-8 ">
+        <div className="flex flex-col items-center h-screen justify-center bg-gray-100 ">
+  <h1 className="text-xl font-bold mb-4">Create Ingredient</h1>
+  <form onSubmit={handleSubmit} className="space-y-4 shadow-2xl bg-white p-8 rounded-md">
+    <div className="mb-4">
+      <label>Name and Quality:</label>
+      <input
+        type="text"
+        name="name_qnty"
+        value={formData.name_qnty}
+        onChange={handleChange}
+        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-sky-500"
+      />
+    </div>
+    <button className=" block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md" type="submit">
+      Create Ingredient
+    </button>
+    <ToastContainer autoClose={3000} />
+  </form>
+  <NavBar/>
+</div>
+
     );
   };
   

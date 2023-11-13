@@ -1,15 +1,33 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/navigation';
 import { baseURL } from '../utils/constants';
+import NavBar from '../NavBar';
 
 const CreateRecipe = () => {
   const router = useRouter(); 
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [categories, setCategories] = useState([]); 
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      
+      const response = await fetch(`${baseURL}/category/getall`, { cache: 'no-store' });
+      const data = await response.json();
+      setCategories(data);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
 
   const [formData, setFormData] = useState({
     name: '',
@@ -28,6 +46,14 @@ const CreateRecipe = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleCategoryChange = (e) => {
+    const selectedValue = e.target.value;
+    setSelectedCategory(selectedValue);
+    localStorage.setItem('CategoryId', selectedValue);
+    console.log(selectedValue);
+    
   };
 
   const handleSubmit = (e) => {
@@ -76,50 +102,68 @@ const CreateRecipe = () => {
   };
 
   return (
-    <div className="grid place-items-center h-screen">
+    <div className="grid place-items-center h-screen m-7">
+  <div className="shadow-2xl max-w-md w-full p-6 bg-white rounded-lg border-slate-950">
+    <h1 className="text-2xl font-bold text-center mb-4">Add New Recipe</h1>
+    <form onSubmit={handleSubmit} encType="multipart/form-data" className=" space-y-4">
       <div>
-        <h1 className="text-xl font-bold  text-center">Add New Recipe</h1>
-        <form onSubmit={handleSubmit}  method="POST" encType="multipart/form-data" >
-          <div>
-            <label>Name:</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div>
-            <label>Description:</label>
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-             
-            />
-          </div>
-         
-          <div>
-            <label>Image:</label>
-            <input
-              type="file"
-              accept=".png, .jpg, .jpeg"
-              name="image"
-              onChange={handleImageChange}
-              required
-            />
-          </div>
-          <button
-            className="bg-green-600 text-white font-bold  cursor-pointer px-6 py-2"
-            type="submit"
-          >
-            Add Recipe
-          </button>
-          <ToastContainer autoClose={3000} /> {/* Add this line to display toasts */}
-        </form>
+        <label className="block">Name:</label>
+        <input
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-gray-300"
+        />
       </div>
-    </div>
+      <div>
+        <label className="block">Description:</label>
+        <textarea
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
+          className="w-full px-4 py-2 border bg-zinc-100/40 rounded-md focus:outline-none focus:border-gray-300"
+        />
+      </div>
+      <div>
+        <label className="block">Image:</label>
+        <input
+          type="file"
+          accept=".png, .jpg, .jpeg"
+          name="image"
+          onChange={handleImageChange}
+          required
+          className="w-full"
+        />
+      </div>
+      <div className="w-full">
+        <label className="block">Select a Category:</label>
+        <select
+          value={selectedCategory}
+          onChange={handleCategoryChange}
+          className="w-full px-4 py-2 border rounded-md bg-zinc-100/40 focus:outline-none focus:border-gray-300"
+        >
+          <option value="">All Categories</option>
+          {categories.map((category) => (
+            <option key={category.ctgyid} value={category.ctgyid}>
+              {category.name }
+            </option>
+          ))}
+        </select>
+      </div>
+      <button
+        className=" block mx-auto  bg-emerald-600 text-white font-bold cursor-pointer px-6 py-2 rounded-md"
+        type="submit"
+      >
+        Add Recipe
+      </button>
+      <ToastContainer autoClose={3000} />
+    </form>
+  </div>
+  <NavBar/>
+</div>
+
   );
 };
 

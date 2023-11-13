@@ -68,41 +68,40 @@ const CreateBanner = () => {
   };
 
   return (
-    <div className="grid place-items-center h-screen">
-      <div>
-        <h1 className="text-xl font-bold text-center">Add New Banner</h1>
-        <form onSubmit={handleSubmit} method="POST" encType="multipart/form-data">
-          <div>
-            <label>Name:</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-          </div>
-    
-          <div>
-            <label>Image:</label>
-            <input
-              type="file"
-              accept=".png, .jpg, .jpeg"
-              name="image"
-              onChange={handleImageChange}
-              required
-            />
-          </div>
-          <button
-            className="bg-green-600 text-white font-bold  cursor-pointer px-6 py-2"
-            type="submit"
-          >
-            Add Banner
-          </button>
-          <ToastContainer autoClose={3000} /> {/* Add this line to display toasts */}
-        </form>
-      </div>
+    <div className="grid place-items-center h-screen bg-gray-100 ">
+    <div>
+      <h1 className="text-xl font-bold text-center">Add New Banner</h1>
+      <form onSubmit={handleSubmit} method="POST" encType="multipart/form-data"  className="shadow-2xl bg-white rounded-md p-8">
+        <div className="mb-4">
+          <label>Name:</label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-green-600"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label>Image:</label>
+          <input
+            type="file"
+            accept=".png, .jpg, .jpeg"
+            name="image"
+            onChange={handleImageChange}
+            required
+          />
+        </div>
+        <button className="bg-emerald-600 text-white font-bold px-6 py-2 rounded-md" type="submit">
+          Add Banner
+        </button>
+        <ToastContainer autoClose={3000} />
+      </form>
     </div>
+    
+  </div>
+  
   );
 };
 
