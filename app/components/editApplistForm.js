@@ -64,54 +64,70 @@ export default function Editapp({
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="absolute right-20 top-20 shadow-2xl" 
-      encType="multipart/form-data" 
-    >
-      <div>
-        <label>Name:</label>
-        <input
-          onChange={(e) => setnewName(e.target.value)}
-          value={newName}
-          type="text"
-          placeholder="Name"
-          required
-        />
-      </div>
-      <div>
-        <label>Description:</label>
-        <input
-          onChange={(e) => setnewDescription(e.target.value)}
-          value={newDescription}
-          type="text"
-          placeholder="Description"
-          required
-        />
-      </div>
-      <div>
-        <label>Package Name:</label>
-        <input
-          onChange={(e) => setnewPackageName(e.target.value)}
-          value={newPackageName}
-          type="text"
-          placeholder="Package Name"
-          required
-        />
-      </div>
-      <div>
-  <label>Image:</label>
-  {/* <img src={imageUrl} alt="App Image" /> */}
-  <input
-    type="file"
-    accept=".png, .jpg, .jpeg"
-    onChange={(e) => setnewImage(e.target.files[0])}
-    // onChange={handleImageChange}
-  />
+    <div className="grid place-items-center h-screen bg-gray-100">
+  <form
+    onSubmit={handleSubmit}
+    className="w-96 p-6 shadow-md bg-white rounded-lg"
+    encType="multipart/form-data"
+  >
+    <div className="mb-4">
+      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+        Name:
+      </label>
+      <input
+        onChange={(e) => setnewName(e.target.value)}
+        value={newName}
+        id="name"
+        type="text"
+        placeholder="Name"
+        required
+        className="w-full py-3 px-3 text-gray-700 rounded focus:outline-none focus:shadow-outline"
+      />
+    </div>
+    <div className="mb-4">
+      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
+        Description:
+      </label>
+      <input
+        onChange={(e) => setnewDescription(e.target.value)}
+        value={newDescription}
+        id="description"
+        type="text"
+        placeholder="Description"
+        required
+        className="w-full py-3 px-3 text-gray-700 rounded focus:outline-none focus:shadow-outline"
+      />
+    </div>
+    <div className="mb-4">
+      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="packageName">
+        Package Name:
+      </label>
+      <input
+        onChange={(e) => setnewPackageName(e.target.value)}
+        value={newPackageName}
+        id="packageName"
+        type="text"
+        placeholder="Package Name"
+        required
+        className="w-full py-3 px-3 text-gray-700 rounded focus:outline-none focus:shadow-outline"
+      />
+    </div>
+    <div className="mb-4">
+      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="image">
+        Image:
+      </label>
+      <input
+        type="file"
+        accept=".png, .jpg, .jpeg"
+        onChange={(e) => setnewImage(e.target.files[0])}
+        className="w-full py-3 px-3 text-gray-700 rounded focus:outline-none focus:shadow-outline"
+      />
+    </div>
+    <button className="block mx-auto bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded" type="submit">
+      Update App
+    </button>
+  </form>
 </div>
-      <button className="bg-sky-700" type="submit">
-        Update App
-      </button>
-    </form>
+
   );
 }

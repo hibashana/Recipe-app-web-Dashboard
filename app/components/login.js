@@ -28,6 +28,8 @@ export default function LoginForm() {
     setFormData({ ...formData, [name]: value });
   };
 
+
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -51,7 +53,7 @@ export default function LoginForm() {
         console.log(token);
         localStorage.setItem('token', token); // Store the token in local storage
 
-        alert('Logged in successfully!');
+        // alert('Logged in successfully!');
         console.log('Successful login', data);
 
         // Redirect to the appList page
@@ -94,9 +96,11 @@ export default function LoginForm() {
                   onChange={handleChange}
                   required
                   placeholder="Password"
+                  className="pr-10" // Add some padding to the right to accommodate the icon
                 />
 
-                <label className="">
+                <label className="absolute top-1/2 transform -translate-y-1/2 right-3 cursor-pointer"
+                 style={{ color: '#9CA3AF'}}>
                   {showPassword ? (
                     <RiEyeFill onClick={togglePasswordVisibility} />
                   ) : (

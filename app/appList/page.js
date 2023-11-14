@@ -55,7 +55,7 @@ const AppList = () => {
     name: app.name,
     id: app.id,
     image:app.image,
-    // description:app.description,
+    description:app.description,
   }));
 
   // const handleOnClick = (id) => {
@@ -125,7 +125,7 @@ const AppList = () => {
                 <img src={`${imageURL}${app.image}`} width="30" height="30" className="w-full" onClick={() => handleOnClick(app)} />
                 <div className="px-6 py-4">
                   <div className="font-bold text-xl mb-2" onClick={() => handleOnClick(app)}>{app.name}</div>
-                  <p className="font-bold text-xl mb-2" onClick={() => handleOnClick(app)}>{app.description}</p>
+                  <p className=" text-sm mb-2" onClick={() => handleOnClick(app)}>{app.description}</p>
                 </div>
                 <div className="hover:text-red-700" onClick={() => deleteApp(app.id, app.name)}>
                   <AiFillDelete />

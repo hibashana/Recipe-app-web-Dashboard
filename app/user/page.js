@@ -12,6 +12,7 @@ import NavBar from '../NavBar';
 
 const User = () => {
   const [usersData, setUsersData] = useState([]);
+  const [token, setToken] = useState('');
   const router = useRouter();
 
   useEffect(() => {
@@ -31,6 +32,8 @@ const User = () => {
     };
 
     fetchData();
+    const tokenFromStorage = localStorage.getItem('token');
+    setToken(tokenFromStorage);
   }, []);
 
   const deleteuser = async (ruserid, name) => {
@@ -96,16 +99,27 @@ const User = () => {
     }
   };
 
+  
+
   return (
     <div className="flex flex-col items-center m-4">
+      {!token ? (
+        <div className='m-7'>
+          <p className='text-2xl'>You are not logged in. Please log in.</p>
+          <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('http://localhost:3000/')}>
+            Go to Login
+          </button>
+        </div>
+      ) : (
+        <>
       <Link
         href="/addUser"
-        className="bg-sky-600 text-black p-2 rounded-lg absolute top-4 right-40 hover:text-white transition-colors"
+        className="bg-emerald-600 text-white hover:text-black p-2 rounded-lg absolute top-4 right-40  transition-colors"
       >
         Register user
       </Link>
 
-      <div className="max-w-screen-md">
+      <div className="max-w-screen-md m-4">
         <table className="w-full table-fixed border p-2">
           <thead>
             <tr className="border p-2">
@@ -146,6 +160,8 @@ const User = () => {
         </table>
       </div>
       <NavBar />
+      </>
+      )}
     </div>
   );
 };

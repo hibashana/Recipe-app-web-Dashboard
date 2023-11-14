@@ -29,7 +29,7 @@ const Ingredients = () => {
   const fetchData = async () => {
     try {
       const recipesId = localStorage.getItem('recipesId');
-      const response = await fetch(`${baseURL}/ingredients/all_by_filter?RecipeID=${recipesId}&page=${currentPage}`, { cache: 'no-store' });
+      const response = await fetch(`${baseURL}/ingredients/all_by_filter?RecipeID=${recipesId}&page=${currentPage}&limit=2`, { cache: 'no-store' });
       const data = await response.json();
       console.log(response);
       setIngredientsData(data.data);
@@ -119,8 +119,8 @@ const Ingredients = () => {
           </button>
           <button
             onClick={nextPage}
-            disabled={ingredientsData.length < itemsPerPage || ingredientsData.length === 0}
-            className={`mx-2 p-2 border rounded-lg ${ingredientsData.length < itemsPerPage || ingredientsData.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={!dataResponse.hasNext}
+            className={`mx-2 p-2 border rounded-lg ${!dataResponse.hasNext ?'opacity-50 cursor-not-allowed' : ''}`}
           >
             Next
           </button>

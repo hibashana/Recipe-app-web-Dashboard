@@ -70,11 +70,18 @@ const handleLogout = () => {
     ))}
 
 <li>
-     
-    <div className=" mt-60 flex items-center gap-4 bg-white px-5 border border-gray-100 hover:bg-gray-900 p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto" onClick={handleLogout}>
-      <MdOutlineLogout className="text-2xl text-gray-100 group-hover:text-white" />
-      <h3 className="text-base text-emerald-600  group-hover:text-white font-semibold">Logout</h3> 
+    
+    <div className=" mt-60 flex items-center gap-4 bg-white px-5 border border-gray-100 hover:border-gray-900 p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto" onClick={handleLogout}>
+    
+      <MdOutlineLogout className="  text-2xl text-gray-100 group-hover:text-white" style={{ color: '#1fb476 '}} />
+      <h3 className=" text-base text-emerald-600   font-semibold">Logout</h3> 
     </div>
+    {/* <div className=" mt-60 flex items-center gap-4 bg-white px-5 border border-gray-100 hover:border-gray-900 p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto" onClick={handleLogout}>
+    
+    <MdOutlineLogout className="  text-2xl text-gray-100 group-hover:text-white" style={{ color: '#1fb476 '}} />
+    <h3 className="text-base text-emerald-600  group-hover:text-white font-semibold">Logout</h3> 
+  </div> */}
+ 
    
   </li>
   </ul>

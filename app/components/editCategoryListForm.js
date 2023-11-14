@@ -4,6 +4,7 @@ import axios from "axios"; // Import Axios
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { baseURL } from "../utils/constants";
+import NavBar from "../NavBar";
 
 export default function EditCategorylist({
   ctgyid,
@@ -50,25 +51,31 @@ export default function EditCategorylist({
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="absolute right-20 top-20 shadow-2xl" 
-      encType="multipart/form-data" 
-    >
-      <div>
-        <label>Name:</label>
-        <input
-          onChange={(e) => setnewName(e.target.value)}
-          value={newName}
-          type="text"
-          placeholder="Name"
-          required
-        />
-      </div>
-      
-      <button className="bg-sky-700" type="submit">
-        Update Category
-      </button>
-    </form>
+    <div className="grid place-items-center h-screen bg-gray-100">
+    <div className="w-full max-w-md">
+      <h1 className="text-xl font-bold text-center mb-4">Add New Category</h1>
+      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg px-8 py-6">
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" >
+            Name:
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            onChange={(e) => setnewName(e.target.value)}
+            value={newName}
+            id="name"
+            type="text"
+            placeholder="Name"
+            required
+          />
+        </div>
+        <button className="block mx-auto bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded" type="submit">
+          Update Category
+        </button>
+        <NavBar />
+      </form>
+    </div>
+  </div>
+  
   );
 }

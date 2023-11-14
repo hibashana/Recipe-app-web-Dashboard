@@ -45,7 +45,8 @@ const Home = () => {
 
   return (
     <div>
-  <nav className="border-gray-200 bg-slate-300 dark:bg-gray-800 dark.border-gray-700">
+      {/* bg-slate-300 */}
+  <nav className="border-gray-200  dark:bg-gray-800 dark.border-gray-700">
     <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-7">
       <div className="w-full flex justify-end items-end">
         <div className="relative inline-block text-left">
@@ -73,7 +74,7 @@ const Home = () => {
       {/* // selectedApp && ( */}
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
           
-        <div style={{ fontWeight: 'bold', fontSize: '40px' }}>
+        <div className="text-emerald-600" style={{ fontWeight: 'bold', fontSize: '40px' }}>
         <div>
         {name && (
           <p>

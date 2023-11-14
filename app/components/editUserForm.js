@@ -4,6 +4,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { baseURL } from "../utils/constants";
+import NavBar from "../NavBar";
 
 export default function EditaUser({
   ruserid,
@@ -97,8 +98,13 @@ export default function EditaUser({
   };
   
   return (
-    <form onSubmit={handleSubmit} className="absolute right-20 top-20 shadow-2xl">
-      <div>
+    <div className="grid place-items-center h-screen bg-gray-100">
+    <form
+      onSubmit={handleSubmit}
+      className="p-8 shadow-2xl bg-white rounded-md"
+      style={{ width: '30rem', height: '25rem' }} // Adjust the width as needed
+    >
+      <div className="mb-4">
         <label>Name:</label>
         <input
           onChange={(e) => setnewName(e.target.value)}
@@ -106,9 +112,10 @@ export default function EditaUser({
           type="text"
           placeholder="Name"
           required
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-green-600"
         />
       </div>
-      <div>
+      <div className="mb-4">
         <label>Email:</label>
         <input
           onChange={(e) => setnewEmail(e.target.value)}
@@ -116,9 +123,10 @@ export default function EditaUser({
           type="email"
           placeholder="Email"
           required
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-green-600"
         />
       </div>
-      <div>
+      <div className="mb-4">
         <label>Contact:</label>
         <input
           onChange={(e) => setnewContact(e.target.value)}
@@ -126,31 +134,15 @@ export default function EditaUser({
           type="number"
           placeholder="Contact"
           required
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-green-600"
         />
       </div>
-      {/* <div> */}
-        {/* <label>Username:</label>
-        <input
-          onChange={(e) => setnewUsername(e.target.value)}
-          value={newUsername}
-          type="text"
-          placeholder="Username"
-          required
-        />
-      </div>
-      <div>
-        <label>Password:</label>
-        <input
-          onChange={(e) => setnewPassword(e.target.value)}
-          value={newPassword}
-          type="password"
-          placeholder="Password"
-        />
-      </div> */}
-
-      <button className="bg-sky-700" type="submit">
+      <button className="block mx-auto bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded" type="submit">
         Update User
       </button>
+      <NavBar/>
     </form>
+  </div>
+  
   );
 }

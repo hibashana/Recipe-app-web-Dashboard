@@ -7,6 +7,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/navigation';
 import { baseURL } from '../utils/constants';
+import NavBar from '../NavBar';
 
 const CreateBanner = () => {
   const router = useRouter(); 
@@ -97,6 +98,7 @@ const CreateBanner = () => {
           Add Banner
         </button>
         <ToastContainer autoClose={3000} />
+        <NavBar/>
       </form>
     </div>
     

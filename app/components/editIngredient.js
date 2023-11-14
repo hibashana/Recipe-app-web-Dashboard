@@ -4,6 +4,7 @@ import axios from "axios"; // Import Axios
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { baseURL } from "../utils/constants";
+import NavBar from "../NavBar";
 
 export default function EditIngredients({
   intrdid,
@@ -50,25 +51,28 @@ export default function EditIngredients({
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="absolute right-20 top-20 shadow-2xl" 
-      
-    >
-      <div>
-        <label>Name and quality:</label>
-        <input
-          onChange={(e) => setnewname_qnty(e.target.value)}
-          value={newname_qnty}
-          type="text"
-          placeholder="Name and quality"
-          required
-        />
-      </div>
-      
-      <button className="bg-sky-700" type="submit">
-        Update Ingredient
-      </button>
-    </form>
+    <div className="flex items-center justify-center h-screen bg-gray-100">
+  <form onSubmit={handleSubmit} className="p-8 shadow-2xl bg-white rounded-md" style={{ width: '25rem', height: '15rem' }}>
+    <div className="mb-4">
+      <label htmlFor="name_qnty" className="block text-gray-700 text-sm font-bold mb-2">
+        Name and quality:
+      </label>
+      <input
+        id="name_qnty"
+        type="text"
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        onChange={(e) => setnewname_qnty(e.target.value)}
+        value={newname_qnty}
+        placeholder="Name and quality"
+        required
+      />
+    </div>
+    <button className=" block mx-auto bg-emerald-600 text-white font-bold py-2 px-4 rounded" type="submit">
+      Update Ingredient
+    </button>
+    <NavBar/>
+  </form>
+</div>
+
   );
 }
