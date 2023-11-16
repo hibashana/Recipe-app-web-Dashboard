@@ -8,51 +8,27 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/navigation';
 import { baseURL } from '../utils/constants';
 import NavBar from '../NavBar';
+import { RiEyeCloseFill, RiEyeFill, RiLockPasswordLine } from 'react-icons/ri';
+import { FaEyeSlash } from 'react-icons/fa';
+
+
 
 const CreateUser= () => {
   const router = useRouter(); 
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     contact: '',
-    username: '',
-    password: '',
-    // Add error state for validation messages
-    emailError: '',
-    contactError: '',
-    passwordError: '',
+    usersname: '',
+    userpassword: '',
+    confirmPassword: ''
+    
   });
 
-  const validateForm = () => {
-    const isValid = true;
-
-    // Email validation
-    if (!formData.email) {
-      setFormData((prevData) => ({ ...prevData, emailError: 'Email is required' }));
-      return false;
-    } else {
-      setFormData((prevData) => ({ ...prevData, emailError: '' }));
-    }
-
-    // Contact validation
-    if (!formData.contact) {
-      setFormData((prevData) => ({ ...prevData, contactError: 'Contact is required' }));
-      return false;
-    } else {
-      setFormData((prevData) => ({ ...prevData, contactError: '' }));
-    }
-
-    // Password validation
-    if (!formData.password) {
-      setFormData((prevData) => ({ ...prevData, passwordError: 'Password is required' }));
-      return false;
-    } else {
-      setFormData((prevData) => ({ ...prevData, passwordError: '' }));
-    }
-
-    return isValid;
-  };
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -60,18 +36,23 @@ const CreateUser= () => {
     
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!validateForm()) {
-      return; // Do not proceed with the submission if the form is not valid
-    }
 
     const token = localStorage.getItem('token');
     const URL=`${baseURL}/user/register`;
     // console.log(token);
 
-    
+    if (formData.password !== formData.confirmPassword) {
+      setErrorMessage("Password and Confirm Password don't match.");
+      return;
+    }
+
     axios
       .post(`${URL}`, formData, {
         headers: {
@@ -97,16 +78,32 @@ const CreateUser= () => {
         router.push('/user');
       })
       .catch((error) => {
-        toast.error(`Failed to create user `);
-        console.error('Error creating user:', error);
-        // Handle the error and display an error message if needed
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.error('Response error data:', error.response.data);
+          setErrorMessage(error.response.data.error || 'An error occurred.');
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.error('Request error:', error.request);
+          setErrorMessage('Failed to create user. Please try again later.');
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.error('Other error:', error.message);
+          setErrorMessage('An unexpected error occurred. Please try again later.');
+        }
       });
+        // toast.error(`Failed to create user `);
+        // console.error('Error creating user:', error);
+        // Handle the error and display an error message if needed
+      // });
   };
 
   return (
     <div className="grid place-items-center h-screen bg-gray-100 m-6">
   <div className="bg-white p-8 rounded-md shadow-2xl max-w-md">
-    <h1 className="text-2xl font-bold mb-2 text-center">Add New App</h1>
+    
+    <h1 className="text-2xl font-bold mb-2 text-center">Register</h1>
     <form onSubmit={handleSubmit} method="POST">
       <div className="mb-2">
         <label>Name:</label>
@@ -126,6 +123,7 @@ const CreateUser= () => {
           name="email"
           value={formData.email}
           onChange={handleChange}
+          required
         />
       </div>
       <div className="mb-2">
@@ -145,30 +143,56 @@ const CreateUser= () => {
           className="w-full border border-gray-300 rounded-md p-2"
           type="text"
           name="username"
-          value={formData.username}
+          value={formData.usersname}
           onChange={handleChange}
           required
         />
       </div>
-      <div className="mb-4">
+      <div className="mb-4 relative">
         <label>Password:</label>
+        <input
+         type={showPassword ? 'text' : 'password'}
+          className="w-full border border-gray-300 rounded-md p-2 "
+          // type="password"
+          name="password"
+          value={formData.userpassword}
+          onChange={handleChange}
+          required
+        />
+        <label className="absolute cursor-pointer flex items-center"
+                 style={{ color: '#9CA3AF' ,right: '8px', top: '50%' }}>
+                  {showPassword ? (
+                    <RiEyeFill onClick={togglePasswordVisibility} />
+                  ) : (
+                    <FaEyeSlash onClick={togglePasswordVisibility} />
+                  )}
+                </label>
+      </div>
+      <div className="mb-4">
+        <label>Confirm Password:</label>
         <input
           className="w-full border border-gray-300 rounded-md p-2"
           type="password"
-          name="password"
-          value={formData.password}
+          name="confirmPassword"
+          value={formData.confirmPassword}
           onChange={handleChange}
           required
         />
       </div>
       <button
-        className="w-full bg-green-600 text-white font-bold rounded-md py-2"
+        className=" block mx-auto bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-md py-2 px-4"
         type="submit"
       >
         Register User
       </button>
       <ToastContainer autoClose={3000} /> {/* Add this line to display toasts */}
     </form>
+    {errorMessage && (
+        <div className="text-red-600 text-center m-2">
+          {/* bg-red-500 text-white m-1 rounded-md */}
+          {errorMessage}
+        </div>
+      )}
   </div>
   <NavBar/>
 </div>

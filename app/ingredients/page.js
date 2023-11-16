@@ -18,7 +18,7 @@ const Ingredients = () => {
   const [dataResponse, setDataResponse] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const itemsPerPage = 3;
+  // const itemsPerPage = 3;
 
   useEffect(() => {
     fetchData();
@@ -28,8 +28,9 @@ const Ingredients = () => {
 
   const fetchData = async () => {
     try {
+
       const recipesId = localStorage.getItem('recipesId');
-      const response = await fetch(`${baseURL}/ingredients/all_by_filter?RecipeID=${recipesId}&page=${currentPage}&limit=2`, { cache: 'no-store' });
+      const response = await fetch(`${baseURL}/ingredients/all_by_filter?RecipeID=${recipesId}&page=${currentPage}`, { cache: 'no-store' });
       const data = await response.json();
       console.log(response);
       setIngredientsData(data.data);
@@ -77,7 +78,7 @@ const Ingredients = () => {
       {!token ? (
         <div className='m-7'>
         <p className='text-2xl'>You are not logged in. Please log in.</p>
-        <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('http://localhost:3000/')}>
+        <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('/')}>
           Go to Login
         </button>
       </div>

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { baseURL } from "../utils/constants";
+import NavBar from "../NavBar";
 
 export default function EditRecipes({
   rcpid,
@@ -57,45 +58,55 @@ export default function EditRecipes({
   };
 
   return (
+    <div className="grid place-items-center h-screen bg-gray-100">
+    <div className="w-full max-w-md">
     <form
-      onSubmit={handleSubmit}
-      className="absolute right-20 top-20 shadow-2xl" 
-      encType="multipart/form-data" 
-    >
-      <div>
-        <label>Name:</label>
-        <input
-          onChange={(e) => setnewName(e.target.value)}
-          value={newName}
-          type="text"
-          placeholder="Name"
-          required
-        />
-      </div>
-      <div>
-        <label>Description:</label>
-        <input
-          onChange={(e) => setnewDescription(e.target.value)}
-          value={newDescription}
-          type="text"
-          placeholder="Description"
-          required
-        />
-      </div>
-      
-      <div>
-  <label>Image:</label>
-  {/* <img src={imageUrl} alt="App Image" /> */}
-  <input
-    type="file"
-    accept=".png, .jpg, .jpeg"
-    onChange={(e) => setnewImage(e.target.files[0])}
-    // onChange={handleImageChange}
-  />
+  onSubmit={handleSubmit}
+  className="flex flex-col items-center justify-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow-2xl p-8 bg-white rounded-md"
+  encType="multipart/form-data"
+  style={{ width: '500px' }} // Set a fixed width for the form
+>
+  <div className="mb-4">
+    <label className="text-lg font-semibold">Name:</label>
+    <input
+      onChange={(e) => setnewName(e.target.value)}
+      value={newName}
+      type="text"
+      placeholder="Name"
+      required
+      className="w-full flex px-4 py-2 mt-2 border rounded-md focus:outline-none focus:shadow-outline"
+      style={{ width: '400px', height: '45px' }} // Set a fixed width and height for the input
+    />
+  </div>
+  <div className="mb-4">
+    <label className="text-lg font-semibold">Description:</label>
+    <input
+      onChange={(e) => setnewDescription(e.target.value)}
+      value={newDescription}
+      type="text"
+      placeholder="Description"
+      required
+      className="w-full flex  px-4 py-2 mt-2 border rounded-md focus:outline-none focus:shadow-outline"
+      style={{  width: '400px', height: '45px'  }} // Set a fixed width and height for the input
+    />
+  </div>
+  <div className="mb-4">
+    <label className="text-lg font-semibold">Image:</label>
+    <input
+      type="file"
+      accept=".png, .jpg, .jpeg"
+      onChange={(e) => setnewImage(e.target.files[0])}
+      className="w-full flex px-4 py-2 mt-2 border rounded-md focus:outline-none focus:shadow-outline"
+      style={{ width: '400px', height: '45px' }} // Set a fixed width and height for the input
+    />
+  </div>
+  <button className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded">
+    Update Recipe
+  </button>
+ 
+</form>
+<NavBar/>
 </div>
-      <button className="bg-sky-700" type="submit">
-        Update Banner
-      </button>
-    </form>
+  </div>
   );
 }

@@ -53,7 +53,7 @@ export default function EditCategorylist({
   return (
     <div className="grid place-items-center h-screen bg-gray-100">
     <div className="w-full max-w-md">
-      <h1 className="text-xl font-bold text-center mb-4">Add New Category</h1>
+      <h1 className="text-xl font-bold text-center mb-4">Edit Category</h1>
       <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg px-8 py-6">
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" >

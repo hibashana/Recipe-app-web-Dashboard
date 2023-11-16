@@ -13,6 +13,8 @@ import NavBar from '../NavBar';
 const User = () => {
   const [usersData, setUsersData] = useState([]);
   const [token, setToken] = useState('');
+  const [dataResponse, setDataResponse] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
 
   useEffect(() => {
@@ -20,12 +22,13 @@ const User = () => {
       try {
         const token = localStorage.getItem('token');
         const response = await axios.get(
-          `${baseURL}/user/alluser`,
+          `${baseURL}/user/all_by_filter?page=${currentPage}`,
           { headers: { 
             'Authorization': `Bearer ${token}`,
             "Cache-Control": "no-store" } }
         );
-        setUsersData(response.data.rows);
+        setUsersData(response.data.data);
+        setDataResponse(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -34,7 +37,7 @@ const User = () => {
     fetchData();
     const tokenFromStorage = localStorage.getItem('token');
     setToken(tokenFromStorage);
-  }, []);
+  }, [currentPage]);
 
   const deleteuser = async (ruserid, name) => {
     try {
@@ -85,7 +88,9 @@ const User = () => {
   };
 
   const fetchData = async () => {
+    
     try {
+      
       const token = localStorage.getItem('token');
       const response = await axios.get(
         `${baseURL}/user/alluser`,
@@ -99,19 +104,42 @@ const User = () => {
     }
   };
 
-  
+  const nextPage = () => {
+    setCurrentPage(currentPage + 1);
+  };
+
+  const prevPage = () => {
+    setCurrentPage(currentPage - 1);
+  };
+
+  if (!token) {
+    return (
+      <div className="flex flex-col items-center m-4">
+      <div className='m-7'>
+        <p className='text-2xl'>You are not logged in. Please log in.</p>
+        <button
+          className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3"
+          type="submit"
+          onClick={() => router.push('/')}
+        >
+          Go to Login
+        </button>
+      </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center m-4">
-      {!token ? (
+      {/* {!token ? (
         <div className='m-7'>
           <p className='text-2xl'>You are not logged in. Please log in.</p>
-          <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('http://localhost:3000/')}>
+          <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('/')}>
             Go to Login
           </button>
         </div>
       ) : (
-        <>
+        <> */}
       <Link
         href="/addUser"
         className="bg-emerald-600 text-white hover:text-black p-2 rounded-lg absolute top-4 right-40  transition-colors"
@@ -120,12 +148,13 @@ const User = () => {
       </Link>
 
       <div className="max-w-screen-md m-4">
-        <table className="w-full table-fixed border p-2">
+        <table className="w-full table-fixed border p-4">
           <thead>
-            <tr className="border p-2">
+            <tr className="border p-4">
               <th>Name</th>
               <th>Email</th>
               <th>Contact</th>
+              <th>Type</th>
               <th>Is Active</th>
             </tr>
           </thead>
@@ -135,6 +164,7 @@ const User = () => {
                 <td className="border p-2">{data.name}</td>
                 <td className="border p-2">{data.email}</td>
                 <td className="border p-2">{data.contact}</td>
+                <td className="border p-2">{data.type}</td>
                 <td className="border p-2">
                   {data.isactive ? 'Active' : 'Inactive'}
                 </td>
@@ -158,10 +188,22 @@ const User = () => {
             ))}
           </tbody>
         </table>
+        <div className="mt-4 flex justify-center">
+          <button onClick={prevPage} disabled={currentPage === 1} className={`mx-2 p-2 border rounded-lg ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}>
+            Previous
+          </button>
+          <button
+            onClick={nextPage}
+            disabled={!dataResponse.hasNext}
+            className={`mx-2 p-2 border rounded-lg ${!dataResponse.hasNext ?'opacity-50 cursor-not-allowed' : ''}`}
+          >
+            Next
+          </button>
+        </div>
       </div>
       <NavBar />
-      </>
-      )}
+      {/* </> */}
+      {/* )} */}
     </div>
   );
 };

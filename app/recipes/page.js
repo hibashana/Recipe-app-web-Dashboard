@@ -8,6 +8,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import NavBar from '../NavBar';
 import { baseURL, imageURL } from '../utils/constants';
+import { MdFilterListAlt } from "react-icons/md";
 
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -17,24 +18,56 @@ import 'react-toastify/dist/ReactToastify.css';
 const Recipes = () => {
   const [recipesData, setRecipesData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [dataResponse, setDataResponse] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [token, setToken] = useState('');
+  const [selectedFilter, setSelectedFilter] = useState("all");
   // const [categories, setCategories] = useState([]); 
 
   useEffect(() => {
     fetchData();
     const tokenFromStorage = localStorage.getItem('token');
     setToken(tokenFromStorage);
-  }, []);
+  }, [currentPage]);
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`${baseURL}/recipes/getall`, { cache: 'no-store' });
+      const appId = localStorage.getItem('appId');
+      console.log(appId);
+      
+
+      const url =
+  selectedFilter === 'premium'
+    ? `${baseURL}/recipes/all_by_filter?appID=${appId}&page=${currentPage}&premium=true`
+    : selectedFilter === 'nonPremium'
+    ? `${baseURL}/recipes/all_by_filter?appID=${appId}&page=${currentPage}&premium=false`
+    : `${baseURL}/recipes/all_by_filter?appID=${appId}&page=${currentPage}`;
+
+      // selectedFilter === 'premium'
+      //   ? `${baseURL}/recipes/all_by_filter?appID=${appId}&page=${currentPage}&premium=true`
+      //   : `${baseURL}/recipes/all_by_filter?appID=${appId}&page=${currentPage}`;
+
+    const response = await fetch(url, { cache: 'no-store' },
+
+      // const response = await fetch(`${baseURL}/recipes/all_by_filter?appID=${appId}&page=${currentPage}&limit=2`, { cache: 'no-store' },
+      {
+        params: { page: currentPage, filter: selectedFilter },
+      }
+      );
+    
       const data = await response.json();
-      setRecipesData(data);
+      console.log(response);
+      setRecipesData(data.data);
+      setDataResponse(data);
       localStorage.setItem('dataId', data.rcpid);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
+  };
+
+  const applyFilter = () => {
+    setCurrentPage(1); // Reset to the first page when applying a new filter
+    fetchData();
   };
 
   // const fetchCategories = async () => {
@@ -116,13 +149,21 @@ const Recipes = () => {
     }
   };
 
+  const nextPage = () => {
+    setCurrentPage(currentPage + 1);
+  };
+
+  const prevPage = () => {
+    setCurrentPage(currentPage - 1);
+  };
+
 
   return (
     <div className="flex flex-col items-center">
       {!token ? (
         <div className='m-7'>
         <p className='text-2xl'>You are not logged in. Please log in.</p>
-        <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('http://localhost:3000/')}>
+        <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('/')}>
           Go to Login
         </button>
       </div>
@@ -131,6 +172,25 @@ const Recipes = () => {
       <Link href="/addRecipes" className="bg-emerald-600 hover:bg-green-700 text-white p-2 rounded-lg  first-letter:transition-colors absolute top-4 right-40">
         Add new
       </Link>
+      <div className="mt-4 flex items-center">
+        <select
+          value={selectedFilter}
+          onChange={(e) => setSelectedFilter(e.target.value)}
+          className="p-2 border rounded-md"
+        >
+          {/* <option></option> */}
+          <option value="all">All Recipes</option>
+          <option value="premium">Premium Recipes</option>
+          <option value="nonPremium">Free Recipes</option>
+        </select>
+        <button
+          onClick={applyFilter}
+          className="ml-2 p-2 bg-emerald-600 text-white rounded-md flex items-center "
+        >
+          <MdFilterListAlt className="mr-2"  />Filter 
+        </button>
+      </div>
+      {/* <h1 className="text-center text-xl font-bold">{dataResponse.totalCount} Recipe</h1> */}
       <div className="max-w-screen-md m-10">
       
       
@@ -164,7 +224,7 @@ const Recipes = () => {
                  
                 </td> */}
                 <td colSpan={3} className="flex flex-row items-center justify-center gap-4 p-6 ">
-                <input className=''
+                <input className='cursor-pointer'
                     type="checkbox"
                     checked={data.premium}
                     onChange={() => handlePremiumChange(data.rcpid, data.premium)}
@@ -195,7 +255,18 @@ const Recipes = () => {
             ))}
           </tbody>
         </table>
-  
+        <div className="mt-4 flex justify-center">
+          <button onClick={prevPage} disabled={currentPage === 1} className={`mx-2 p-2 border rounded-lg ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}>
+            Previous
+          </button>
+          <button
+            onClick={nextPage}
+            disabled={!dataResponse.hasNext}
+            className={`mx-2 p-2 border rounded-lg ${!dataResponse.hasNext ?'opacity-50 cursor-not-allowed' : ''}`}
+          >
+            Next
+          </button>
+        </div>
       </div>
       
       <NavBar />

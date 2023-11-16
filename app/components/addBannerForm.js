@@ -91,10 +91,11 @@ const CreateBanner = () => {
             accept=".png, .jpg, .jpeg"
             name="image"
             onChange={handleImageChange}
+            className="w-full flex px-4 py-2 mt-2 border rounded-md"
             required
           />
         </div>
-        <button className="bg-emerald-600 text-white font-bold px-6 py-2 rounded-md" type="submit">
+        <button className="bg-emerald-600 hover:bg-emerald-700 block mx-auto text-white font-bold px-6 py-2 rounded-md" type="submit">
           Add Banner
         </button>
         <ToastContainer autoClose={3000} />

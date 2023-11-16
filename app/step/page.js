@@ -91,7 +91,7 @@ useEffect(() => {
       {!token ? (
         <div className='m-7'>
         <p className='text-2xl'>You are not logged in. Please log in.</p>
-        <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('http://localhost:3000/')}>
+        <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('/')}>
           Go to Login
         </button>
       </div>

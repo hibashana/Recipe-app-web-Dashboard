@@ -16,6 +16,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const banner = () => {
   const [bannerData,setBannerData] = useState([]);
+  const [dataResponse, setDataResponse] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [token, setToken] = useState('');
   const router = useRouter();
 
@@ -23,22 +25,27 @@ const banner = () => {
     fetchData();
     const tokenFromStorage = localStorage.getItem('token');
     setToken(tokenFromStorage);
-  }, []);
+  }, [currentPage]);
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`${baseURL}/banner/getall`, { cache: 'no-store' });
+      const appId = localStorage.getItem('appId');
+      console.log(appId);
+      // const response = await fetch(`${baseURL}/banner/getall`, { cache: 'no-store' });
+      const response = await fetch(`${baseURL}/banner/all_by_filter?appID=${appId}&page=${currentPage}`, { cache: 'no-store' });
       const data = await response.json();
-      setBannerData(data);
+      console.log(response);
+      setBannerData(data.data);
+      setDataResponse(data);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
 
-  const handleBannerClick = (id) => {
-    // Store the selected bannerId in localStorage
-    localStorage.setItem('bannerId', id);
-  };
+  // const handleBannerClick = (id) => {
+  //   // Store the selected bannerId in localStorage
+  //   localStorage.setItem('bannerId', id);
+  // };
 
   const deleteBanner = async (id, name) => {
     const confirmDelete = window.confirm(`Are you sure you want to delete the  "${name}"?`);
@@ -70,12 +77,20 @@ const banner = () => {
   }
   };
 
+  const nextPage = () => {
+    setCurrentPage(currentPage + 1);
+  };
+
+  const prevPage = () => {
+    setCurrentPage(currentPage - 1);
+  };
+
   return (
     <div className="flex flex-col items-center">
        {!token ? (
         <div className='m-7'>
           <p className='text-2xl'>You are not logged in. Please log in.</p>
-          <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('http://localhost:3000/')}>
+          <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('/')}>
             Go to Login
           </button>
         </div>
@@ -84,6 +99,7 @@ const banner = () => {
           <Link href="/addBanner" className="bg-emerald-600 text-white hover:text-black p-2 rounded-lg transition-colors absolute top-4 right-40">
             Add new
           </Link>
+          <h1 className="text-center text-xl font-bold">{dataResponse.totalCount}Banner</h1>
           <div className="max-w-screen-md m-20">
             <table className="w-full table-fixed border p-2">
               <thead>
@@ -99,7 +115,8 @@ const banner = () => {
                     <td className="border p-2">
                       <img src={`${imageURL}${data.image}`} width="100" height="100" alt={data.name} />
                     </td>
-                    <td className="border p-2" onClick={() => handleBannerClick(data.id)}>
+                    <td className="border p-2" >
+                    {/* onClick={() => handleBannerClick(data.id)} */}
                       {data.name}
                     </td>
                     <td colSpan={2} className="flex items-center justify-center gap-4 p-6">
@@ -116,6 +133,18 @@ const banner = () => {
                 ))}
               </tbody>
             </table>
+            <div className="mt-4 flex justify-center">
+          <button onClick={prevPage} disabled={currentPage === 1} className={`mx-2 p-2 border rounded-lg ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}>
+            Previous
+          </button>
+          <button
+            onClick={nextPage}
+            disabled={!dataResponse.hasNext}
+            className={`mx-2 p-2 border rounded-lg ${!dataResponse.hasNext ?'opacity-50 cursor-not-allowed' : ''}`}
+          >
+            Next
+          </button>
+        </div>
           </div>
           <NavBar />
           <ToastContainer autoClose={3000} />

@@ -70,13 +70,14 @@ export default function LoginForm() {
 
   return (
     <main>
-      <div className="grid place-items-center h-screen">
+      <div className="grid place-items-center h-screen justify-center">
         {!showLoading ? (
-          <div className="shadow-lg p-5 rounded-lg border-t-4  border-green-400">
-            <h1 className="text-xl font-bold my-4">Login</h1>
+          <div className="shadow-lg p-5 rounded-lg border-t-4  border-green-400" >
+            <h1 className="text-xl text-center font-bold my-4">Login</h1>
 
-            <form onSubmit={handleLogin} className="flex flex-col gap-3">
-              <div className="input-container">
+            <form onSubmit={handleLogin} className="flex flex-col gap-4"
+               style={{ width: '90%', height: '300px' }}>
+              <div className="input-container flex">
                 <input
                   type="text"
                   name="username"

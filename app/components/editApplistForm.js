@@ -71,7 +71,7 @@ export default function Editapp({
     encType="multipart/form-data"
   >
     <div className="mb-4">
-      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+      <label className="block text-gray-700 text-sm font-bold mb-2">
         Name:
       </label>
       <input
@@ -85,7 +85,7 @@ export default function Editapp({
       />
     </div>
     <div className="mb-4">
-      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
+      <label className="block text-gray-700 text-sm font-bold mb-2">
         Description:
       </label>
       <input
@@ -95,11 +95,11 @@ export default function Editapp({
         type="text"
         placeholder="Description"
         required
-        className="w-full py-3 px-3 text-gray-700 rounded focus:outline-none focus:shadow-outline"
+        className="w-full py-3 px-3 text-gray-700 rounded"
       />
     </div>
     <div className="mb-4">
-      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="packageName">
+      <label className="block text-gray-700 text-sm font-bold mb-2">
         Package Name:
       </label>
       <input
@@ -109,11 +109,11 @@ export default function Editapp({
         type="text"
         placeholder="Package Name"
         required
-        className="w-full py-3 px-3 text-gray-700 rounded focus:outline-none focus:shadow-outline"
+        className="w-full py-3 px-3 text-gray-700 rounded"
       />
     </div>
     <div className="mb-4">
-      <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="image">
+      <label className="block text-gray-700 text-sm font-bold mb-2">
         Image:
       </label>
       <input
