@@ -48,13 +48,20 @@ export default function LoginForm() {
       });
       if (response.ok) {
         const data = await response.json();
+        const userType = data.type;
 
         // if (data.type == 'admin') {
         const token = data.token; // Extract the token from the response
         console.log(token);
         localStorage.setItem('token', token); 
 
+        // if (userType === 'admin') {
+        //   console.log('Admin logged in');
+        // }
+
         // alert('Logged in successfully!');
+
+        
         console.log('Successful login', data);
 
        
@@ -64,6 +71,7 @@ export default function LoginForm() {
       //   setErrorMessage('Invalid user type. Only admin users are allowed.');
       //   console.error('Invalid user type');
       // }
+        
       } else {
         setErrorMessage('Incorrect username or password.');
         console.error('Login failed');

@@ -5,6 +5,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
+import { ClipLoader } from 'react-spinners';
 import { AiFillDelete, AiTwotoneEdit } from 'react-icons/ai';
 import {baseURL,imageURL } from '../utils/constants';
 import { useRouter } from 'next/navigation';
@@ -17,6 +18,8 @@ import { HiPlus } from "react-icons/hi";
 const AppList = () => {
   const [appData, setAppData] = useState([]);
   const [token, setToken] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [showLoading, setShowLoading] = useState(false); 
  
   const router = useRouter();
 
@@ -46,7 +49,12 @@ const AppList = () => {
  
 
   useEffect(() => {
-    fetchAppData();
+    setLoading(true);
+    fetchAppData().then(() => {
+      setLoading(false);
+      setShowLoading(false);
+    });
+
     const tokenFromStorage = localStorage.getItem('token');
     setToken(tokenFromStorage);
   }, []);
@@ -100,14 +108,19 @@ const AppList = () => {
  
   return (
     <div>
-     {!token ? (
-        <div className='m-7 flex flex-col items-center'>
-          <p className='text-2xl'>You are not logged in. Please log in.</p>
-          <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('/')}>
-            Go to Login
-          </button>
-        </div>
-      ) : (
+
+{loading ? (
+  <div className="flex justify-center items-center h-screen">
+    <ClipLoader color={'#36d7b7'} size={100} />
+  </div>
+) : !token ? (
+  <div className='m-7 flex flex-col items-center'>
+    <p className='text-2xl'>You are not logged in. Please log in.</p>
+    <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('/')}>
+      Go to Login
+    </button>
+  </div>
+) : (
         <>
           {/* <h1 className="text-center text-xl font-bold">App List</h1> */}
           <div className="rounded overflow-hidden m-4">
@@ -131,8 +144,8 @@ const AppList = () => {
           onClick={() => handleOnClick(app)}
         />
          <div className="absolute top-0 right-0  flex flex-col gap-2 p-2 ">
-    <div className="rounded-full p-2 hover:bg-red-700 bg-white transition-colors">
-      <div className=" hover:text-white" onClick={() => deleteApp(app.id, app.name)}>
+    <div className="">
+      <div className=" rounded-full p-2 bg-white  hover:bg-red-700 hover:text-white transition-colors" onClick={() => deleteApp(app.id, app.name)}>
         <AiFillDelete />
       </div>
     </div>
