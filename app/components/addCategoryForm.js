@@ -144,6 +144,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const CreateCategory = () => {
   const router = useRouter(); 
+  const [errorMessage, setErrorMessage] = useState('');
 
   const [formData, setFormData] = useState({
     name: '',
@@ -186,11 +187,20 @@ const CreateCategory = () => {
          router.push('/category');
       })
       .catch((error) => {
-        console.error('Error creating category:', error);
-        toast.error(`Failed to create app `);
-       
-
-       
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.error('Response error data:', error.response.data);
+          setErrorMessage(error.response.data.message || 'An error occurred.');
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.error('Request error:', error.request);
+          setErrorMessage('Failed to create user. Please try again later.');
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.error('Other error:', error.message);
+          setErrorMessage('An unexpected error occurred. Please try again later.');
+        }
       });
   };
 
@@ -208,12 +218,20 @@ const CreateCategory = () => {
             value={formData.name}
             onChange={handleChange}
             className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:border-gray-400"
+            required
           />
         </div>
         <button className="block mx-auto bg-emerald-600  text-white px-4 py-2 rounded-md" type="submit">
           Create category
         </button>
+        {errorMessage && (
+          <div className="text-red-600 text-center m-2">
+            {/* bg-red-500 text-white m-1 rounded-md */}
+            {errorMessage}
+          </div>
+        )}
       </form>
+      
       <ToastContainer autoClose={3000} />
       <NavBar />
     </div>

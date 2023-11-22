@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import 'tailwindcss/tailwind.css';
-import { AiFillDelete } from 'react-icons/ai';
-import { AiTwotoneEdit } from 'react-icons/ai';
+import { AiFillDelete,AiTwotoneEdit} from 'react-icons/ai';
+import { HiPlus } from "react-icons/hi";
 import axios from 'axios';
 import Link from 'next/link';
 import NavBar from '../NavBar';
@@ -22,6 +22,8 @@ const Recipes = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [token, setToken] = useState('');
   const [selectedFilter, setSelectedFilter] = useState("all");
+ 
+
   // const [categories, setCategories] = useState([]); 
 
   useEffect(() => {
@@ -41,7 +43,9 @@ const Recipes = () => {
     ? `${baseURL}/recipes/all_by_filter?appID=${appId}&page=${currentPage}&premium=true`
     : selectedFilter === 'nonPremium'
     ? `${baseURL}/recipes/all_by_filter?appID=${appId}&page=${currentPage}&premium=false`
-    : `${baseURL}/recipes/all_by_filter?appID=${appId}&page=${currentPage}`;
+    : selectedFilter === 'all'
+    ?`${baseURL}/recipes/all_by_filter?appID=${appId}&page=${currentPage}`
+    : `${baseURL}/recipes/all_by_filter?appID=${appId}&sortBy=name&page=${currentPage}`;
 
       // selectedFilter === 'premium'
       //   ? `${baseURL}/recipes/all_by_filter?appID=${appId}&page=${currentPage}&premium=true`
@@ -169,10 +173,20 @@ const Recipes = () => {
       </div>
     ) : (
       <>  
-      <Link href="/addRecipes" className="bg-emerald-600 hover:bg-green-700 text-white p-2 rounded-lg  first-letter:transition-colors absolute top-4 right-40">
+      <div className="rounded overflow-hidden m-4">
+            <div className="fixed bottom-10 right-10">
+              <Link href="/addRecipes">
+                <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full ">
+                  <HiPlus className="text-2xl" />
+                </button>
+              </Link>
+            </div>
+          </div>
+          <div className="mt-4 flex items-center">
+      {/* <Link href="/addRecipes" className="bg-emerald-600 hover:bg-green-700 text-white p-2 rounded-lg  first-letter:transition-colors absolute top-4 right-40">
         Add new
-      </Link>
-      <div className="mt-4 flex items-center">
+      </Link> */}
+
         <select
           value={selectedFilter}
           onChange={(e) => setSelectedFilter(e.target.value)}
@@ -182,6 +196,7 @@ const Recipes = () => {
           <option value="all">All Recipes</option>
           <option value="premium">Premium Recipes</option>
           <option value="nonPremium">Free Recipes</option>
+          <option value="sortbyname">Sort by Name</option>
         </select>
         <button
           onClick={applyFilter}
@@ -190,71 +205,69 @@ const Recipes = () => {
           <MdFilterListAlt className="mr-2"  />Filter 
         </button>
       </div>
-      {/* <h1 className="text-center text-xl font-bold">{dataResponse.totalCount} Recipe</h1> */}
-      <div className="max-w-screen-md m-10">
+      <h1 className="text-center text-xl font-bold p-2">{dataResponse.totalCount}  Recipe</h1>
+      <div className="max-w-screen-md m-6">
       
-      
-        <table className="w-full table-fixed border p-2">
-          <thead>
+      <table className="w-full table-fixed border p-2">
+      <thead>
             <tr className="border p-2">
-              <th>Image</th>
-              <th>Name</th>
-              <th>Description</th>
-              {/* <th>Premium</th> */}
-              <th>Action</th>
-              <th></th>
-              <th></th>
-              <th></th>
+              <th className="border w-1/6">Image</th>
+              <th className="border w-1/6">Name</th>
+              <th className="border w-3/6">Description</th>
+              <th className="border w-1/6">Premium</th>
+              <th className="border w-1/6">Action</th>
+              <th className="w-1/6"></th>
+              <th className="w-1/6" colSpan={2} ></th>
+              
             </tr>
           </thead>
-          <tbody className="border p-2">
-            {recipesData.map((data) => (
-              <tr className="border p-2" key={data.rcpid}>
-                <td className="border p-2">
-                  <img src={`${imageURL}${data.image}`} width="100" height="100" />
-                </td>
-                {/* <td className="border p-2" onClick={() => handleRecipesClick(data.rcpid)}> */}
-                <td className="border p-2">
-                  {data.name}
-                </td>
-                <td className="border p-2" >
-                  {data.description}
-                </td>
-                {/* <td className="border  ">
-                 
-                </td> */}
-                <td colSpan={3} className="flex flex-row items-center justify-center gap-4 p-6 ">
-                <input className='cursor-pointer'
-                    type="checkbox"
-                    checked={data.premium}
-                    onChange={() => handlePremiumChange(data.rcpid, data.premium)}
-                  />
-                  <div className="hover:text-red-700 cursor-pointer " onClick={() => deleteRecipes(data.rcpid, data.name)}>
-                    <AiFillDelete />
-                  </div>
-                  <div className="hover:text-sky-500">
-                    <Link className="transition-colors p-3 " href={`/editRecipe/${data.rcpid}`}>
-                      <AiTwotoneEdit />
-                    </Link>
-                    
-                  </div>
-                  
-                  </td>
-                  <td></td>
-                  
-                  <td className="flex justify-center flex-row gap-14 " colSpan={3} onClick={() => handleRecipesClick(data.rcpid)}  >
-              <div className=" hover:text-sky-500 ">
+  <tbody className="border text-center p-2">
+    {recipesData.map((data) => (
+      <tr className="border p-2" key={data.rcpid}>
+        <td className="border p-2">
+          <img src={`${imageURL}${data.image}`} className="w-20 h-20 object-cover" />
+        </td>
+        <td className="border p-2">{data.name}</td>
+        <td className="border p-2">{data.description}</td>
+        <td className="border p-2">
+          <label className="flex  cursor-pointer">
+            {/* <div className="relative"> */}
+              <input
+                className='cursor-pointer'
+                type="checkbox"
+                checked={data.premium}
+                onChange={() => handlePremiumChange(data.rcpid, data.premium)}
+              />
+            {/* </div> */}
+          </label>
+        </td>
+          
+        <td className="flex flex-row items-center  justify-center gap-2">
+  <div className="hover:text-red-700 justify-center cursor-pointer " onClick={() => deleteRecipes(data.rcpid, data.name)}>
+    <AiFillDelete />
+  </div>
+  <div className="hover:text-sky-500">
+    <Link className="transition-colors p-3 " href={`/editRecipe/${data.rcpid}`}>
+      <AiTwotoneEdit />
+    </Link>
+  </div>
+</td>
+        <td></td>
+        <td className="w-1/4 flex justify-center flex-row gap-4 relative" onClick={() => handleRecipesClick(data.rcpid)}>
+          {/* <div className="absolute left-1/2 transform -translate-x-1/2"> */}
+            <div className="hover:text-sky-500">
               <Link href={`/ingredients`}>Ingredients</Link>
-              </div>
-               <div className=" hover:text-sky-500  ">
-                <Link href={`/step`}>Steps</Link>
-              </div>
-                  </td>
-                  
-              </tr>
-            ))}
-          </tbody>
-        </table>
+            </div>
+            <div className="hover:text-sky-500">
+              <Link href={`/step`}>Steps</Link>
+            </div>
+          {/* </div> */}
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
         <div className="mt-4 flex justify-center">
           <button onClick={prevPage} disabled={currentPage === 1} className={`mx-2 p-2 border rounded-lg ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}>
             Previous

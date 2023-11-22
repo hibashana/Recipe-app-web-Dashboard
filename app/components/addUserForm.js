@@ -13,31 +13,35 @@ import { FaEyeSlash } from 'react-icons/fa';
 
 
 
-const CreateUser= () => {
-  const router = useRouter(); 
+const CreateUser = () => {
+  const router = useRouter();
   const [errorMessage, setErrorMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [showconfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     contact: '',
-    usersname: '',
-    userpassword: '',
+    rusername: '',
+    rpassword: '',
     confirmPassword: ''
-    
+
   });
 
-  
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    
+
   };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showconfirmPassword);
   };
 
   const handleSubmit = (e) => {
@@ -45,28 +49,34 @@ const CreateUser= () => {
 
 
     const token = localStorage.getItem('token');
-    const URL=`${baseURL}/user/register`;
+    const URL = `${baseURL}/user/register`;
     // console.log(token);
 
-    if (formData.password !== formData.confirmPassword) {
+    if (formData.rpassword !== formData.confirmPassword) {
       setErrorMessage("Password and Confirm Password don't match.");
       return;
     }
 
     axios
-      .post(`${URL}`, formData, {
+      .post(`${URL}`, {
+        name: formData.name,
+        email: formData.email,
+        contact:formData.contact,
+        username: formData.rusername,
+        password: formData.rpassword,
+      }, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
       })
 
-   
+
 
       .then((response) => {
         // console.log(`res=${response.status}`);
         console.log('User created:', response.data);
-       
+
         toast.success(`User created.`);
 
         setTimeout(() => {
@@ -93,109 +103,119 @@ const CreateUser= () => {
           setErrorMessage('An unexpected error occurred. Please try again later.');
         }
       });
-        // toast.error(`Failed to create user `);
-        // console.error('Error creating user:', error);
-        // Handle the error and display an error message if needed
-      // });
+    // toast.error(`Failed to create user `);
+    // console.error('Error creating user:', error);
+    // Handle the error and display an error message if needed
+    // });
   };
 
   return (
     <div className="grid place-items-center h-screen bg-gray-100 m-6">
-  <div className="bg-white p-8 rounded-md shadow-2xl max-w-md">
-    
-    <h1 className="text-2xl font-bold mb-2 text-center">Register</h1>
-    <form onSubmit={handleSubmit} method="POST">
-      <div className="mb-2">
-        <label>Name:</label>
-        <input
-          className="w-full border border-gray-300 rounded-md p-2"
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
+      <div className="bg-white p-8 rounded-md shadow-2xl max-w-md">
+
+        <h1 className="text-2xl font-bold mb-2 text-center">Register</h1>
+        <form onSubmit={handleSubmit} method="POST">
+          <div className="mb-2">
+            <label>Name:</label>
+            <input
+              className="w-full border border-gray-300 rounded-md p-2"
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-2">
+            <label>Email:</label>
+            <input
+              className="w-full border border-gray-300  rounded-md p-2"
+              name="email"
+              type="email" 
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-2">
+            <label>Contact:</label>
+            <input
+              className="w-full border border-gray-300 rounded-md p-2"
+              type="number"
+              name="contact"
+              value={formData.contact}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-2">
+            <label>Username:</label>
+            <input
+              className="w-full border border-gray-300 rounded-md p-2"
+              type="text"
+              name="rusername"
+              value={formData.rusername}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-4 relative">
+            <label>Password:</label>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              className="w-full border border-gray-300 rounded-md p-2 "
+              // type="password"
+              name="rpassword"
+              value={formData.rpassword}
+              onChange={handleChange}
+              required
+            />
+            <label className="absolute cursor-pointer flex items-center"
+              style={{ color: '#9CA3AF', right: '8px', top: '50%' }}>
+              {showPassword ? (
+                <RiEyeFill onClick={togglePasswordVisibility} />
+              ) : (
+                <FaEyeSlash onClick={togglePasswordVisibility} />
+              )}
+            </label>
+          </div>
+          <div className="mb-4 relative">
+            <label>Confirm Password:</label>
+            <input
+              className="w-full border border-gray-300 rounded-md p-2"
+              type={showconfirmPassword ? 'text' : 'password'}
+              // type="password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              required
+            />
+            <label className="absolute cursor-pointer flex items-center"
+              style={{ color: '#9CA3AF', right: '8px', top: '50%' }}>
+              {showconfirmPassword ? (
+                <RiEyeFill onClick={toggleConfirmPasswordVisibility} />
+              ) : (
+                <FaEyeSlash onClick={toggleConfirmPasswordVisibility} />
+              )}
+            </label>
+          </div>
+          <button
+            className=" block mx-auto bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-md py-2 px-4"
+            type="submit"
+          >
+            Register User
+          </button>
+          <ToastContainer autoClose={3000} /> {/* Add this line to display toasts */}
+        </form>
+        {errorMessage && (
+          <div className="text-red-600 text-center m-2">
+            {/* bg-red-500 text-white m-1 rounded-md */}
+            {errorMessage}
+          </div>
+        )}
       </div>
-      <div className="mb-2">
-        <label>Email:</label>
-        <input
-          className="w-full border border-gray-300  rounded-md p-2"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div className="mb-2">
-        <label>Contact:</label>
-        <input
-          className="w-full border border-gray-300 rounded-md p-2"
-          type="number"
-          name="contact"
-          value={formData.contact}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div className="mb-2">
-        <label>Username:</label>
-        <input
-          className="w-full border border-gray-300 rounded-md p-2"
-          type="text"
-          name="username"
-          value={formData.usersname}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div className="mb-4 relative">
-        <label>Password:</label>
-        <input
-         type={showPassword ? 'text' : 'password'}
-          className="w-full border border-gray-300 rounded-md p-2 "
-          // type="password"
-          name="password"
-          value={formData.userpassword}
-          onChange={handleChange}
-          required
-        />
-        <label className="absolute cursor-pointer flex items-center"
-                 style={{ color: '#9CA3AF' ,right: '8px', top: '50%' }}>
-                  {showPassword ? (
-                    <RiEyeFill onClick={togglePasswordVisibility} />
-                  ) : (
-                    <FaEyeSlash onClick={togglePasswordVisibility} />
-                  )}
-                </label>
-      </div>
-      <div className="mb-4">
-        <label>Confirm Password:</label>
-        <input
-          className="w-full border border-gray-300 rounded-md p-2"
-          type="password"
-          name="confirmPassword"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <button
-        className=" block mx-auto bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-md py-2 px-4"
-        type="submit"
-      >
-        Register User
-      </button>
-      <ToastContainer autoClose={3000} /> {/* Add this line to display toasts */}
-    </form>
-    {errorMessage && (
-        <div className="text-red-600 text-center m-2">
-          {/* bg-red-500 text-white m-1 rounded-md */}
-          {errorMessage}
-        </div>
-      )}
-  </div>
-  <NavBar/>
-</div>
+      <NavBar />
+    </div>
 
   );
 };

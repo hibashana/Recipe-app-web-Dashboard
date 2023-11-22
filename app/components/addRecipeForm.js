@@ -13,6 +13,7 @@ const CreateRecipe = () => {
   const router = useRouter(); 
   const [selectedCategory, setSelectedCategory] = useState('');
   const [categories, setCategories] = useState([]); 
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     fetchCategories();
@@ -34,7 +35,8 @@ const CreateRecipe = () => {
     description: '',
     image: null, 
     appID:localStorage.getItem('appId'),
-    CategoryID:localStorage.getItem('CategoryId'),
+    CategoryID:'',
+    // localStorage.getItem('CategoryId')
   });
 
   const handleImageChange = (e) => {
@@ -51,8 +53,9 @@ const CreateRecipe = () => {
   const handleCategoryChange = (e) => {
     const selectedValue = e.target.value;
     setSelectedCategory(selectedValue);
-    localStorage.setItem('CategoryId', selectedValue);
+    // localStorage.setItem('CategoryId', selectedValue);
     console.log(selectedValue);
+    setFormData({ ...formData, CategoryID: selectedValue });
     
   };
 
@@ -63,8 +66,8 @@ const CreateRecipe = () => {
     console.log(token);
     const appId = localStorage.getItem('appId');
     console.log(appId);
-    const CategoryId=localStorage.getItem('CategoryId');
-    console.log(CategoryId);
+    // const CategoryId=localStorage.getItem('CategoryId');
+    // console.log(CategoryId);
     
 
     const URL=`${baseURL}/recipes/addrecipe`;
@@ -95,10 +98,24 @@ const CreateRecipe = () => {
         router.push('/recipes');
       })
       .catch((error) => {
-        toast.error(`Failed to create recipe `);
-        console.error('Error creating recipe:', error);
-        // Handle the error and display an error message if needed
+        if (error.response) {
+          console.error('Response error data:', error.response.data);
+          setErrorMessage(error.response.data.message || 'An error occurred.');
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.error('Request error:', error.request);
+          setErrorMessage('Failed to create user. Please try again later.');
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.error('Other error:', error.message);
+          setErrorMessage('An unexpected error occurred. Please try again later.');
+        }
       });
+      // .catch((error) => {
+      //   toast.error(`Failed to create recipe `);
+      //   console.error('Error creating recipe:', error);
+      //   // Handle the error and display an error message if needed
+      // });
   };
 
   return (
@@ -143,8 +160,9 @@ const CreateRecipe = () => {
           value={selectedCategory}
           onChange={handleCategoryChange}
           className="w-full px-4 py-2 border rounded-md bg-zinc-100/40 focus:outline-none focus:border-gray-300"
-        >
-          <option value="">All Categories</option>
+          required
+          >
+          <option value="">Select Categories</option>
           {categories.map((category) => (
             <option key={category.ctgyid} value={category.ctgyid}>
               {category.name }
@@ -159,7 +177,14 @@ const CreateRecipe = () => {
         Add Recipe
       </button>
       <ToastContainer autoClose={3000} />
+      {errorMessage && (
+          <div className="text-red-600 text-center m-2">
+            {/* bg-red-500 text-white m-1 rounded-md */}
+            {errorMessage}
+          </div>
+        )}
     </form>
+    
   </div>
   <NavBar/>
 </div>

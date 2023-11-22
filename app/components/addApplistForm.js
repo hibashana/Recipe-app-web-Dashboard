@@ -7,6 +7,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/navigation';
 import { baseURL } from '../utils/constants';
+import NavBar from '../NavBar';
 
 const CreateApp = () => {
   const router = useRouter(); 
@@ -69,59 +70,65 @@ const CreateApp = () => {
   };
 
   return (
-    <div className="grid place-items-center h-screen">
-      <div>
-        <h1 className="text-xl font-bold  text-center">Add New App</h1>
-        <form onSubmit={handleSubmit}  method="POST" encType="multipart/form-data" >
-          <div>
-            <label>Name:</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div>
-            <label>Description:</label>
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-             
-            />
-          </div>
-          <div>
-            <label>Package Name:</label>
-            <input
-              type="text"
-              name="packageName"
-              value={formData.packageName}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div>
-            <label>Image:</label>
-            <input
-              type="file"
-              accept=".png, .jpg, .jpeg"
-              name="image"
-              onChange={handleImageChange}
-              required
-            />
-          </div>
-          <button
-            className="bg-green-600 text-white font-bold  cursor-pointer px-6 py-2"
-            type="submit"
-          >
-            Add App
-          </button>
-          <ToastContainer autoClose={3000} /> {/* Add this line to display toasts */}
-        </form>
-      </div>
+    <div className="grid place-items-center h-screen bg-gray-100 p-6">
+    <div className="bg-white p-8 rounded-md shadow-md max-w-md">
+      <h1 className="text-xl font-bold text-center mb-4">Add New App</h1>
+      <form onSubmit={handleSubmit} method="POST" encType="multipart/form-data">
+        <div className="mb-4">
+          <label className="block text-sm font-semibold mb-2">Name:</label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+            className="w-full border border-gray-300 rounded-md p-2"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-semibold mb-2">Description:</label>
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            className="w-full border bg-zinc-100/40  border-gray-300 rounded-md p-2"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-semibold mb-2">Package Name:</label>
+          <input
+            type="text"
+            name="packageName"
+            value={formData.packageName}
+            onChange={handleChange}
+            required
+            className="w-full border border-gray-300 rounded-md p-2"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-semibold mb-2">Image:</label>
+          <input
+            type="file"
+            accept=".png, .jpg, .jpeg"
+            name="image"
+            onChange={handleImageChange}
+            required
+            className="w-full border border-gray-300 rounded-md p-2"
+          />
+        </div>
+        <button
+          className="bg-green-600 text-white font-bold cursor-pointer px-6 py-2 rounded-md hover:bg-green-700 transition-colors"
+          type="submit"
+        >
+          Add App
+        </button>
+        <ToastContainer autoClose={3000} />
+        {/* Add this line to display toasts */}
+      </form>
     </div>
+    <NavBar/>
+  </div>
+  
   );
 };
 

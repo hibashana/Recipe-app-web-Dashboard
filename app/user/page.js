@@ -4,6 +4,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { AiOutlineEdit } from "react-icons/ai";
 import { MdDeleteOutline } from "react-icons/md";
+import { HiPlus } from "react-icons/hi";
 import Link from "next/link";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -40,6 +41,8 @@ const User = () => {
   }, [currentPage]);
 
   const deleteuser = async (ruserid, name) => {
+    const confirmDelete = window.confirm(`Are you sure you want to delete the User "${name}"?`);
+    if (confirmDelete) {
     try {
       const token = localStorage.getItem('token');
       const URL = `${baseURL}/user/${ruserid}`;
@@ -59,6 +62,7 @@ const User = () => {
       toast.error(`An error occurred: ${error.message}`);
       console.error(`An error occurred: ${error.message}`);
     }
+  }
   };
 
   const handleIsActive = async (ruserid, isactive) => {
@@ -140,22 +144,32 @@ const User = () => {
         </div>
       ) : (
         <> */}
-      <Link
+      {/* <Link
         href="/addUser"
         className="bg-emerald-600 text-white hover:text-black p-2 rounded-lg absolute top-4 right-40  transition-colors"
       >
         Register user
-      </Link>
+      </Link> */}
+      <div className="rounded overflow-hidden m-4">
+            <div className="fixed bottom-10 right-10">
+              <Link href="/addUser">
+                <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full ">
+                  <HiPlus className="text-2xl" />
+                </button>
+              </Link>
+            </div>
+          </div>
 
       <div className="max-w-screen-md m-4">
-        <table className="w-full table-fixed border p-4">
+        <table className="w-full table-auto border ">
           <thead>
-            <tr className="border p-4">
-              <th>Name</th>
-              <th>Email</th>
-              <th>Contact</th>
-              <th>Type</th>
-              <th>Is Active</th>
+            <tr className="border p-6">
+              <th className="border p-6">Name</th>
+              <th className="border p-6">Email</th>
+              <th className="border p-6">Contact</th>
+              <th className="border p-6">Type</th>
+              <th className="border p-6">Action</th>
+              <th className="border p-6">IsActive</th>
             </tr>
           </thead>
           <tbody className="text-cyan-900 text-center">
@@ -165,10 +179,10 @@ const User = () => {
                 <td className="border p-2">{data.email}</td>
                 <td className="border p-2">{data.contact}</td>
                 <td className="border p-2">{data.type}</td>
-                <td className="border p-2">
+                {/* <td className="border p-2">
                   {data.isactive ? 'Active' : 'Inactive'}
-                </td>
-                <td colSpan={2} className="flex items-center justify-center gap-4 p-6">
+                </td> */}
+                <td  className="flex items-center border p-2 justify-center gap-4">
                   <div className="hover:text-red-700" onClick={() => deleteuser(data.ruserid, data.name)}>
                     <MdDeleteOutline />
                   </div>
@@ -177,12 +191,15 @@ const User = () => {
                       <AiOutlineEdit />
                     </Link>
                   </div>
+                  </td>
+                  <td>
                   <button
-                    onClick={() => handleIsActive(data.ruserid, data.isactive)}
-                    className="bg-green-500 text-black p-2 rounded-lg hover:text-white transition-colors"
-                  >
-                    Active
-                  </button>
+            onClick={() => handleIsActive(data.ruserid, data.isactive)}
+            className={`p-2 w-20 rounded-lg hover:text-white transition-colors ${
+            data.isactive ? 'bg-emerald-500 text-black' : 'bg-red-500 text-black'
+                          }`}>
+                   {data.isactive ? 'Active' : 'Inactive'}
+                   </button>
                 </td>
               </tr>
             ))}
@@ -202,8 +219,10 @@ const User = () => {
         </div>
       </div>
       <NavBar />
+      <ToastContainer autoClose={3000} />
       {/* </> */}
       {/* )} */}
+      
     </div>
   );
 };

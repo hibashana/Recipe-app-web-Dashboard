@@ -8,6 +8,7 @@ import { AiTwotoneEdit } from 'react-icons/ai';
 import axios from 'axios';
 import Link from 'next/link';
 import NavBar from '../NavBar';
+import { HiPlus } from "react-icons/hi";
 import { baseURL } from '../utils/constants';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -84,19 +85,28 @@ const Ingredients = () => {
       </div>
     ) : (
       <>  
-      <Link href="/addIngredients" className="bg-emerald-600 text-white hover:text-black p-2 rounded-lg  transition-colors absolute top-4 right-40">
+      {/* <Link href="/addIngredients" className="bg-emerald-600 text-white hover:text-black p-2 rounded-lg  transition-colors absolute top-4 right-40">
         Add new
-      </Link>
-      <h1 className="text-center text-xl font-bold">{dataResponse.totalCount} Ingredients</h1>
-      <div className="max-w-screen-md m-20">
+      </Link> */}
+      <div className="rounded overflow-hidden m-4">
+            <div className="fixed bottom-10 right-10">
+              <Link href="/addIngredients">
+                <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full ">
+                  <HiPlus className="text-2xl" />
+                </button>
+              </Link>
+            </div>
+          </div>
+      <h1 className="text-center text-xl font-bold p-4">{dataResponse.totalCount} Ingredients</h1>
+      <div className="max-w-screen-md m-8">
         <table className="w-full table-fixed border p-2">
           <thead>
             <tr className="border p-2">
-              <th>Name and Quality</th>
-              <th></th>
+              <th className="border p-2">Name and Quality</th>
+              <th>Action</th>
             </tr>
           </thead>
-          <tbody className="border p-2">
+          <tbody className="border text-center p-2">
             {ingredientsData.map((data) =>(
               <tr className="border p-2" key={data.intrdid}>
                 <td className="border p-2">{data.name_qnty}</td>

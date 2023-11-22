@@ -1,96 +1,119 @@
 'use client';
 
-import Link from 'next/link'
-import { usePathname ,useRouter} from 'next/navigation';
-import React from 'react'
-import {MdOutlineLogout } from "react-icons/md";
+// Import necessary modules and components
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { MdOutlineLogout, MdOutlineArrowForward } from 'react-icons/md';
+import { IoIosArrowBack } from 'react-icons/io';
 import classnames from 'classnames';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useEffect, useState } from 'react';
 
 const NavBar = () => {
+  // Get the current path and router
+  const currentPath = useRouter().asPath;
+  const searchParams = useSearchParams(); // Retrieve query parameters
+  const [storedName, setStoredName] = useState('');
 
-  const currentPath=  usePathname();
   const router = useRouter();
-//   console.log(currentPath);
-  
-const handleLogout = () => {
-  const shouldLogout = window.confirm("Are you sure you want to logout?");
-  
-  if (shouldLogout) {
-    // Clear the authentication token from local storage
-    localStorage.removeItem('token');
-    toast.success('Logged Out');
-    console.log('Logged Out');
-    // Redirect the user to the login page
-    setTimeout(() => {
-      router.push('/');
-    }, 2000);
-  }
-};
-        const links=[
-          
-            { label: 'Home', href:'/home'},
-            { label: 'Category', href:'/category'},
-            { label: 'Recipes', href:'/recipes'},
-            { label: 'Banner', href:'/banner'},
-            { label: 'User', href:'/user'},
-        ]
+
+  useEffect(() => {
+    const paramName = searchParams.get('name');
+
+    if (paramName) {
+      localStorage.setItem('appName', paramName);
+      setStoredName(paramName);
+    } else {
+      const storedName = localStorage.getItem('appName');
+      if (storedName) {
+        setStoredName(storedName);
+      }
+    }
+  }, [searchParams]);
+
+  const handleLogout = () => {
+    const shouldLogout = window.confirm('Are you sure you want to logout?');
+
+    if (shouldLogout) {
+      // Clear the authentication token from local storage
+      localStorage.removeItem('token');
+      localStorage.removeItem('appName');
+      localStorage.removeItem('CategoryId');
+      toast.success('Logged Out');
+      console.log('Logged Out');
+      setTimeout(() => {
+        router.push('/');
+      }, 2000);
+    }
+  };
+
+  // Define navigation links
+  const links = [
+    { label: 'Home', href: '/home' },
+    { label: 'Category', href: '/category' },
+    { label: 'Recipes', href: '/recipes' },
+    { label: 'Banner', href: '/banner' },
+    { label: 'User', href: '/user' },
+  ];
 
   return (
-
-    <nav className='flex flex-col space-y-6 border-b-1  mb-5 px-5 h-16'>
-     
-      <div className='p-10 w-1/2 h-screen bg-emerald-600 z-10 fixed top-0 left-96 lg:w-60 lg:left-0 peer:transition '>
-        
-        <div className='flex flex-col justify-start items-center'>
-       
-          <h1 className='text-base text-center cursor-pointer font-bold text-blue-100 pb-4 w-full '>Profile</h1>
-        </div>
-         
-  <ul className=' flex flex-col space-y-2 gap-4 pl-2'>
-  {/* <Link href="/home"><AiFillHome/></Link>  */}
-    {links.map((link) => (
+    <nav className="flex flex-col">
       
-      <li key={link.href}>    
-        <Link
-          className={classnames({
-            // 'hover:bg-gray-500 rounded-md cursor-pointer hover:shadow-lg m-auto': link.href === currentPath,
-            'text-zinc-900': link.href === currentPath,
-            'text-white': link.href !== currentPath,
-            'hover:text-zinc-800 transition-colors': true
-          })}
-          href={link.href}
-        >
-          {link.label}
-          
-        </Link>  
-
-      </li>
-    ))}
-
-<li>
-    
-    <div className=" mt-60 flex items-center gap-4 bg-white px-5 border border-gray-100 hover:border-gray-900 p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto" onClick={handleLogout}>
-    
-      <MdOutlineLogout className="  text-2xl text-gray-100 group-hover:text-white" style={{ color: '#1fb476 '}} />
-      <h3 className=" text-base text-emerald-600 font-semibold">Logout</h3> 
+      <div className=" w-1/2 py-10 h-screen bg-emerald-600  fixed top-0 left-96 lg:w-60 lg:left-0 ">
+      <div className="flex items-center justify-between  mb-4">
+      <h2 className="flex items-center px-2 gap-2  font-bold text-white text-3xl">
+      <Link href="/appList">
+        <IoIosArrowBack className="text-3xl text-white cursor-pointer hover:text-black" />
+        </Link>
+        {storedName}
+      </h2>
     </div>
-    {/* <div className=" mt-60 flex items-center gap-4 bg-white px-5 border border-gray-100 hover:border-gray-900 p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto" onClick={handleLogout}>
-    
-    <MdOutlineLogout className="  text-2xl text-gray-100 group-hover:text-white" style={{ color: '#1fb476 '}} />
-    <h3 className="text-base text-emerald-600  group-hover:text-white font-semibold">Logout</h3> 
-  </div> */}
- 
-   
-  </li>
-  </ul>
-  
-  </div>
-</nav>
+        {/* <div className="flex items-center  justify-between  mb-4">
+       <Link href="/appList">
+            <div className="flex items-center text-3xl  text-white cursor-pointer hover:text-black">
+              <IoIosArrowBack />
+            </div>
+          </Link>
+          <h2 className="flex flex-col space-y-2 px-5   gap-4 pl-10 font-bold text-white text-3xl ">
+            {storedName}
+          </h2>
+        </div> */}
 
-  
-  )
-}
+        <ul className="flex  flex-col space-y-2 gap-4 pl-12">
+          {links.map((link) => (
+            <li key={link.href}>
+              <Link
+                className={classnames({
+                  'text-zinc-900': link.href === currentPath,
+                  'text-white': link.href !== currentPath,
+                  'hover:text-zinc-800 transition-colors': true,
+                })}
+                href={link.href}
+              >
+                <div className="flex items-center gap-2">{link.icon}</div>
+                {link.label}
+              </Link>
+            </li>
+          ))}
 
-export default NavBar
+          <li className='p-5 pl-0 px-10'>
+            <div
+              className="flex gap-2 p-2 bg-white border hover:border-gray-900  rounded-md cursor-pointer "
+              onClick={handleLogout}
+            >
+              <MdOutlineLogout
+                className="text-2xl text-gray-100 group-hover:text-white"
+                style={{ color: '#1fb476' }}
+              />
+              <h3 className="text-base text-emerald-600 font-semibold">Logout</h3>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  );
+};
+
+export default NavBar;
+

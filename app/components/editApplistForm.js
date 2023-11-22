@@ -4,6 +4,7 @@ import axios from "axios"; // Import Axios
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { baseURL } from "../utils/constants";
+import NavBar from "../NavBar";
 
 export default function Editapp({
   id,

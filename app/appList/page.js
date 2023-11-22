@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { HiPlus } from "react-icons/hi";
 
 
 const AppList = () => {
@@ -103,39 +103,58 @@ const AppList = () => {
      {!token ? (
         <div className='m-7 flex flex-col items-center'>
           <p className='text-2xl'>You are not logged in. Please log in.</p>
-          <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('http://localhost:3000/')}>
+          <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('/')}>
             Go to Login
           </button>
         </div>
       ) : (
         <>
-          <h1 className="text-center text-xl font-bold">App List</h1>
+          {/* <h1 className="text-center text-xl font-bold">App List</h1> */}
           <div className="rounded overflow-hidden m-4">
-            <div className="flex justify-end">
-              <Link href="/addApp">
-                <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                  Add
-                </button>
-              </Link>
-            </div>
-          </div>
-          <div className="flex flex-wrap justify-center p-4">
-            {appObjects.map((app) => (
-              <div key={app.id} className="max-w-sm rounded overflow-hidden shadow-lg m-4 w-60">
-                <img src={`${imageURL}${app.image}`} width="30" height="30" className="w-full" onClick={() => handleOnClick(app)} />
-                <div className="px-6 py-4">
-                  <div className="font-bold text-xl mb-2" onClick={() => handleOnClick(app)}>{app.name}</div>
-                  <p className=" text-sm mb-2" onClick={() => handleOnClick(app)}>{app.description}</p>
-                </div>
-                <div className="hover:text-red-700" onClick={() => deleteApp(app.id, app.name)}>
-                  <AiFillDelete />
-                </div>
-                <Link className='hover:text-sky-400 transition-colors p-2' href={`/editapp/${app.id}`}>
-                  <AiTwotoneEdit />
-                </Link>
-              </div>
-            ))}
-          </div>
+  <div className="fixed bottom-10 right-10">
+    <Link href="/addApp">
+      <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full ">
+        <HiPlus className="text-2xl" />
+      </button>
+    </Link>
+  </div>
+</div>
+
+<div className="flex flex-wrap justify-center p-4">
+  {appObjects.map((app) => (
+    <div key={app.id} className="max-w-sm rounded overflow-hidden shadow-lg m-4 w-60">
+      <div className="relative">
+        <img
+          src={`${imageURL}${app.image}`}
+          alt={app.name}
+          className="w-full h-40 object-cover cursor-pointer"
+          onClick={() => handleOnClick(app)}
+        />
+         <div className="absolute top-0 right-0  flex flex-col gap-2 p-2 ">
+    <div className="rounded-full p-2 hover:bg-red-700 bg-white transition-colors">
+      <div className=" hover:text-white" onClick={() => deleteApp(app.id, app.name)}>
+        <AiFillDelete />
+      </div>
+    </div>
+    <Link href={`/editapp/${app.id}`}>
+      <div className="rounded-full  p-2 bg-white hover:bg-sky-400 hover:text-white transition-colors">
+        <AiTwotoneEdit />
+      </div>
+    </Link>
+  </div>
+</div>
+      <div className="px-6 py-4">
+        <div className="font-bold text-xl mb-2" onClick={() => handleOnClick(app)}>
+          {app.name}
+        </div>
+        <p className="text-sm mb-2" onClick={() => handleOnClick(app)}>
+          {app.description}
+        </p>
+      </div>
+    </div>
+  ))}
+</div>
+
         </>
       )}
     </div>

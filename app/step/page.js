@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import 'tailwindcss/tailwind.css';
-import { AiFillDelete } from 'react-icons/ai';
-import { AiTwotoneEdit } from 'react-icons/ai';
+import { AiFillDelete,AiTwotoneEdit } from 'react-icons/ai';
+import { HiPlus } from "react-icons/hi";
 import axios from 'axios';
 import Link from 'next/link';
 import NavBar from '../NavBar';
@@ -17,7 +17,6 @@ const step = () => {
   const [token, setToken] = useState('');
   const [dataResponse, setDataResponse] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-const itemsPerPage = 3; 
 
 useEffect(() => {
   fetchData();
@@ -97,19 +96,28 @@ useEffect(() => {
       </div>
     ) : (
       <>  
-      <Link href="/addStep" className="bg-emerald-600 text-white hover:text-black p-2 rounded-lg  transition-colors absolute top-4 right-40">
+      {/* <Link href="/addStep" className="bg-emerald-600 text-white hover:text-black p-2 rounded-lg  transition-colors absolute top-4 right-40">
         Add new
-      </Link>
+      </Link> */}
+      <div className="rounded overflow-hidden m-4">
+            <div className="fixed bottom-10 right-10">
+              <Link href="/addStep">
+                <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full ">
+                  <HiPlus className="text-2xl" />
+                </button>
+              </Link>
+            </div>
+          </div>
       <h1 className="text-center text-xl font-bold">{dataResponse.totalCount} Steps</h1>
-      <div className="max-w-screen-md m-20">
+      <div className="max-w-screen-md m-10">
         <table className="w-full table-fixed border p-2">
           <thead>
             <tr className="border p-2">
-              <th>Description</th>
-              <th></th>
+              <th className="border p-2">Description</th>
+              <th>Actions</th>
             </tr>
           </thead>
-          <tbody className="border p-2">
+          <tbody className="border text-center p-2">
             {stepData.map((data) => (
               <tr className="border p-2" key={data.stpid}>
                 <td className="border p-2" >
@@ -136,9 +144,8 @@ useEffect(() => {
           
           <button
             onClick={nextPage}
-            disabled={stepData.length < itemsPerPage || stepData.length === 0}
-              // || dataResponse.totalCount === stepData.length}
-            className={`mx-2 p-2 border rounded-lg ${stepData.length < itemsPerPage || stepData.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={!dataResponse.hasNext}
+            className={`mx-2 p-2 border rounded-lg ${!dataResponse.hasNext ?'opacity-50 cursor-not-allowed' : ''}`}
           >
           Next
         </button>

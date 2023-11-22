@@ -46,19 +46,24 @@ export default function LoginForm() {
         },
         body: JSON.stringify(formData),
       });
-
       if (response.ok) {
         const data = await response.json();
+
+        // if (data.type == 'admin') {
         const token = data.token; // Extract the token from the response
         console.log(token);
-        localStorage.setItem('token', token); // Store the token in local storage
+        localStorage.setItem('token', token); 
 
         // alert('Logged in successfully!');
         console.log('Successful login', data);
 
-        // Redirect to the appList page
+       
         setShowLoading(true); // Show loading spinner when redirecting
         router.push('/appList');
+      // } else {
+      //   setErrorMessage('Invalid user type. Only admin users are allowed.');
+      //   console.error('Invalid user type');
+      // }
       } else {
         setErrorMessage('Incorrect username or password.');
         console.error('Login failed');

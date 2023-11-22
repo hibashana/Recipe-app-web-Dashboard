@@ -11,6 +11,7 @@ import NavBar from '../NavBar';
 
 const CreateBanner = () => {
   const router = useRouter(); 
+  const [errorMessage, setErrorMessage] = useState('');
 
   const [formData, setFormData] = useState({
     name: '',
@@ -62,10 +63,24 @@ const CreateBanner = () => {
         router.push('/banner');
       })
       .catch((error) => {
-        toast.error(`Failed to create banner `);
-        console.error('Error creating banner:', error);
-        // Handle the error and display an error message if needed
+        if (error.response) {  
+          console.error('Response error data:', error.response.data);
+          setErrorMessage(error.response.data.message || 'An error occurred.');
+        } else if (error.request) {
+          
+          console.error('Request error:', error.request);
+          setErrorMessage('Failed to create user. Please try again later.');
+        } else {
+         
+          console.error('Other error:', error.message);
+          setErrorMessage('An unexpected error occurred. Please try again later.');
+        }
       });
+      // .catch((error) => {
+      //   toast.error(`Failed to create banner `);
+      //   console.error('Error creating banner:', error);
+      //   Handle the error and display an error message if needed
+      // });
   };
 
   return (
@@ -100,7 +115,14 @@ const CreateBanner = () => {
         </button>
         <ToastContainer autoClose={3000} />
         <NavBar/>
+        {errorMessage && (
+          <div className="text-red-600 text-center m-2">
+            {/* bg-red-500 text-white m-1 rounded-md */}
+            {errorMessage}
+          </div>
+        )}
       </form>
+      
     </div>
     
   </div>

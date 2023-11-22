@@ -10,6 +10,7 @@ import Link from 'next/link';
 import NavBar from '../NavBar';
 import { baseURL, imageURL } from '../utils/constants';
 import { useRouter } from 'next/navigation';
+import { HiPlus } from "react-icons/hi";
 
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -19,6 +20,7 @@ const banner = () => {
   const [dataResponse, setDataResponse] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [token, setToken] = useState('');
+  const [searchName, setSearchName] = useState('');
   const router = useRouter();
 
   useEffect(() => {
@@ -39,6 +41,19 @@ const banner = () => {
       setDataResponse(data);
     } catch (error) {
       console.error('Error fetching data:', error);
+    }
+  };
+
+  const handleSearch = async () => {
+    try {
+      const appId = localStorage.getItem('appId');
+       const response = await fetch(`${baseURL}/banner/all_by_filter?appID=${appId}&page=${currentPage}&name=${searchName}`,{ cache: 'no-store' });
+      const data = await response.json();
+      console.log(response);
+      setBannerData(data.data);
+      setDataResponse(data);
+    } catch (error) {
+      console.error('Error fetching search results:', error);
     }
   };
 
@@ -96,24 +111,51 @@ const banner = () => {
         </div>
       ) : (
         <>
-          <Link href="/addBanner" className="bg-emerald-600 text-white hover:text-black p-2 rounded-lg transition-colors absolute top-4 right-40">
+        <div className="rounded overflow-hidden m-4">
+            <div className="fixed bottom-10 right-10">
+              <Link href="/addBanner">
+                <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full ">
+                  <HiPlus className="text-2xl" />
+                </button>
+              </Link>
+            </div>
+          </div>
+
+          <div className="flex items-center">
+            <div className="flex border border-emerald-400 rounded">
+                <input
+                    type="text"
+                    className="block w-full px-4 py-2 text-black bg-white border rounded-md focus:border-emerald-600 focus:outline-none  focus:ring-opacity-40"
+                    // focus:ring-emerald-600 focus:ring
+                    placeholder="Search..."
+                    value={searchName}
+                onChange={(e) => setSearchName(e.target.value)}
+                />
+                <button className="px-4 text-white bg-emerald-600 border-l rounded "
+                onClick={handleSearch}>
+                    Search
+                </button>
+            </div>
+        </div>
+        
+          {/* <Link href="/addBanner" className="bg-emerald-600 text-white hover:text-black p-2 rounded-lg transition-colors absolute top-4 right-40">
             Add new
-          </Link>
-          <h1 className="text-center text-xl font-bold">{dataResponse.totalCount}Banner</h1>
-          <div className="max-w-screen-md m-20">
+          </Link> */}
+          <h1 className="text-center text-xl font-bold p-4">{dataResponse.totalCount} Banner</h1>
+          <div className="max-w-screen-md m-4">
             <table className="w-full table-fixed border p-2">
               <thead>
                 <tr className="border p-2">
-                  <th>Image</th>
-                  <th>Name</th>
-                  <th></th>
+                  <th className="border p-2 w-32">Image</th>
+                  <th className="border p-2">Name</th>
+                  <th className="border p-2">Action</th>
                 </tr>
               </thead>
-              <tbody className="border p-2">
+              <tbody className="border text-center p-2">
                 {bannerData.map((data) => (
                   <tr className="border p-2" key={data.id}>
                     <td className="border p-2">
-                      <img src={`${imageURL}${data.image}`} width="100" height="100" alt={data.name} />
+                      <img src={`${imageURL}${data.image}`} className="w-20 h-20 object-cover" alt={data.name} />
                     </td>
                     <td className="border p-2" >
                     {/* onClick={() => handleBannerClick(data.id)} */}
