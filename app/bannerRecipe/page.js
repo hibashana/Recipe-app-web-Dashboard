@@ -6,31 +6,37 @@ import { AiFillDelete,AiTwotoneEdit} from 'react-icons/ai';
 import { HiPlus } from "react-icons/hi";
 import axios from 'axios';
 import Link from 'next/link';
-import NavBar from '../NavBar';
 import { baseURL, imageURL } from '../utils/constants';
 import { MdFilterListAlt } from "react-icons/md";
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import NavBar from '../NavBar';
 
 
 
-const Recipes = () => {
+const BannerRecipes = () => {
   const [recipesData, setRecipesData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [recipeIds, setRecipeIds] = useState([]);
   const [dataResponse, setDataResponse] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [token, setToken] = useState('');
   const [selectedFilter, setSelectedFilter] = useState("all");
  
-
-  // const [categories, setCategories] = useState([]); 
+  const searchParams = useSearchParams();
+  
+   
 
   useEffect(() => {
     fetchData();
     const tokenFromStorage = localStorage.getItem('token');
     setToken(tokenFromStorage);
-  }, [currentPage]);
+    const recipeId = searchParams.get('recipeIds');
+    setRecipeIds(recipeId ? recipeId.split(',') : []);
+  // }, [searchParams]);
+  }, [currentPage,searchParams]);
 
   const fetchData = async () => {
     try {
@@ -161,7 +167,38 @@ const Recipes = () => {
     setCurrentPage(currentPage - 1);
   };
 
+  const addRecipeToBanner = async (rcpid) => {
+    try {
+      const token = localStorage.getItem('token');
+      const bannerId = searchParams.get('bannerId'); 
+      const recipeId = searchParams.get('recipeIds');
+      const URL = `${baseURL}/banner/create_banner_recipe`;
+  
+      const response = await axios.post(
+        URL,
+        { 
+          bannerId: bannerId,
+          recipeId: rcpid,},
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        }
+      );
+  
+      if (response.status === 200) {
+        toast.success(`Recipe ${rcpid} has been added to the banner.`);
+        fetchData();
+      } else {
+        toast.error(`Failed to add recipe ${rcpid} to the banner.`);
+      }
+    } catch (error) {
+      toast.error(`An error occurred: ${error.message}`);
+      console.error(`An error occurred: ${error.message}`);
+    }
+  };
 
+  
   return (
     <div className="flex flex-col">
       {!token ? (
@@ -218,9 +255,9 @@ const Recipes = () => {
               <th className="border w-1/6">Name</th>
               <th className="border w-3/6">Description</th>
               <th className="border w-1/6">Premium</th>
-              <th className="border w-1/6">Action</th>
               <th className="w-1/6"></th>
-              <th className="w-1/6" ></th>
+              <th className="w-1/6"></th>
+              <th className="border w-1/6">Action</th>
               
             </tr>
           </thead>
@@ -245,29 +282,31 @@ const Recipes = () => {
           </label>
         </td>
           
-        <td className="flex flex-row items-center justify-center gap-2">
-  <div className="hover:text-red-700 justify-center cursor-pointer " onClick={() => deleteRecipes(data.rcpid, data.name)}>
-    <AiFillDelete />
-  </div>
-  <div className="hover:text-sky-500">
-    <Link className="transition-colors p-3 " href={`/editRecipe/${data.rcpid}`}>
-      <AiTwotoneEdit />
-    </Link>
-  </div>
-</td>
-        <td></td>
-        <td className="w-1/4  flex justify-center flex-row gap-4  relative" onClick={() => handleRecipesClick(data.rcpid)}>
-          {/* <div className="absolute left-1/2 transform -translate-x-1/2"> */}
+        <td className="border justify-center flex-row gap-4  relative" onClick={() => handleRecipesClick(data.rcpid)} colSpan={2}>
+            <div className='flex flex-row gap-4 p-2 justify-center'>
             <div className="hover:text-sky-500">
               <Link href={`/ingredients`}>Ingredients</Link>
             </div>
             <div className="hover:text-sky-500">
               <Link href={`/step`}>Steps</Link>
             </div>
-            <td></td>
-          {/* </div> */}
+            </div>
         </td>
-        
+    <td className="flex flex-col items-center gap-2 p-4">
+    {recipeIds.includes(data.rcpid) ? (
+       
+        <div className="w-20 rounded-full text-red-500 border hover:border-red-500 transition-colors cursor-pointer" onClick={() => deleteRecipes(data.rcpid, data.name)}>
+          Remove
+        </div>
+      ) : (
+       
+        <div className="w-20 rounded-full text-emerald-600 border hover:border-emerald-600 transition-colors cursor-pointer"
+        onClick={() => addRecipeToBanner(data.rcpid)}>
+          Add
+        </div>
+      )}
+  
+</td>
       </tr>
     ))}
   </tbody>
@@ -295,4 +334,4 @@ const Recipes = () => {
   );
 };
 
-export default Recipes;
+export default BannerRecipes;

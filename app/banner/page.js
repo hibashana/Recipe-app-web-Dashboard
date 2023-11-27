@@ -23,6 +23,8 @@ const banner = () => {
   const [searchName, setSearchName] = useState('');
   const router = useRouter();
 
+  const [selectedBanner, setSelectedBanner] = useState(null);
+
   useEffect(() => {
     fetchData();
     const tokenFromStorage = localStorage.getItem('token');
@@ -100,8 +102,14 @@ const banner = () => {
     setCurrentPage(currentPage - 1);
   };
 
+  const viewRecipes = (id) => {
+    setSelectedBanner(selectedBanner === id ? null : id);
+  };
+
+  
+
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col">
        {!token ? (
         <div className='m-7'>
           <p className='text-2xl'>You are not logged in. Please log in.</p>
@@ -121,8 +129,8 @@ const banner = () => {
             </div>
           </div>
 
-          <div className="flex items-center">
-            <div className="flex border border-emerald-400 rounded">
+          <div className="flex mx-12 items-center">
+            <div className="flex border mx-60  border-emerald-400 rounded">
                 <input
                     type="text"
                     className="block w-full px-4 py-2 text-black bg-white border rounded-md focus:border-emerald-600 focus:outline-none  focus:ring-opacity-40"
@@ -136,23 +144,26 @@ const banner = () => {
                     Search
                 </button>
             </div>
+            <h1 className="text-center text-xl font-bold gap-30 p-6">{dataResponse.totalCount} Banner</h1>
         </div>
         
-          {/* <Link href="/addBanner" className="bg-emerald-600 text-white hover:text-black p-2 rounded-lg transition-colors absolute top-4 right-40">
+          <Link href="/addBanner" className="bg-emerald-600 text-white hover:text-black p-2 rounded-lg transition-colors absolute top-4 right-40">
             Add new
-          </Link> */}
-          <h1 className="text-center text-xl font-bold p-4">{dataResponse.totalCount} Banner</h1>
-          <div className="max-w-screen-md m-4">
+          </Link>
+          
+          <div className="max-w-screen-md m-4 mx-auto">
             <table className="w-full table-fixed border p-2">
               <thead>
-                <tr className="border p-2">
+                <tr className="border p-2 bg-emerald-600 text-white">
                   <th className="border p-2 w-32">Image</th>
                   <th className="border p-2">Name</th>
+                  <th className="border p-2">Recipes</th>
                   <th className="border p-2">Action</th>
                 </tr>
               </thead>
-              <tbody className="border text-center p-2">
+              <tbody className="border bg-white text-center p-2">
                 {bannerData.map((data) => (
+                  <React.Fragment key={data.id}>
                   <tr className="border p-2" key={data.id}>
                     <td className="border p-2">
                       <img src={`${imageURL}${data.image}`} className="w-20 h-20 object-cover" alt={data.name} />
@@ -161,20 +172,94 @@ const banner = () => {
                     {/* onClick={() => handleBannerClick(data.id)} */}
                       {data.name}
                     </td>
+                    <td className='border p-2'>
+                  {data.Recipes.length} Recipes{' '}
+                  <span
+                    className="flex justify-center text-emerald-600 hover:text-blue-500 cursor-pointer"
+                    onClick={() => viewRecipes(data.id)}
+                  >
+                    View
+                  </span>
+                  <Link href={`/bannerRecipe?bannerId=${data.id}&recipeIds=${data.Recipes.map(recipe => recipe.rcpid).join(',')}`}>
+                    <span className="flex justify-center text-emerald-600 hover:text-blue-500 cursor-pointer">
+                       Add Recipe
+                    </span>
+                  </Link>
+                </td>
                     <td colSpan={2} className="flex items-center justify-center gap-4 p-6">
-                      <div className="hover:text-red-700" onClick={() => deleteBanner(data.id, data.name)}>
+                      <div className="rounded-full p-2 bg-emerald-100 hover:bg-red-700 hover:text-white transition-colors" onClick={() => deleteBanner(data.id, data.name)}>
                         <AiFillDelete />
                       </div>
-                      <div className="hover:text-sky-500">
-                        <Link className="transition-colors p-2" href={`/editBanner/${data.id}`}>
+                      <div className="rounded-full p-2 bg-emerald-100 hover:bg-sky-400 hover:text-white transition-colors">
+                        <Link className="" href={`/editBanner/${data.id}`}>
                           <AiTwotoneEdit />
                         </Link>
                       </div>
                     </td>
                   </tr>
+                  {data.Recipes.length > 0 && selectedBanner === data.id && (
+              <tr>
+              <td colSpan={4}>
+          <table className="w-full table-fixed text-center border-black bg-emerald-100">
+            <thead>
+              <tr className="border-black p-2 bg-emerald-600 text-white">
+                <th className="border w-1/6">Image</th>
+                <th className="border w-1/6">Name</th>
+                <th className="border w-3/6">Description</th>
+                <th className="border w-1/6">Premium</th>
+                <th className=" w-1/6"></th>
+                <th className="w-1/6"></th>
+              </tr>
+            </thead>
+            <tbody>
+                   {bannerData
+                .find((banner) => banner.id === selectedBanner)
+                .Recipes.map((recipe) => (
+                  
+                                <tr className="border p-2" key={recipe.rcpid}>
+                                  <td className="border p-2">
+                                    <img
+                                      src={`${imageURL}${recipe.image}`}
+                                      className="w-20 h-20 object-cover"
+                                    />
+                                  </td>
+                                  <td className="border p-2">{recipe.name}</td>
+                                  <td className="border p-2">
+                                    {recipe.description}
+                                  </td>
+                                  <td className="border p-2">
+                                    <label className="flex  cursor-pointer">
+                                      <input
+                                        className="cursor-pointer"
+                                        type="checkbox"
+                                        checked={recipe.premium}
+                                      />
+                                    </label>
+                                  </td>
+                                  
+                                  <td></td>
+                                  <td className="w-1/4 flex justify-center text-center flex-row gap-4  " colSpan={3}>
+                                    <div className="hover:text-sky-500">
+                                      <Link href={`/ingredients`}>Ingredients</Link>
+                                    </div>
+                                    <div className="hover:text-sky-500">
+                                      <Link href={`/step`}>Steps</Link>
+                                    </div>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                          </td>
+                          
+                      </tr>
+                           )}
+                           
+                  </React.Fragment>
                 ))}
               </tbody>
             </table>
+            
             <div className="mt-4 flex justify-center">
           <button onClick={prevPage} disabled={currentPage === 1} className={`mx-2 p-2 border rounded-lg ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}>
             Previous

@@ -21,8 +21,9 @@ const CreateRecipe = () => {
 
   const fetchCategories = async () => {
     try {
-      
-      const response = await fetch(`${baseURL}/category/getall`, { cache: 'no-store' });
+      const appId = localStorage.getItem("appId");
+      console.log(appId);
+      const response = await fetch(`${baseURL}/category/getall/${appId}`, { cache: 'no-store' });
       const data = await response.json();
       setCategories(data);
     } catch (error) {

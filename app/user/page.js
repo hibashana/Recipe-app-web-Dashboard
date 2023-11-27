@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { AiOutlineEdit } from "react-icons/ai";
+import { AiOutlineEdit,AiFillDelete,AiTwotoneEdit} from "react-icons/ai";
 import { MdDeleteOutline } from "react-icons/md";
 import { HiPlus } from "react-icons/hi";
 import Link from "next/link";
@@ -163,16 +163,16 @@ const User = () => {
       <div className="max-w-screen-md m-4">
         <table className="w-full table-auto border ">
           <thead>
-            <tr className="border p-6">
+            <tr className="border p-6 bg-emerald-600 text-white">
               <th className="border p-6">Name</th>
               <th className="border p-6">Email</th>
               <th className="border p-6">Contact</th>
               <th className="border p-6">Type</th>
               <th className="border p-6">Action</th>
-              <th className="border p-6">IsActive</th>
+              <th className="border p-6">Status</th>
             </tr>
           </thead>
-          <tbody className="text-cyan-900 text-center">
+          <tbody className="text-cyan-900 bg-white text-center">
             {usersData.map((data) => (
               <tr className="border p-2" key={data.ruserid}>
                 <td className="border p-2">{data.name}</td>
@@ -183,12 +183,12 @@ const User = () => {
                   {data.isactive ? 'Active' : 'Inactive'}
                 </td> */}
                 <td  className="flex items-center border p-2 justify-center gap-4">
-                  <div className="hover:text-red-700" onClick={() => deleteuser(data.ruserid, data.name)}>
-                    <MdDeleteOutline />
+                  <div className="rounded-full p-2 bg-emerald-100 hover:bg-red-700 hover:text-white transition-colors" onClick={() => deleteuser(data.ruserid, data.name)}>
+                    <AiFillDelete/>
                   </div>
-                  <div className="hover:text-sky-500">
-                    <Link className="transition-colors p-2" href={`/editUser/${data.ruserid}`}>
-                      <AiOutlineEdit />
+                  <div className="rounded-full p-2 bg-emerald-100 hover:bg-sky-400 hover:text-white transition-colors">
+                    <Link className="" href={`/editUser/${data.ruserid}`}>
+                      <AiTwotoneEdit/>
                     </Link>
                   </div>
                   </td>

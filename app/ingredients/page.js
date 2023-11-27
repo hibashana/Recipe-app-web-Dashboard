@@ -101,12 +101,12 @@ const Ingredients = () => {
       <div className="max-w-screen-md m-8">
         <table className="w-full table-fixed border p-2">
           <thead>
-            <tr className="border p-2">
+            <tr className="border p-2 bg-emerald-600 text-white">
               <th className="border p-2">Name and Quality</th>
               <th>Action</th>
             </tr>
           </thead>
-          <tbody className="border text-center p-2">
+          <tbody className="border text-center bg-white p-2">
             {ingredientsData.map((data) =>(
               <tr className="border p-2" key={data.intrdid}>
                 <td className="border p-2">{data.name_qnty}</td>

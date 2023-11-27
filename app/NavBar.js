@@ -2,8 +2,9 @@
 
 // Import necessary modules and components
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams , usePathname} from 'next/navigation';
 import { MdOutlineLogout, MdOutlineArrowForward } from 'react-icons/md';
+import { AiOutlineHome, AiOutlineBook, AiOutlineTags, AiOutlinePicRight, AiOutlineUser } from 'react-icons/ai';
 import { IoIosArrowBack } from 'react-icons/io';
 import classnames from 'classnames';
 import { toast, ToastContainer } from 'react-toastify';
@@ -11,8 +12,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useEffect, useState } from 'react';
 
 const NavBar = () => {
-  // Get the current path and router
-  const currentPath = useRouter().asPath;
+  const currentPath = usePathname();
+  console.log(currentPath);
+
+  // const currentPath = useRouter();
   const searchParams = useSearchParams(); // Retrieve query parameters
   const [storedName, setStoredName] = useState('');
 
@@ -50,8 +53,8 @@ const NavBar = () => {
 
   // Define navigation links
   const links = [
-    { label: 'Home', href: '/home' },
-    { label: 'Category', href: '/category' },
+    { icon: <AiOutlineHome /> ,label: 'Home', href: '/home'},
+    { label: 'Category', href: '/category', icon: <AiOutlineTags />  },
     { label: 'Recipes', href: '/recipes' },
     { label: 'Banner', href: '/banner' },
     { label: 'User', href: '/user' },
@@ -85,6 +88,7 @@ const NavBar = () => {
             <li key={link.href}>
               <Link
                 className={classnames({
+                 
                   'text-zinc-900': link.href === currentPath,
                   'text-white': link.href !== currentPath,
                   'hover:text-zinc-800 transition-colors': true,
@@ -98,6 +102,7 @@ const NavBar = () => {
           ))}
 
           <li className='p-5 pl-0 px-10'>
+          <div className="fixed bottom-10 ">
             <div
               className="flex gap-2 p-2 bg-white border hover:border-gray-900  rounded-md cursor-pointer "
               onClick={handleLogout}
@@ -108,7 +113,9 @@ const NavBar = () => {
               />
               <h3 className="text-base text-emerald-600 font-semibold">Logout</h3>
             </div>
+            </div>
           </li>
+          
         </ul>
       </div>
     </nav>

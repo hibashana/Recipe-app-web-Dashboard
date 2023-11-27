@@ -112,12 +112,12 @@ useEffect(() => {
       <div className="max-w-screen-md m-10">
         <table className="w-full table-fixed border p-2">
           <thead>
-            <tr className="border p-2">
+            <tr className="border p-2 bg-emerald-600 text-white">
               <th className="border p-2">Description</th>
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody className="border text-center p-2">
+          <tbody className="border bg-white text-center p-2">
             {stepData.map((data) => (
               <tr className="border p-2" key={data.stpid}>
                 <td className="border p-2" >

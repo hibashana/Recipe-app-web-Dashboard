@@ -29,7 +29,7 @@ const CreateUser = () => {
 
   });
 
-
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -54,6 +54,11 @@ const CreateUser = () => {
 
     if (formData.rpassword !== formData.confirmPassword) {
       setErrorMessage("Password and Confirm Password don't match.");
+      return;
+    }
+
+    if (!/^\d{10}$/.test(formData.contact)) {
+      setErrorMessage("Please enter a valid 10-digit phone number.");
       return;
     }
 
@@ -147,6 +152,7 @@ const CreateUser = () => {
               onChange={handleChange}
               required
             />
+             
           </div>
           <div className="mb-2">
             <label>Username:</label>
@@ -207,6 +213,7 @@ const CreateUser = () => {
           </button>
           <ToastContainer autoClose={3000} /> {/* Add this line to display toasts */}
         </form>
+        {/* {!isValidPhoneNumber && <p className="text-red-500">Please enter a valid 10-digit phone number.</p>} */}
         {errorMessage && (
           <div className="text-red-600 text-center m-2">
             {/* bg-red-500 text-white m-1 rounded-md */}
