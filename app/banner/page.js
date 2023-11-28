@@ -64,6 +64,31 @@ const banner = () => {
   //   localStorage.setItem('bannerId', id);
   // };
 
+  const handlePremiumChange = async (rcpid,name, isPremium) => {
+    try {
+      const token = localStorage.getItem('token');
+      const URL = `${baseURL}/recipes/change_premium_status/?id=${rcpid}`;
+      const response = await axios.get(
+        URL,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(`Premium status updated for Recipe ${name}`);
+        fetchData(); // Refresh the data after the update
+      } else {
+        toast.error(`Failed to update Premium status for Recipe ${name}`);
+        console.error(`Failed to update Premium status for Recipe ${name}`);
+      }
+    } catch (error) {
+      toast.error(`An error occurred: ${error.message}`);
+      console.error(`An error occurred: ${error.message}`);
+    }
+  };
+
   const deleteBanner = async (id, name) => {
     const confirmDelete = window.confirm(`Are you sure you want to delete the  "${name}"?`);
     if (confirmDelete) {
@@ -80,14 +105,14 @@ const banner = () => {
         console.log(`Banner ${name} has been deleted.`);
         setTimeout(() => {
           window.location.reload();
-        }, 3000); // Reload the page after 3 seconds
+        }, 3000); 
       } else {
-        // Handle any errors that occur during the API call.
+        
         toast.error(`Failed to delete Banner ${name}`);
         console.error(`Failed to delete Banner ${name}`);
       }
     } catch (error) {
-      // Handle network errors or other exceptions.
+     
       toast.error(`An error occurred: ${error.message}`);
       console.error(`An error occurred: ${error.message}`);
     }
@@ -106,7 +131,33 @@ const banner = () => {
     setSelectedBanner(selectedBanner === id ? null : id);
   };
 
-  
+  const deleteRecipeFromBanner = async (id, name) => {
+    const confirmDelete = window.confirm(`Are you sure you want to delete the recipe "${name}"?`);
+    if (confirmDelete) {
+      try {
+        const token = localStorage.getItem('token');
+        const URL = `${baseURL}/banner/delete_banner_recipe/${id}`;
+        const response = await axios.delete(`${URL}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        if (response.status === 200) {
+          toast.success(`Recipe ${id} has been removed from the banner.`);
+          console.log(`Recipe ${id} has been removed from the banner.`);
+          setTimeout(() => {
+            window.location.reload();
+          }, 3000); // Reload the page after 3 seconds
+        } else {
+          toast.error(`Failed to remove recipe ${id} from the banner.`);
+          console.error(`Failed to remove recipe ${id} from the banner.`);
+        }
+      } catch (error) {
+        toast.error(`An error occurred: ${error.message}`);
+        console.error(`An error occurred: ${error.message}`);
+      }
+    }
+  };
 
   return (
     <div className="flex flex-col">
@@ -147,9 +198,9 @@ const banner = () => {
             <h1 className="text-center text-xl font-bold gap-30 p-6">{dataResponse.totalCount} Banner</h1>
         </div>
         
-          <Link href="/addBanner" className="bg-emerald-600 text-white hover:text-black p-2 rounded-lg transition-colors absolute top-4 right-40">
+          {/* <Link href="/addBanner" className="bg-emerald-600 text-white hover:text-black p-2 rounded-lg transition-colors absolute top-4 right-40">
             Add new
-          </Link>
+          </Link> */}
           
           <div className="max-w-screen-md m-4 mx-auto">
             <table className="w-full table-fixed border p-2">
@@ -180,7 +231,7 @@ const banner = () => {
                   >
                     View
                   </span>
-                  <Link href={`/bannerRecipe?bannerId=${data.id}&recipeIds=${data.Recipes.map(recipe => recipe.rcpid).join(',')}`}>
+                  <Link href={`/bannerRecipe?bannerId=${data.id}`}>
                     <span className="flex justify-center text-emerald-600 hover:text-blue-500 cursor-pointer">
                        Add Recipe
                     </span>
@@ -209,6 +260,7 @@ const banner = () => {
                 <th className="border w-1/6">Premium</th>
                 <th className=" w-1/6"></th>
                 <th className="w-1/6"></th>
+                <th className="border w-1/6">Remove</th>
               </tr>
             </thead>
             <tbody>
@@ -228,14 +280,15 @@ const banner = () => {
                                     {recipe.description}
                                   </td>
                                   <td className="border p-2">
-                                    <label className="flex  cursor-pointer">
-                                      <input
-                                        className="cursor-pointer"
-                                        type="checkbox"
-                                        checked={recipe.premium}
-                                      />
-                                    </label>
-                                  </td>
+                      <label className="flex  cursor-pointer">
+                        <input
+                          className='cursor-pointer'
+                          type="checkbox"
+                          checked={recipe.premium}
+                          onChange={() => handlePremiumChange(recipe.rcpid,recipe.name,recipe.premium)}
+                        />
+                      </label>
+                    </td>
                                   
                                   <td></td>
                                   <td className="w-1/4 flex justify-center text-center flex-row gap-4  " colSpan={3}>
@@ -246,12 +299,30 @@ const banner = () => {
                                       <Link href={`/step`}>Steps</Link>
                                     </div>
                                   </td>
+                                  <td className='border'>
+                                  <div
+                                  
+                               className="w-20 rounded-full text-red-500 border hover:bg-white border-red-500 transition-colors hover:text-red-700 justify-center cursor-pointer"
+                               onClick={() => deleteRecipeFromBanner(recipe.BannerRecipes.id, recipe.name)}
+                               >
+                               Remove
+                              </div>
+                                  {/* {Banners.map((item) => (
+                             <div
+                                key={item.id}  
+                               className="w-20 rounded-full text-red-500 border hover:bg-white border-red-500 transition-colors hover:text-red-700 justify-center cursor-pointer"
+                               onClick={() => deleteRecipeFromBanner(item.BannerRecipes.id, recipe.name)}
+                               >
+                               Remove
+                              </div>
+                                ))} */}
+                                </td>
+                                
                                 </tr>
                               ))}
                             </tbody>
                           </table>
                           </td>
-                          
                       </tr>
                            )}
                            
