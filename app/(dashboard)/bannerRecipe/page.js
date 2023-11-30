@@ -307,7 +307,7 @@ const BannerRecipes = () => {
             </div>
           </div>
       
-          <NavBar />
+          {/* <NavBar /> */}
           <ToastContainer autoClose={3000} />
         </>
       )}

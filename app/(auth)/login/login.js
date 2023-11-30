@@ -1,11 +1,12 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { baseURL } from '../utils/constants';
+import { baseURL } from '../../utils/constants';
 import { FaRegCircleUser } from 'react-icons/fa6';
 import { RiEyeCloseFill, RiEyeFill, RiLockPasswordLine } from 'react-icons/ri';
 import { FaEyeSlash } from 'react-icons/fa';
 import { ClipLoader } from 'react-spinners';
+// import LoginLayout from '../login/layout';
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
@@ -83,6 +84,7 @@ export default function LoginForm() {
 
   return (
     <main>
+      {/* <LoginLayout/> */}
       <div className="grid place-items-center h-screen justify-center">
         {!showLoading ? (
           <div className="shadow-lg p-5 rounded-lg border-t-4  border-green-400" >

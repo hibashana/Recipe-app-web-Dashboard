@@ -134,8 +134,8 @@
 
 import React, { useState } from 'react';
 import axios from 'axios'; // Import Axios
-import NavBar from '../NavBar';
-import {baseURL,imageURL } from '../utils/constants';
+// import NavBar from '../NavBar';
+import {baseURL,imageURL } from '../../utils/constants';
 import { useRouter } from 'next/navigation';
 
 
@@ -205,7 +205,7 @@ const CreateCategory = () => {
   };
 
   return (
-<div className="flex flex-col items-center h-screen justify-center bg-gray-100">
+<div className="flex flex-col items-center h-screen justify-center">
       <form
         className="shadow-2xl bg-white p-8 rounded-md"
         onSubmit={handleSubmit}
@@ -233,7 +233,7 @@ const CreateCategory = () => {
       </form>
       
       <ToastContainer autoClose={3000} />
-      <NavBar />
+      {/* <NavBar /> */}
     </div>
   );
  

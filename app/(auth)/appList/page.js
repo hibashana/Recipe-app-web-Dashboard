@@ -7,7 +7,7 @@ import Link from 'next/link';
 import axios from 'axios';
 import { ClipLoader } from 'react-spinners';
 import { AiFillDelete, AiTwotoneEdit,AiOutlineEdit } from 'react-icons/ai';
-import {baseURL,imageURL } from '../utils/constants';
+import {baseURL,imageURL } from '../../utils/constants';
 import { useRouter } from 'next/navigation';
 
 import { toast, ToastContainer } from 'react-toastify';

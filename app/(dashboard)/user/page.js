@@ -8,8 +8,8 @@ import { HiPlus } from "react-icons/hi";
 import Link from "next/link";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { baseURL, imageURL } from '../utils/constants';
-import NavBar from '../NavBar';
+import { baseURL, imageURL } from '../../utils/constants';
+// import NavBar from '../NavBar';
 
 const User = () => {
   const [usersData, setUsersData] = useState([]);
@@ -218,7 +218,7 @@ const User = () => {
           </button>
         </div>
       </div>
-      <NavBar />
+      {/* <NavBar /> */}
       <ToastContainer autoClose={3000} />
       {/* </> */}
       {/* )} */}

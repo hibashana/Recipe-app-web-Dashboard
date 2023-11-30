@@ -7,8 +7,8 @@ import { AiFillDelete } from 'react-icons/ai';
 import { AiTwotoneEdit } from 'react-icons/ai';
 import axios from 'axios';
 import Link from 'next/link';
-import NavBar from '../NavBar';
-import { baseURL, imageURL } from '../utils/constants';
+// import NavBar from '../NavBar';
+import { baseURL, imageURL } from '../../utils/constants';
 import { useRouter } from 'next/navigation';
 import { HiPlus } from "react-icons/hi";
 
@@ -344,7 +344,7 @@ const banner = () => {
           </button>
         </div>
           </div>
-          <NavBar />
+          {/* <NavBar /> */}
           <ToastContainer autoClose={3000} />
         </>
       )}

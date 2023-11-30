@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { baseURL } from "@/app/utils/constants";
-import EditCategorylist from "../../(dashboard)/components/editCategoryListForm";
+import EditCategorylist from "../../components/editCategoryListForm";
 
 
 

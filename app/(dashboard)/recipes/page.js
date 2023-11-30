@@ -6,8 +6,8 @@ import { AiFillDelete,AiTwotoneEdit} from 'react-icons/ai';
 import { HiPlus } from "react-icons/hi";
 import axios from 'axios';
 import Link from 'next/link';
-import NavBar from '../NavBar';
-import { baseURL, imageURL } from '../utils/constants';
+// import NavBar from '../NavBar';
+import { baseURL, imageURL } from '../../utils/constants';
 import { MdFilterListAlt } from "react-icons/md";
 
 import { toast, ToastContainer } from 'react-toastify';
@@ -287,7 +287,7 @@ const Recipes = () => {
         </div>
       </div>
       
-      <NavBar />
+      {/* <NavBar /> */}
       <ToastContainer autoClose={3000} />
       </>
       )}

@@ -6,8 +6,8 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/navigation';
-import { baseURL } from '../utils/constants';
-import NavBar from '../NavBar';
+import { baseURL } from '../../utils/constants';
+// import NavBar from '../NavBar';
 
 const CreateBanner = () => {
   const router = useRouter(); 
@@ -114,7 +114,7 @@ const CreateBanner = () => {
           Add Banner
         </button>
         <ToastContainer autoClose={3000} />
-        <NavBar/>
+        {/* <NavBar/> */}
         {errorMessage && (
           <div className="text-red-600 text-center m-2">
             {/* bg-red-500 text-white m-1 rounded-md */}

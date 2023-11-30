@@ -65,7 +65,7 @@ const NavBar = () => {
   ];
 
   return (
-    <nav className="flex flex-col">
+    <nav className="flex fixed flex-col">
        {/* <AppBar title={storedName} /> */}
       <div className="w-1/2 py-10 h-screen bg-emerald-600 fixed top-0 left-96 lg:w-60 lg:left-0">
       <div className="flex items-center justify-between  mb-4">

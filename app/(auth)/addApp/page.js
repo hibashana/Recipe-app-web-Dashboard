@@ -1,6 +1,6 @@
 
 import Head from 'next/head';
-import CreateApp from '../components/addApplistForm';
+import CreateApp from '../../components/addApplistForm';
 
 const AddApp= () => {
   return (

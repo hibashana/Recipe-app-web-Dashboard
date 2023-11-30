@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import axios from "axios"; // Import Axios
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { baseURL } from "../utils/constants";
-import NavBar from "../NavBar";
+import { baseURL } from "../../utils/constants";
+// import NavBar from "../NavBar";
 
 export default function EditCategorylist({
   ctgyid,
@@ -72,7 +72,7 @@ export default function EditCategorylist({
         <button className="block mx-auto bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded" type="submit">
           Update Category
         </button>
-        <NavBar />
+        {/* <NavBar /> */}
       </form>
     </div>
   </div>

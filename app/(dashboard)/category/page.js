@@ -5,8 +5,8 @@ import { AiFillDelete, AiTwotoneEdit } from "react-icons/ai";
 import { HiPlus } from "react-icons/hi";
 import axios from "axios";
 import Link from "next/link";
-import NavBar from "../NavBar";
-import { baseURL, imageURL } from "../utils/constants";
+// import NavBar from "../NavBar";
+import { baseURL, imageURL } from "../../utils/constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
@@ -229,7 +229,7 @@ const handlePremiumChange = async (rcpid, isPremium) => {
             </h1>
           </div>
 
-          <div className="max-w-screen-md items-center p-2 mx-auto">
+          <div className="max-w-screen-md items-center p-2">
             <table className="w-full table-fixed text-center items-center border-black ">
               <thead>
                 <tr className="border p-2 bg-emerald-600 text-white">
@@ -346,7 +346,7 @@ const handlePremiumChange = async (rcpid, isPremium) => {
             </div>
           </div>
 
-          <NavBar />
+          {/* <NavBar /> */}
           <ToastContainer autoClose={3000} />
         </>
       )}
