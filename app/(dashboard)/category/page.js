@@ -10,6 +10,7 @@ import { baseURL, imageURL } from "../../utils/constants";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
+import tablesize from "../../tablestyle.css";
 
 // Create a new component for the table rows
 const CategoryRow = ({ data, onDelete, onView }) => (
@@ -145,7 +146,7 @@ const Category = () => {
   }
   };
 
-const handlePremiumChange = async (rcpid, isPremium) => {
+const handlePremiumChange = async (rcpid,name,isPremium) => {
     try {
       const token = localStorage.getItem('token');
       const URL = `${baseURL}/recipes/change_premium_status/?id=${rcpid}`;
@@ -158,11 +159,11 @@ const handlePremiumChange = async (rcpid, isPremium) => {
         }
       );
       if (response.status === 200) {
-        toast.success(`Premium status updated for Recipe ${rcpid}`);
+        toast.success(`Premium status updated for Recipe ${name}`);
         fetchData(); // Refresh the data after the update
       } else {
-        toast.error(`Failed to update Premium status for Recipe ${rcpid}`);
-        console.error(`Failed to update Premium status for Recipe ${rcpid}`);
+        toast.error(`Failed to update Premium status for Recipe ${name}`);
+        console.error(`Failed to update Premium status for Recipe ${name}`);
       }
     } catch (error) {
       toast.error(`An error occurred: ${error.message}`);
@@ -199,7 +200,7 @@ const handlePremiumChange = async (rcpid, isPremium) => {
       ) : (
         <>
           <div className="rounded overflow-hidden m-4">
-            <div className="fixed bottom-10 right-10">
+            <div className="fixed bottom-7 right-10">
               <Link href="/addCategory">
                 <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full ">
                   <HiPlus className="text-2xl" />
@@ -208,11 +209,11 @@ const handlePremiumChange = async (rcpid, isPremium) => {
             </div>
           </div>
 
-          <div className="flex mx-12 p-2">
-            <div className="flex border border-emerald-400 rounded mx-60">
+          <div className="flex  p-2">
+            <div className="flex border border-emerald-400 mr-auto rounded ">
               <input
                 type="text"
-                className="block w-full px-4 py-2 text-black bg-white border rounded-md focus:border-emerald-600  focus:outline-none  focus:ring-opacity-40"
+                className="block w-full px-4  text-black bg-white border rounded-md focus:border-emerald-600  focus:outline-none  focus:ring-opacity-40"
                 placeholder="Search..."
                 value={searchName}
                 onChange={(e) => setSearchName(e.target.value)}
@@ -224,21 +225,22 @@ const handlePremiumChange = async (rcpid, isPremium) => {
                 Search
               </button>
             </div>
-            <h1 className="text-center text-xl p-2 font-bold ">
+            <h1 className="ml-auto text-center text-xl  p-2 font-bold ">
               {dataResponse.totalCount} Categories
             </h1>
           </div>
 
-          <div className="max-w-screen-md items-center p-2">
+          <div className={tablesize.fullWidthTable}>
+        
             <table className="w-full table-fixed text-center items-center border-black ">
               <thead>
-                <tr className="border p-2 bg-emerald-600 text-white">
+                <tr className=" p-2 bg-emerald-600 text-white">
                   <th className="border p-2">Name</th>
                   <th className="border p-2">
                     Total Recipes{" "}
                     
                   </th>
-                  <th className="border p-2">Action</th>
+                  <th className=" p-2">Action</th>
                 </tr>
               </thead>
               <tbody className="bg-white">
@@ -252,7 +254,7 @@ const handlePremiumChange = async (rcpid, isPremium) => {
                     {data.Recipes.length > 0 && visibleCategory === data.ctgyid && (
                       <tr>
                         <td colSpan={3}>
-                          <table className="w-full table-fixed text-center border-black bg-emerald-100">
+                          <table className="w-full table-fixed text-center  bg-emerald-100">
                             <thead>
                               <tr className="border-black p-2 bg-emerald-600 text-white">
                                 <th className="border w-1/6">Image</th>
@@ -283,7 +285,7 @@ const handlePremiumChange = async (rcpid, isPremium) => {
                                         className='cursor-pointer'
                                          type="checkbox"
                                          checked={recipe.premium}
-                                         onChange={() => handlePremiumChange(recipe.rcpid, recipe.premium)}
+                                         onChange={() => handlePremiumChange(recipe.rcpid,recipe.name,recipe.premium)}
                                       />
                                       
                                     </label>
@@ -328,7 +330,7 @@ const handlePremiumChange = async (rcpid, isPremium) => {
               <button
                 onClick={prevPage}
                 disabled={currentPage === 1}
-                className={`mx-2 p-2 border rounded-lg ${
+                className={`mr-2 p-2 border rounded-lg ${
                   currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
                 }`}
               >

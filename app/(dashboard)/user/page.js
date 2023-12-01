@@ -9,6 +9,7 @@ import Link from "next/link";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { baseURL, imageURL } from '../../utils/constants';
+import tablesize from "../../tablestyle.css";
 // import NavBar from '../NavBar';
 
 const User = () => {
@@ -160,16 +161,16 @@ const User = () => {
             </div>
           </div>
 
-      <div className="max-w-screen-md m-4">
-        <table className="w-full table-auto border ">
+        <div className={tablesize.fullWidthTable}>
+        <table className="w-full table-fixed p-2 ">
           <thead>
             <tr className="border p-6 bg-emerald-600 text-white">
-              <th className="border p-6">Name</th>
-              <th className="border p-6">Email</th>
-              <th className="border p-6">Contact</th>
-              <th className="border p-6">Type</th>
-              <th className="border p-6">Action</th>
-              <th className="border p-6">Status</th>
+              <th className="border">Name</th>
+              <th className="border w-2/6 p-2">Email</th>
+              <th className="border p-2">Contact</th>
+              <th className="border p-2">Type</th>
+              <th className="border p-2">Action</th>
+              <th className="border p-2">Status</th>
             </tr>
           </thead>
           <tbody className="text-cyan-900 bg-white text-center">
@@ -182,9 +183,10 @@ const User = () => {
                 {/* <td className="border p-2">
                   {data.isactive ? 'Active' : 'Inactive'}
                 </td> */}
-                <td  className="flex items-center border p-2 justify-center gap-4">
+
+                <td  className="flex items-center border  p-2 justify-center gap-4">
                   <div className="rounded-full p-2 bg-emerald-100 hover:bg-red-700 hover:text-white transition-colors" onClick={() => deleteuser(data.ruserid, data.name)}>
-                    <AiFillDelete/>
+                    <AiFillDelete />
                   </div>
                   <div className="rounded-full p-2 bg-emerald-100 hover:bg-sky-400 hover:text-white transition-colors">
                     <Link className="" href={`/editUser/${data.ruserid}`}>
@@ -205,7 +207,7 @@ const User = () => {
             ))}
           </tbody>
         </table>
-        <div className="mt-4 flex justify-center">
+        <div className="mt-4 flex ">
           <button onClick={prevPage} disabled={currentPage === 1} className={`mx-2 p-2 border rounded-lg ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}>
             Previous
           </button>

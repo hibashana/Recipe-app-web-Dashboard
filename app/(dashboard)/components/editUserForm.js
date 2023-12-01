@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { baseURL } from "../utils/constants";
-import NavBar from "../NavBar";
+import { baseURL } from "../../utils/constants";
+// import NavBar from "../NavBar";
 
 export default function EditaUser({
   ruserid,
@@ -98,7 +98,7 @@ export default function EditaUser({
   };
   
   return (
-    <div className="grid place-items-center h-screen bg-gray-100">
+    <div className="grid place-items-center">
     <form
       onSubmit={handleSubmit}
       className="p-8 shadow-2xl bg-white rounded-md"
@@ -140,7 +140,7 @@ export default function EditaUser({
       <button className="block mx-auto bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded" type="submit">
         Update User
       </button>
-      <NavBar/>
+      {/* <NavBar/> */}
     </form>
   </div>
   

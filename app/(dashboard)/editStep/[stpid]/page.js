@@ -4,8 +4,6 @@ import { toast } from "react-toastify";
 import { baseURL } from "@/app/utils/constants";
 import EditSteps from "../../components/editStep";
 
-
-
 export default async function EditStep({ params }) {
   const { stpid} = params;
   console.log(`idid=${stpid}`);

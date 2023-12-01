@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import axios from "axios"; // Import Axios
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { baseURL } from "../utils/constants";
-import NavBar from "../NavBar";
+import { baseURL } from "../../utils/constants";
+// import NavBar from "../NavBar";
 
 export default function EditSteps({
   stpid,
@@ -51,7 +51,7 @@ export default function EditSteps({
   };
 
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="flex justify-center ">
   <form
     onSubmit={handleSubmit}
     className="bg-white p-8 shadow-2xl rounded-md"
@@ -79,7 +79,6 @@ export default function EditSteps({
     >
       Update Step
     </button>
-    <NavBar/>
   </form>
 </div>
 

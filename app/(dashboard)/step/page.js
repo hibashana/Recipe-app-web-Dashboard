@@ -6,8 +6,9 @@ import { AiFillDelete,AiTwotoneEdit } from 'react-icons/ai';
 import { HiPlus } from "react-icons/hi";
 import axios from 'axios';
 import Link from 'next/link';
-import NavBar from '../NavBar';
-import { baseURL } from '../utils/constants';
+// import NavBar from '../NavBar';
+import { baseURL } from '../../utils/constants';
+import tablesize from "../../tablestyle.css";
 
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -100,7 +101,7 @@ useEffect(() => {
         Add new
       </Link> */}
       <div className="rounded overflow-hidden m-4">
-            <div className="fixed bottom-10 right-10">
+            <div className="fixed bottom-7 right-10">
               <Link href="/addStep">
                 <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full ">
                   <HiPlus className="text-2xl" />
@@ -108,8 +109,8 @@ useEffect(() => {
               </Link>
             </div>
           </div>
-      <h1 className="text-center text-xl font-bold">{dataResponse.totalCount} Steps</h1>
-      <div className="max-w-screen-md m-10">
+      <h1 className="ml-auto text-xl font-bold">{dataResponse.totalCount} Steps</h1>
+      <div className={tablesize.fullWidthTable}>
         <table className="w-full table-fixed border p-2">
           <thead>
             <tr className="border p-2 bg-emerald-600 text-white">
@@ -137,7 +138,7 @@ useEffect(() => {
             ))}
           </tbody>
         </table>
-        <div className="mt-4 flex justify-center">
+        <div className="mx-2 flex ">
         <button onClick={prevPage} disabled={currentPage === 1} className={`mx-2 p-2 border rounded-lg ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}>
             Previous
           </button>
@@ -151,7 +152,7 @@ useEffect(() => {
         </button>
       </div>
       </div>
-      <NavBar/>
+      {/* <NavBar/> */}
       <ToastContainer autoClose={3000} />
       </>
       )}

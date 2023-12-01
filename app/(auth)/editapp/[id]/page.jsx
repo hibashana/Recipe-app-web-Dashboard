@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import Editapp from "@/app/components/editApplistForm";
+import Editapp from "@/app/(auth)/components/editApplistForm";
 import { baseURL } from "@/app/utils/constants";
 
 

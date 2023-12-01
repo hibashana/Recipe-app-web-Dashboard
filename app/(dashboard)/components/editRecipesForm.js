@@ -4,8 +4,8 @@ import axios from "axios"; // Import Axios
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import { baseURL } from "../utils/constants";
-import NavBar from "../NavBar";
+import { baseURL } from "../.././utils/constants";
+// import NavBar from "../NavBar";
 
 export default function EditRecipes({
   rcpid,
@@ -58,11 +58,11 @@ export default function EditRecipes({
   };
 
   return (
-    <div className="grid place-items-center h-screen bg-gray-100">
+    <div className="grid place-items-center">
     <div className="w-full max-w-md">
     <form
   onSubmit={handleSubmit}
-  className="flex flex-col items-center justify-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow-2xl p-8 bg-white rounded-md"
+  className="p-8 mx-auto shadow-2xl bg-white rounded-md"
   encType="multipart/form-data"
   style={{ width: '500px' }} // Set a fixed width for the form
 >
@@ -105,7 +105,7 @@ export default function EditRecipes({
   </button>
  
 </form>
-<NavBar/>
+{/* <NavBar/> */}
 </div>
   </div>
   );

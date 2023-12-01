@@ -6,13 +6,14 @@ import { AiFillDelete, AiTwotoneEdit } from 'react-icons/ai';
 import { HiPlus } from "react-icons/hi";
 import axios from 'axios';
 import Link from 'next/link';
-import { baseURL, imageURL } from '../utils/constants';
+import { baseURL, imageURL } from '../../utils/constants';
 import { MdFilterListAlt } from "react-icons/md";
 import { useRouter, useSearchParams } from 'next/navigation';
+import tablesize from "../../tablestyle.css";
 
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import NavBar from '../NavBar';
+// import NavBar from '../NavBar';
 
 const BannerRecipes = () => {
   const [recipesData, setRecipesData] = useState([]);
@@ -92,7 +93,7 @@ const BannerRecipes = () => {
     }
   };
 
-  const handlePremiumChange = async (rcpid, isPremium) => {
+  const handlePremiumChange = async (rcpid,name,isPremium) => {
     try {
       const token = localStorage.getItem('token');
       const URL = `${baseURL}/recipes/change_premium_status/?id=${rcpid}`;
@@ -105,11 +106,11 @@ const BannerRecipes = () => {
         }
       );
       if (response.status === 200) {
-        toast.success(`Premium status updated for Recipe ${rcpid}`);
+        toast.success(`Premium status updated for Recipe ${name}`);
         fetchData(); // Refresh the data after the update
       } else {
-        toast.error(`Failed to update Premium status for Recipe ${rcpid}`);
-        console.error(`Failed to update Premium status for Recipe ${rcpid}`);
+        toast.error(`Failed to update Premium status for Recipe ${name}`);
+        console.error(`Failed to update Premium status for Recipe ${name}`);
       }
     } catch (error) {
       toast.error(`An error occurred: ${error.message}`);
@@ -125,7 +126,7 @@ const BannerRecipes = () => {
     setCurrentPage(currentPage - 1);
   };
 
-  const addRecipeToBanner = async (rcpid) => {
+  const addRecipeToBanner = async (rcpid,name) => {
     try {
       const token = localStorage.getItem('token');
       const bannerId = searchParams.get('bannerId'); 
@@ -145,10 +146,10 @@ const BannerRecipes = () => {
       );
   
       if (response.status === 200) {
-        toast.success(`Recipe ${rcpid} has been added to the banner.`);
+        toast.success(`Recipe ${name} has been added to the banner.`);
         fetchData();
       } else {
-        toast.error(`Failed to add recipe ${rcpid} to the banner.`);
+        toast.error(`Failed to add recipe ${name} to the banner.`);
       }
     } catch (error) {
       toast.error(`An error occurred: ${error.message}`);
@@ -196,7 +197,7 @@ const BannerRecipes = () => {
       ) : (
         <>  
           <div className="rounded overflow-hidden m-4">
-            <div className="fixed bottom-10 right-10">
+            <div className="fixed bottom-7 right-10">
               <Link href="/addRecipes">
                 <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full ">
                   <HiPlus className="text-2xl" />
@@ -204,12 +205,12 @@ const BannerRecipes = () => {
               </Link>
             </div>
           </div>
-          <div className='flex mx-12 p-2'>
-            <div className="mt-4 flex items-center mx-60">
+          <div className='flex p-2'>
+            <div className="flex">
               <select
                 value={selectedFilter}
                 onChange={(e) => setSelectedFilter(e.target.value)}
-                className="p-2 border rounded-md"
+                className="p-2 ml-auto border rounded-md"
               >
                 <option value="all">All Recipes</option>
                 <option value="premium">Premium Recipes</option>
@@ -222,11 +223,12 @@ const BannerRecipes = () => {
               >
                 <MdFilterListAlt className="mr-2" />Filter 
               </button>
-              <h1 className="text-xl ml-96 font-bold ">{dataResponse.totalCount}  Recipes</h1>
-            </div>
+              </div>
+              <h1 className="text-xl ml-auto items-center font-bold p-2">{dataResponse.totalCount}  Recipes</h1>
           </div>
+          
       
-          <div className="max-w-screen-md m-6 mx-auto">
+          <div className={tablesize.fullWidthTable}>
             <table className="w-full table-fixed border p-2 ">
               <thead>
                 <tr className="border p-2 bg-emerald-600 text-white">
@@ -253,7 +255,7 @@ const BannerRecipes = () => {
                           className='cursor-pointer'
                           type="checkbox"
                           checked={data.premium}
-                          onChange={() => handlePremiumChange(data.rcpid, data.premium)}
+                          onChange={() => handlePremiumChange(data.rcpid,data.name,data.premium)}
                         />
                       </label>
                     </td>
@@ -267,7 +269,7 @@ const BannerRecipes = () => {
                         </div>
                       </div>
                     </td>
-                    <td className="flex flex-col items-center gap-2 p-4">
+                    <td className="flex flex-col items-center gap-2 p-8">
                       {data.Banners !== null && data.Banners.some(item => item.id === bannerId) ? (
                         data.Banners.map((item) => (
                           item.id === bannerId ? (
@@ -282,8 +284,8 @@ const BannerRecipes = () => {
                         ))
                       ) : (
                         <div
-                          className="w-20 rounded-full text-emerald-600 border hover:border-emerald-600 transition-colors cursor-pointer"
-                          onClick={() => addRecipeToBanner(data.rcpid)}
+                          className="w-20 justify-center rounded-full text-emerald-600 border  hover:border-emerald-600 transition-colors cursor-pointer"
+                          onClick={() => addRecipeToBanner(data.rcpid,data.name)}
                         >
                           Add
                         </div>
@@ -293,7 +295,7 @@ const BannerRecipes = () => {
                 ))}
               </tbody>
             </table>
-            <div className="mt-4 flex justify-center">
+            <div className="mt-4 flex">
               <button onClick={prevPage} disabled={currentPage === 1} className={`mx-2 p-2 border rounded-lg ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}>
                 Previous
               </button>

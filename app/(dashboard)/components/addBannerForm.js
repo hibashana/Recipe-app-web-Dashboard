@@ -84,9 +84,9 @@ const CreateBanner = () => {
   };
 
   return (
-    <div className="grid place-items-center h-screen bg-gray-100 ">
+    <div className="grid place-items-center">
     <div>
-      <h1 className="text-xl font-bold text-center">Add New Banner</h1>
+      <h1 className="text-xl font-bold text-center p-2">Add New Banner</h1>
       <form onSubmit={handleSubmit} method="POST" encType="multipart/form-data"  className="shadow-2xl bg-white rounded-md p-8">
         <div className="mb-4">
           <label>Name:</label>

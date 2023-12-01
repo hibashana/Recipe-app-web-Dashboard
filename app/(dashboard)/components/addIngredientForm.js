@@ -4,8 +4,8 @@
 
 import React, { useState } from 'react';
 import axios from 'axios'; // Import Axios
-import NavBar from '../NavBar';
-import {baseURL,imageURL } from '../utils/constants';
+// import NavBar from '../NavBar';
+import {baseURL,imageURL } from '../../utils/constants';
 import { useRouter } from 'next/navigation';
 
 import { toast, ToastContainer } from 'react-toastify';
@@ -65,7 +65,7 @@ const CreateIngredient = () => {
   
     return (
       // <div className="absolute top-20 right-20 shadow-2xl bg-sky-200 p-8 ">
-        <div className="flex flex-col items-center h-screen justify-center bg-gray-100 ">
+        <div className="flex flex-col items-center mx-auto">
   <h1 className="text-xl font-bold mb-4">Create Ingredient</h1>
   <form onSubmit={handleSubmit} className="space-y-4 shadow-2xl bg-white p-8 rounded-md">
     <div className="mb-4">
@@ -84,7 +84,7 @@ const CreateIngredient = () => {
     </button>
     <ToastContainer autoClose={3000} />
   </form>
-  <NavBar/>
+  {/* <NavBar/> */}
 </div>
 
     );

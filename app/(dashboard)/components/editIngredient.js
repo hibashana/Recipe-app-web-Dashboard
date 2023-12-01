@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import axios from "axios"; // Import Axios
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { baseURL } from "../utils/constants";
-import NavBar from "../NavBar";
+import { baseURL } from "../../utils/constants";
+// import NavBar from "../NavBar";
 
 export default function EditIngredients({
   intrdid,
@@ -51,7 +51,7 @@ export default function EditIngredients({
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
+    <div className="flex items-center justify-center ">
   <form onSubmit={handleSubmit} className="p-8 shadow-2xl bg-white rounded-md" style={{ width: '25rem', height: '15rem' }}>
     <div className="mb-4">
       <label htmlFor="name_qnty" className="block text-gray-700 text-sm font-bold mb-2">
@@ -70,7 +70,7 @@ export default function EditIngredients({
     <button className=" block mx-auto bg-emerald-600 text-white font-bold py-2 px-4 rounded" type="submit">
       Update Ingredient
     </button>
-    <NavBar/>
+    {/* <NavBar/> */}
   </form>
 </div>
 

@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import axios from "axios"; // Import Axios
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { baseURL } from "../utils/constants";
-import NavBar from "../NavBar";
+import { baseURL } from "../../utils/constants";
+// import NavBar from "../NavBar";
 
 export default function EditaBanner({
   id,
@@ -53,7 +53,7 @@ export default function EditaBanner({
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
+    <div className="flex justify-center items-center ">
   <form
     onSubmit={handleSubmit}
     className="flex flex-col items-center p-8 shadow-lg bg-white rounded-lg"
@@ -90,7 +90,7 @@ export default function EditaBanner({
     <button className="block mx-auto bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded" type="submit">
       Update Banner
     </button>
-    <NavBar/>
+    {/* <NavBar/> */}
   </form>
 </div>
   );

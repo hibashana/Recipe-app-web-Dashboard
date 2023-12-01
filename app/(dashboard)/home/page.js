@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-// import NavBar from '../../NavBar';
+import NavBar from '../../NavBar';
 // import Header from '../layout/header';
 
 const Home = () => {
@@ -24,7 +24,7 @@ const Home = () => {
           <div className="w-full flex justify-end items-end">
             {/* Omitted select dropdown for simplicity */}
           </div>
-          <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
+          <div className="flex items-center justify-center mx-auto">
             <div className="text-emerald-600" style={{ fontWeight: 'bold', fontSize: '40px' }}>
               <div>
                 {storedName && (

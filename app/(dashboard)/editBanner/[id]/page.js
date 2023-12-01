@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import EditaBanner from "@/app/components/editBannerForm";
+import EditaBanner from "@/app/(dashboard)/components/editBannerForm";
 
 import { baseURL } from "@/app/utils/constants";
 

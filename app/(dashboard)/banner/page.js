@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { baseURL, imageURL } from '../../utils/constants';
 import { useRouter } from 'next/navigation';
 import { HiPlus } from "react-icons/hi";
+import tablesize from "../../tablestyle.css";
 
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -171,7 +172,7 @@ const banner = () => {
       ) : (
         <>
         <div className="rounded overflow-hidden m-4">
-            <div className="fixed bottom-10 right-10">
+            <div className="fixed bottom-8 right-10">
               <Link href="/addBanner">
                 <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full ">
                   <HiPlus className="text-2xl" />
@@ -180,29 +181,32 @@ const banner = () => {
             </div>
           </div>
 
-          <div className="flex mx-12 items-center">
-            <div className="flex border mx-60  border-emerald-400 rounded">
-                <input
-                    type="text"
-                    className="block w-full px-4 py-2 text-black bg-white border rounded-md focus:border-emerald-600 focus:outline-none  focus:ring-opacity-40"
-                    // focus:ring-emerald-600 focus:ring
-                    placeholder="Search..."
-                    value={searchName}
+          <div className="flex  p-2">
+            <div className="flex border border-emerald-400 mr-auto rounded ">
+              <input
+                type="text"
+                className="block w-full px-4  text-black bg-white border rounded-md focus:border-emerald-600  focus:outline-none  focus:ring-opacity-40"
+                placeholder="Search..."
+                value={searchName}
                 onChange={(e) => setSearchName(e.target.value)}
-                />
-                <button className="px-4 text-white bg-emerald-600 border-l rounded "
-                onClick={handleSearch}>
-                    Search
-                </button>
+              />
+              <button
+                className="px-4 text-white bg-emerald-600 border-l rounded "
+                onClick={handleSearch}
+              >
+                Search
+              </button>
             </div>
-            <h1 className="text-center text-xl font-bold gap-30 p-6">{dataResponse.totalCount} Banner</h1>
-        </div>
+            <h1 className="ml-auto text-center text-xl  p-2 font-bold ">
+              {dataResponse.totalCount} Banners
+            </h1>
+          </div>
         
           {/* <Link href="/addBanner" className="bg-emerald-600 text-white hover:text-black p-2 rounded-lg transition-colors absolute top-4 right-40">
             Add new
           </Link> */}
           
-          <div className="max-w-screen-md m-4 mx-auto">
+          <div className={tablesize.fullWidthTable}>
             <table className="w-full table-fixed border p-2">
               <thead>
                 <tr className="border p-2 bg-emerald-600 text-white">
@@ -299,10 +303,10 @@ const banner = () => {
                                       <Link href={`/step`}>Steps</Link>
                                     </div>
                                   </td>
-                                  <td className='border'>
+                                  <td className='p-4 border'>
                                   <div
                                   
-                               className="w-20 rounded-full text-red-500 border hover:bg-white border-red-500 transition-colors hover:text-red-700 justify-center cursor-pointer"
+                               className="w-20 justify-center rounded-full text-red-500 border hover:bg-white border-red-500 transition-colors hover:text-red-700 cursor-pointer"
                                onClick={() => deleteRecipeFromBanner(recipe.BannerRecipes.id, recipe.name)}
                                >
                                Remove
@@ -331,7 +335,7 @@ const banner = () => {
               </tbody>
             </table>
             
-            <div className="mt-4 flex justify-center">
+            <div className="mt-4 flex ">
           <button onClick={prevPage} disabled={currentPage === 1} className={`mx-2 p-2 border rounded-lg ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}>
             Previous
           </button>

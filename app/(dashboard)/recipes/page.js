@@ -9,6 +9,7 @@ import Link from 'next/link';
 // import NavBar from '../NavBar';
 import { baseURL, imageURL } from '../../utils/constants';
 import { MdFilterListAlt } from "react-icons/md";
+import tablesize from "../../tablestyle.css";
 
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -45,6 +46,8 @@ const Recipes = () => {
     ? `${baseURL}/recipes/all_by_filter?appID=${appId}&page=${currentPage}&premium=false`
     : selectedFilter === 'all'
     ?`${baseURL}/recipes/all_by_filter?appID=${appId}&page=${currentPage}`
+    // : selectedFilter === 'latest'
+    // ?`${baseURL}/recipes/all_by_filter?appID=${appId}&sortBy=createdAt&page=${currentPage}`
     : `${baseURL}/recipes/all_by_filter?appID=${appId}&sortBy=name&page=${currentPage}`;
 
       // selectedFilter === 'premium'
@@ -128,7 +131,7 @@ const Recipes = () => {
   }
   };
 
-  const handlePremiumChange = async (rcpid, isPremium) => {
+  const handlePremiumChange = async (rcpid,name,isPremium) => {
     try {
       const token = localStorage.getItem('token');
       const URL = `${baseURL}/recipes/change_premium_status/?id=${rcpid}`;
@@ -141,11 +144,11 @@ const Recipes = () => {
         }
       );
       if (response.status === 200) {
-        toast.success(`Premium status updated for Recipe ${rcpid}`);
+        toast.success(`Premium status updated for Recipe ${name}`);
         fetchData(); // Refresh the data after the update
       } else {
-        toast.error(`Failed to update Premium status for Recipe ${rcpid}`);
-        console.error(`Failed to update Premium status for Recipe ${rcpid}`);
+        toast.error(`Failed to update Premium status for Recipe ${name}`);
+        console.error(`Failed to update Premium status for Recipe ${name}`);
       }
     } catch (error) {
       toast.error(`An error occurred: ${error.message}`);
@@ -174,7 +177,7 @@ const Recipes = () => {
     ) : (
       <>  
       <div className="rounded overflow-hidden m-4">
-            <div className="fixed bottom-10 right-10">
+            <div className="fixed bottom-7 right-10">
               <Link href="/addRecipes">
                 <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full ">
                   <HiPlus className="text-2xl" />
@@ -182,34 +185,38 @@ const Recipes = () => {
               </Link>
             </div>
           </div>
-          <div className='flex mx-12 p-2'>
-          <div className="mt-4 flex items-center mx-60">
-      {/* <Link href="/addRecipes" className="bg-emerald-600 hover:bg-green-700 text-white p-2 rounded-lg  first-letter:transition-colors absolute top-4 right-40">
-        Add new
-      </Link> */}
-       
-        <select
-          value={selectedFilter}
-          onChange={(e) => setSelectedFilter(e.target.value)}
-          className="p-2 border rounded-md"
-        >
-          {/* <option></option> */}
-          <option value="all">All Recipes</option>
-          <option value="premium">Premium Recipes</option>
-          <option value="nonPremium">Free Recipes</option>
-          <option value="sortbyname">Sort by Name</option>
-        </select>
-        <button
-          onClick={applyFilter}
-          className="ml-2 p-2 bg-emerald-600 text-white rounded-md flex items-center "
-        >
-          <MdFilterListAlt className="mr-2"  />Filter 
-        </button>
-        <h1 className="text-xl ml-96 font-bold ">{dataResponse.totalCount}  Recipes</h1>
-        </div>
-      </div>
+          <div className='flex p-2 justify-between'>
+  <div className="flex items-center">
+    {/* <Link href="/addRecipes" className="bg-emerald-600 hover:bg-green-700 text-white p-2 rounded-lg  first-letter:transition-colors absolute top-4 right-40">
+      Add new
+    </Link> */}
+    <select
+      value={selectedFilter}
+      onChange={(e) => setSelectedFilter(e.target.value)}
+      className="p-2 border rounded-md"
+    >
+      {/* <option></option> */}
+      <option value="all">All Recipes</option>
+      <option value="premium">Premium Recipes</option>
+      <option value="nonPremium">Free Recipes</option>
+      {/* <option value="latest">Latest</option> */}
+      <option value="sortbyname">Sort by Name</option>
+
+    </select>
+    <button
+      onClick={applyFilter}
+      className="ml-2 p-2 bg-emerald-600 text-white rounded-md flex items-center"
+    >
+      <MdFilterListAlt className="mr-2"  />Filter 
+    </button>
+  </div>
+  <h1 className="text-xl p-2 font-bold">
+    {dataResponse.totalCount} Recipes
+  </h1>
+</div>
+
       
-      <div className="max-w-screen-md m-6 mx-auto">
+      <div className={tablesize.fullWidthTable}>
       
       <table className="w-full table-fixed border p-2 ">
       <thead>
@@ -239,7 +246,7 @@ const Recipes = () => {
                 className='cursor-pointer'
                 type="checkbox"
                 checked={data.premium}
-                onChange={() => handlePremiumChange(data.rcpid, data.premium)}
+                onChange={() => handlePremiumChange(data.rcpid,data.name,data.premium)}
               />
             {/* </div> */}
           </label>
@@ -273,7 +280,7 @@ const Recipes = () => {
   </tbody>
 </table>
 
-        <div className="mt-4 flex justify-center">
+        <div className="mt-4 flex">
           <button onClick={prevPage} disabled={currentPage === 1} className={`mx-2 p-2 border rounded-lg ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}>
             Previous
           </button>
