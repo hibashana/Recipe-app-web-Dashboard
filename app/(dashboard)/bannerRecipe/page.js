@@ -10,6 +10,7 @@ import { baseURL, imageURL } from '../../utils/constants';
 import { MdFilterListAlt } from "react-icons/md";
 import { useRouter, useSearchParams } from 'next/navigation';
 import tablesize from "../../tablestyle.css";
+import { ClipLoader } from 'react-spinners';
 
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -21,6 +22,7 @@ const BannerRecipes = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [token, setToken] = useState('');
   const [selectedFilter, setSelectedFilter] = useState("all");
+  const [loading, setLoading] = useState(true);
  
   const searchParams = useSearchParams();
   
@@ -34,6 +36,7 @@ const BannerRecipes = () => {
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       const appId = localStorage.getItem('appId');
 
       const url =
@@ -51,8 +54,10 @@ const BannerRecipes = () => {
       setRecipesData(data.data);
       setDataResponse(data);
       localStorage.setItem('dataId', data.rcpid);
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching data:', error);
+      setLoading(false);
     }
   };
 
@@ -187,7 +192,13 @@ const BannerRecipes = () => {
 
   return (
     <div className="flex flex-col">
-      {!token ? (
+      {loading ? (
+     <div className="flex h-screen justify-center my-32">
+      <ClipLoader color={'#3d9f49'} size={100} />
+      </div>
+    )
+    :
+      !token ? (
         <div className='m-7'>
           <p className='text-2xl'>You are not logged in. Please log in.</p>
           <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('/')}>

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import "tailwindcss/tailwind.css";
 import { AiFillDelete, AiTwotoneEdit } from "react-icons/ai";
 import { HiPlus } from "react-icons/hi";
+import { ClipLoader } from 'react-spinners';
 import axios from "axios";
 import Link from "next/link";
 // import NavBar from "../NavBar";
@@ -52,6 +53,7 @@ const Category = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [token, setToken] = useState("");
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchData();
@@ -61,6 +63,7 @@ const Category = () => {
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       const appId = localStorage.getItem("appId");
       const response = await fetch(
         `${baseURL}/category/all_by_filter?appID=${appId}&page=${currentPage}`,
@@ -69,8 +72,10 @@ const Category = () => {
       const data = await response.json();
       setCategoryData(data.data);
       setDataResponse(data);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
+      setLoading(false);
     }
   };
 
@@ -186,7 +191,13 @@ const handlePremiumChange = async (rcpid,name,isPremium) => {
 
   return (
     <div className="flex flex-col ">
-      {!token ? (
+      {loading ? (
+     <div className="flex h-screen justify-center my-32">
+      <ClipLoader color={'#36d7b7'} size={100} />
+      </div>
+    )
+    :
+      !token ? (
         <div className="m-7">
           <p className="text-2xl">You are not logged in. Please login.</p>
           <button

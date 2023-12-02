@@ -6,8 +6,8 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/navigation';
-import { baseURL } from '../utils/constants';
-import NavBar from '../NavBar';
+import { baseURL } from '../../utils/constants';
+// import NavBar from '../NavBar';
 import { RiEyeCloseFill, RiEyeFill, RiLockPasswordLine } from 'react-icons/ri';
 import { FaEyeSlash } from 'react-icons/fa';
 
@@ -166,10 +166,10 @@ const CreateUser = () => {
             />
           </div>
           <div className="mb-4 relative">
-            <label>Password:</label>
+            <label style={{text:'disc'}}>Password:</label>
             <input
-              type={showPassword ? 'text' : 'password'}
-              className="w-full border border-gray-300 rounded-md p-2 "
+              type={showPassword ? 'text' : 'text'}
+              className=" passwordInput w-full border border-gray-300 rounded-md p-2 "
               // type="password"
               name="rpassword"
               value={formData.rpassword}
@@ -177,7 +177,7 @@ const CreateUser = () => {
               required
             />
             <label className="absolute cursor-pointer flex items-center"
-              style={{ color: '#9CA3AF', right: '8px', top: '50%' }}>
+              style={{ text:'disc', color: '#9CA3AF', right: '8px', top: '50%' }}>
               {showPassword ? (
                 <RiEyeFill onClick={togglePasswordVisibility} />
               ) : (
@@ -188,13 +188,14 @@ const CreateUser = () => {
           <div className="mb-4 relative">
             <label>Confirm Password:</label>
             <input
-              className="w-full border border-gray-300 rounded-md p-2"
-              type={showconfirmPassword ? 'text' : 'password'}
+              className=" w-full border border-gray-300 rounded-md p-2"
+              type={showconfirmPassword ? 'text' : 'text'}
               // type="password"
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
               required
+              style={{ WebkitTextSecurity: 'disc', textSecurity: 'disc' }}
             />
             <label className="absolute cursor-pointer flex items-center"
               style={{ color: '#9CA3AF', right: '8px', top: '50%' }}>
@@ -221,7 +222,7 @@ const CreateUser = () => {
           </div>
         )}
       </div>
-      <NavBar />
+      {/* <NavBar /> */}
     </div>
 
   );

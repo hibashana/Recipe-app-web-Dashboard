@@ -57,11 +57,12 @@ export default function Editapp({
       console.log(`Updated app name: ${result.data.name}`);
 
       toast.success("App has been updated");
-      router.push("/appList"); 
+      
     } catch (error) {
       console.error("Error updating app:", error);
       toast.error("Error updating app");
     }
+    router.push("/appList"); 
   };
 
   return (
@@ -95,7 +96,6 @@ export default function Editapp({
         id="description"
         type="text"
         placeholder="Description"
-        required
         className="w-full py-3 px-3 text-gray-700 rounded"
       />
     </div>

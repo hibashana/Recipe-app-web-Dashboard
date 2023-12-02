@@ -12,6 +12,7 @@ import { baseURL, imageURL } from '../../utils/constants';
 import { useRouter } from 'next/navigation';
 import { HiPlus } from "react-icons/hi";
 import tablesize from "../../tablestyle.css";
+import { ClipLoader } from 'react-spinners';
 
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -23,6 +24,7 @@ const banner = () => {
   const [token, setToken] = useState('');
   const [searchName, setSearchName] = useState('');
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
   const [selectedBanner, setSelectedBanner] = useState(null);
 
@@ -34,6 +36,7 @@ const banner = () => {
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       const appId = localStorage.getItem('appId');
       console.log(appId);
       // const response = await fetch(`${baseURL}/banner/getall`, { cache: 'no-store' });
@@ -42,8 +45,10 @@ const banner = () => {
       console.log(response);
       setBannerData(data.data);
       setDataResponse(data);
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching data:', error);
+      setLoading(false);
     }
   };
 
@@ -162,7 +167,12 @@ const banner = () => {
 
   return (
     <div className="flex flex-col">
-       {!token ? (
+     {loading ? (
+     <div className="flex h-screen justify-center my-32">
+      <ClipLoader color={'#3d9f49'} size={100} />
+      </div>
+    )
+    :!token ? (
         <div className='m-7'>
           <p className='text-2xl'>You are not logged in. Please log in.</p>
           <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('/')}>

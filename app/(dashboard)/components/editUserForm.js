@@ -4,6 +4,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { baseURL } from "../../utils/constants";
+import { ClipLoader } from 'react-spinners';
 // import NavBar from "../NavBar";
 
 export default function EditaUser({
@@ -19,7 +20,8 @@ export default function EditaUser({
   const [newContact, setnewContact] = useState(contact);
   const [newUsername, setnewUsername] = useState(username);
   const [newPassword, setnewPassword] = useState(password);
-  const [newID, setID] = useState(ruserid);
+  // const [newID, setID] = useState(ruserid);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   // const handlePasswordUpdate = async () => {
@@ -64,6 +66,7 @@ export default function EditaUser({
     const userURL = `${baseURL}/user/${ruserid}`;
 
     try {
+      // setLoading(true);
       const result = await axios.put(
         userURL,
         {
@@ -91,14 +94,25 @@ export default function EditaUser({
       // }
       
       router.push('/user');
+      // setLoading(false);
     } catch (error) {
       console.error('Error updating user:', error);
       toast.error('Error updating user');
     }
+    // finally {
+    //   setLoading(false);
+    // }
   };
   
   return (
     <div className="grid place-items-center">
+      {/* {loading ? (
+     <div className="flex h-screen justify-center my-32">
+      <ClipLoader color={'#3d9f49'} size={100} />
+      </div>
+    )
+    :(
+      <> */}
     <form
       onSubmit={handleSubmit}
       className="p-8 shadow-2xl bg-white rounded-md"
@@ -142,6 +156,8 @@ export default function EditaUser({
       </button>
       {/* <NavBar/> */}
     </form>
+    {/* </>
+     )}  */}
   </div>
   
   );

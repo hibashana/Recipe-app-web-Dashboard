@@ -10,6 +10,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { baseURL, imageURL } from '../../utils/constants';
 import tablesize from "../../tablestyle.css";
+import { ClipLoader } from 'react-spinners';
 // import NavBar from '../NavBar';
 
 const User = () => {
@@ -18,10 +19,12 @@ const User = () => {
   const [dataResponse, setDataResponse] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const token = localStorage.getItem('token');
         const response = await axios.get(
           `${baseURL}/user/all_by_filter?page=${currentPage}`,
@@ -31,8 +34,10 @@ const User = () => {
         );
         setUsersData(response.data.data);
         setDataResponse(response.data);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
+        setLoading(false);
       }
     };
 
@@ -117,26 +122,31 @@ const User = () => {
     setCurrentPage(currentPage - 1);
   };
 
-  if (!token) {
-    return (
-      <div className="flex flex-col items-center m-4">
-      <div className='m-7'>
-        <p className='text-2xl'>You are not logged in. Please log in.</p>
-        <button
-          className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3"
-          type="submit"
-          onClick={() => router.push('/')}
-        >
-          Go to Login
-        </button>
-      </div>
-      </div>
-    );
-  }
+  // if (!token) {
+  //   return (
+  //     <div className="flex flex-col items-center m-4">
+  //     <div className='m-7'>
+  //       <p className='text-2xl'>You are not logged in. Please log in.</p>
+  //       <button
+  //         className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3"
+  //         type="submit"
+  //         onClick={() => router.push('/')}
+  //       >
+  //         Go to Login
+  //       </button>
+  //     </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="flex flex-col items-center m-4">
-      {/* {!token ? (
+      {loading ? (
+     <div className="flex h-screen justify-center my-32">
+      <ClipLoader color={'#3d9f49'} size={100} />
+      </div>
+    )
+    :!token ? (
         <div className='m-7'>
           <p className='text-2xl'>You are not logged in. Please log in.</p>
           <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('/')}>
@@ -144,7 +154,7 @@ const User = () => {
           </button>
         </div>
       ) : (
-        <> */}
+        <>
       {/* <Link
         href="/addUser"
         className="bg-emerald-600 text-white hover:text-black p-2 rounded-lg absolute top-4 right-40  transition-colors"
@@ -222,8 +232,8 @@ const User = () => {
       </div>
       {/* <NavBar /> */}
       <ToastContainer autoClose={3000} />
-      {/* </> */}
-      {/* )} */}
+      </>
+       )} 
       
     </div>
   );
