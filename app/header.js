@@ -11,6 +11,33 @@
 //   }
 "use client"
 
+// import { useRouter, usePathname } from "next/navigation";
+
+// const Header = () => {
+//   const router = useRouter();
+//   const pathname = usePathname();
+//   const pathSegments = pathname.split("/")[1];
+
+//   // Function to replace UUID with "edit" and capitalize the first letter
+//   const formatSegment = (segment) => {
+    
+//       return segment.charAt(0).toUpperCase() + segment.slice(1);
+    
+//   };
+
+//   return (
+//     <div className="header">
+//       <nav className="flex justify-between items-center h-20 p-4 bg-white">
+//         <div>
+//           {formatSegment(pathSegments)}
+//         </div>
+//       </nav>
+//     </div>
+//   );
+// };
+
+// export default Header;
+
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
