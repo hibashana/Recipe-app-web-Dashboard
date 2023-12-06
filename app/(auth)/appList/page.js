@@ -18,8 +18,7 @@ import { HiPlus } from "react-icons/hi";
 const AppList = () => {
   const [appData, setAppData] = useState([]);
   const [token, setToken] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [showLoading, setShowLoading] = useState(false); 
+  const [loading, setLoading] = useState(true);
  
   const router = useRouter();
 
@@ -33,27 +32,32 @@ const AppList = () => {
   
   const fetchAppData = async () => {
     try {
+      setLoading(true);
       const URL=`${baseURL}/app/all`
       const res = await fetch(URL, { cache: 'no-store' });
       if (res.ok) {
         const data = await res.json();
         setAppData(data);
         localStorage.setItem('dataId', data.id);
+        setLoading(false);
       } else {
         console.error('Failed to fetch data');
+        setLoading(false);
       }
     } catch (error) {
       console.error('Error while fetching data:', error);
+      setLoading(false);
     }
   };
  
 
   useEffect(() => {
-    setLoading(true);
-    fetchAppData().then(() => {
-      setLoading(false);
-      setShowLoading(false);
-    });
+    // setLoading(true);
+    fetchAppData();
+    // .then(() => {
+      // setLoading(false);
+      // setShowLoading(false);
+    // });
 
     const tokenFromStorage = localStorage.getItem('token');
     setToken(tokenFromStorage);
@@ -90,9 +94,10 @@ const AppList = () => {
        
         toast.success(`App ${name} has been deleted.`);
         console.log(`App ${name} has been deleted.`);
-        setTimeout(() => {
-          window.location.reload();
-        }, 3000); // Reload the page after 3 seconds
+        fetchAppData();
+        // setTimeout(() => {
+        //   window.location.reload();
+        // }, 3000); // Reload the page after 3 seconds
       } else {
         
         toast.error(`Failed to delete App${name}`);
@@ -125,9 +130,9 @@ return (
         <>
           {/* <h1 className="text-center text-xl font-bold">App List</h1> */}
           <div className="rounded overflow-hidden m-4">
-  <div className="fixed bottom-10 right-10">
-    <Link href="/addApp">
-      <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full ">
+  <div className="fixed bottom-6 right-10">
+    <Link href="/appList/add">
+      <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold p-3 rounded-full ">
         <HiPlus className="text-2xl" />
       </button>
     </Link>
@@ -146,12 +151,12 @@ return (
         />
          <div className="absolute top-0 right-0  flex flex-col gap-2 p-2 ">
     <div className="">
-      <div className=" rounded-full p-2 bg-white  hover:bg-red-700 hover:text-white transition-colors" onClick={() => deleteApp(app.id, app.name)}>
+      <div className=" rounded-full p-2 bg-white  hover:bg-red-700 hover:text-white transition-colors cursor-pointer" onClick={() => deleteApp(app.id, app.name)}>
         <AiFillDelete />
       </div>
     </div>
-    <Link href={`/editapp/${app.id}`}>
-      <div className="rounded-full  p-2 bg-white hover:bg-sky-400 hover:text-white transition-colors">
+    <Link href={`/appList/edit/${app.id}`}>
+      <div className="rounded-full  p-2 bg-white hover:bg-sky-400 hover:text-white transition-colors cursor-pointer">
         <AiTwotoneEdit />
       </div>
     </Link>
@@ -168,7 +173,7 @@ return (
     </div>
   ))}
 </div>
-
+<ToastContainer autoClose={3000} />
         </>
       )}
     </div>

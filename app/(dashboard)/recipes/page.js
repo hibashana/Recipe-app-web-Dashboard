@@ -11,6 +11,7 @@ import { baseURL, imageURL } from '../../utils/constants';
 import { MdFilterListAlt } from "react-icons/md";
 import tablesize from "../../tablestyle.css";
 import { ClipLoader } from 'react-spinners';
+import { useRouter } from 'next/navigation';
 
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -24,10 +25,11 @@ const Recipes = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [token, setToken] = useState('');
   const [selectedFilter, setSelectedFilter] = useState("all");
+  // const [searchName, setSearchName] = useState("");
   const [loading, setLoading] = useState(true);
  
-
-  // const [categories, setCategories] = useState([]); 
+  const router = useRouter();
+ 
 
   useEffect(() => {
     fetchData();
@@ -93,11 +95,6 @@ const Recipes = () => {
   //   }
   // };
 
-  const handleRecipesClick = (rcpid) => {
-    localStorage.setItem('recipesId', rcpid);
-    console.log(rcpid);
-  };
-
   // const handleCategoryChange = (e) => {
   //   const selectedValue = e.target.value;
   //   setSelectedCategory(selectedValue);
@@ -120,9 +117,9 @@ const Recipes = () => {
       if (response.status === 200) {
         toast.success(`Recipes ${name} has been deleted.`);
         console.log(`Recipes ${name} has been deleted.`);
-        setTimeout(() => {
-          window.location.reload();
-        }, 3000); // Reload the page after 3 seconds
+        // setTimeout(() => {
+        //   window.location.reload();
+        // }, 3000); // Reload the page after 3 seconds
       } else {
         // Handle any errors that occur during the API call.
         toast.error(`Failed to delete Recipes ${name}`);
@@ -161,6 +158,21 @@ const Recipes = () => {
     }
   };
 
+  const handleSearch = async () => {
+    try {
+      const appId = localStorage.getItem("appId");
+      const response = await fetch(
+        `${baseURL}/recipes/all_by_filter?appID=${appId}&name=${searchName}&page=${currentPage}`,
+        { cache: "no-store" }
+      );
+      const data = await response.json();
+      setRecipesData(data.data);
+      setDataResponse(data);
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+    }
+  };
+
   const nextPage = () => {
     setCurrentPage(currentPage + 1);
   };
@@ -180,24 +192,24 @@ const Recipes = () => {
     )
     :!token ? (
         <div className='m-7'>
-        <p className='text-2xl'>You are not logged in. Please log in.</p>
+        <p className='flex flex-col items-center text-2xl'>You are not logged in. Please log in.</p>
         <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('/')}>
           Go to Login
         </button>
       </div>
     ) : (
       <>  
-      <div className="rounded overflow-hidden m-4">
-            <div className="fixed bottom-7 right-10">
-              <Link href="/addRecipes">
-                <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full ">
+      <div className="rounded overflow-hidden">
+            <div className="fixed bottom-5  right-10">
+              <Link href="/recipes/add">
+                <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold p-3 rounded-full ">
                   <HiPlus className="text-2xl" />
                 </button>
               </Link>
             </div>
           </div>
           <div className='flex p-2 justify-between'>
-  <div className="flex items-center">
+  <div className="flex items-center ">
     {/* <Link href="/addRecipes" className="bg-emerald-600 hover:bg-green-700 text-white p-2 rounded-lg  first-letter:transition-colors absolute top-4 right-40">
       Add new
     </Link> */}
@@ -220,7 +232,25 @@ const Recipes = () => {
     >
       <MdFilterListAlt className="mr-2"  />Filter 
     </button>
+    {/* <div className="flex  p-2">
+  <div className="flex border border-emerald-400 mr-auto rounded ">
+              <input
+                type="text"
+                className="block w-full px-4 p-1 text-black bg-white border rounded-md focus:border-emerald-600  focus:outline-none  focus:ring-opacity-40"
+                placeholder="Search..."
+                value={searchName}
+                onChange={(e) => setSearchName(e.target.value)}
+              />
+              <button
+                className="px-4 text-white bg-emerald-600 border-l rounded "
+                onClick={handleSearch}
+              >
+                Search
+              </button>
+            </div>
+            </div> */}
   </div>
+
   <h1 className="text-xl p-2 font-bold">
     {dataResponse.totalCount} Recipes
   </h1>
@@ -236,10 +266,9 @@ const Recipes = () => {
               <th className="border w-1/6">Name</th>
               <th className="border w-3/6">Description</th>
               <th className="border w-1/6">Premium</th>
-              <th className="border w-1/6">Action</th>
               <th className="w-1/6"></th>
               <th className="w-1/6" ></th>
-              
+              <th className="border w-1/6">Action</th>
             </tr>
           </thead>
   <tbody className="border text-center bg-white p-2">
@@ -262,29 +291,30 @@ const Recipes = () => {
             {/* </div> */}
           </label>
         </td>
-          
-        <td className="flex flex-row items-center justify-center gap-2">
-  <div className="hover:text-red-700 justify-center cursor-pointer " onClick={() => deleteRecipes(data.rcpid, data.name)}>
-    <AiFillDelete />
-  </div>
-  <div className="hover:text-sky-500">
-    <Link className="transition-colors p-3 " href={`/editRecipe/${data.rcpid}`}>
-      <AiTwotoneEdit />
-    </Link>
-  </div>
-</td>
-        <td></td>
-        <td className="w-1/4  flex justify-center flex-row gap-4  relative" onClick={() => handleRecipesClick(data.rcpid)}>
-          {/* <div className="absolute left-1/2 transform -translate-x-1/2"> */}
+        <td className="border justify-center flex-row gap-4  relative"  colSpan={2}>
+        <div className='flex flex-row gap-4 p-2 justify-center'>
             <div className="hover:text-sky-500">
-              <Link href={`/ingredients`}>Ingredients</Link>
+              <Link href={`/recipes/ingredients?id=${data.rcpid}`}>Ingredients</Link>
             </div>
             <div className="hover:text-sky-500">
-              <Link href={`/step`}>Steps</Link>
+              <Link href={`/recipes/step?id=${data.rcpid}`}>Steps</Link>
             </div>
-            <td></td>
-          {/* </div> */}
-        </td>
+            </div>
+        </td>  
+
+        <td colSpan={2} className="flex items-center justify-center gap-4 p-6">
+                      <div className="rounded-full p-2 bg-emerald-100 hover:bg-red-700 hover:text-white transition-colors cursor-pointer" onClick={() => deleteRecipes(data.rcpid, data.name)}>
+                        <AiFillDelete />
+                      </div>
+                      <div className="rounded-full p-2 bg-emerald-100 hover:bg-sky-400 hover:text-white transition-colors cursor-pointer">
+                        <Link className="" href={`/recipes/edit/${data.rcpid}`}>
+                          <AiTwotoneEdit />
+                        </Link>
+                      </div>
+                    </td>
+        
+        {/* <td></td> */}
+        
         
       </tr>
     ))}

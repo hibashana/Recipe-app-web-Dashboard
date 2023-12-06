@@ -9,10 +9,10 @@ import axios from 'axios';
 import Link from 'next/link';
 // import NavBar from '../NavBar';
 import { HiPlus } from "react-icons/hi";
-import { baseURL } from '../../utils/constants';
+import { baseURL } from '../../../utils/constants';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import tablesize from "../../tablestyle.css";
+import tablesize from "../../../tablestyle.css";
 import { ClipLoader } from 'react-spinners';
 import { useRouter,useSearchParams } from 'next/navigation';
 
@@ -99,7 +99,7 @@ const Ingredients = () => {
     : 
     !token ? (
         <div className='m-7'>
-        <p className='text-2xl'>You are not logged in. Please log in.</p>
+        <p className='flex flex-col items-center text-2xl'>You are not logged in. Please log in.</p>
         <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('/')}>
           Go to Login
         </button>
@@ -111,7 +111,7 @@ const Ingredients = () => {
       </Link> */}
       <div className="rounded overflow-hidden m-4">
             <div className="fixed bottom-6 right-10">
-              <Link href={`/ingredients/add?id=${recipesId}`}>
+              <Link href={`/recipes/ingredients/add?id=${recipesId}`}>
                 <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold p-3 rounded-full ">
                   <HiPlus className="text-2xl" />
                 </button>
@@ -136,7 +136,7 @@ const Ingredients = () => {
                     <AiFillDelete />
                   </div>
                   <div className="rounded-full p-2 bg-emerald-100 hover:bg-sky-400 hover:text-white transition-colors cursor-pointer">
-                    <Link className="" href={`/ingredients/editIngredient/${data.intrdid}?id=${recipesId}`}>
+                    <Link className="" href={`/recipes/ingredients/edit/${data.intrdid}?id=${recipesId}`}>
                       <AiTwotoneEdit />
                     </Link>
                   </div>

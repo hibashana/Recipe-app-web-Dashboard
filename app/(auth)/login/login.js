@@ -6,23 +6,25 @@ import { FaRegCircleUser } from 'react-icons/fa6';
 import { RiEyeCloseFill, RiEyeFill, RiLockPasswordLine } from 'react-icons/ri';
 import { FaEyeSlash } from 'react-icons/fa';
 import { ClipLoader } from 'react-spinners';
+
 // import LoginLayout from '../login/layout';
 
 export default function LoginForm() {
-  const [loading, setLoading] = useState(false);
-  const [showLoading, setShowLoading] = useState(false); // New state for showing loading spinner
+  // const [loading, setLoading] = useState(false);
+  // const [showLoading, setShowLoading] = useState(false); // New state for showing loading spinner
   useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setShowLoading(false); // Turn off loading spinner after loading
-    }, 5000);
+    // setLoading(true);
+    // setTimeout(() => {
+    //   setLoading(false);
+    //   setShowLoading(false); // Turn off loading spinner after loading
+    // }, 5000);
   }, []);
 
   const router = useRouter(); // Create a router object
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [errorMessage, setErrorMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,6 +39,7 @@ export default function LoginForm() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    
     try {
       const URL = `${baseURL}/user/admin-login`;
       console.log(`url=${URL}`);
@@ -60,8 +63,9 @@ export default function LoginForm() {
         // alert('Logged in successfully!');        
         console.log('Successful login', data);
 
-       
-        setShowLoading(true); // Show loading spinner when redirecting
+        setLoading(true);
+        
+        // setShowLoading(true); // Show loading spinner when redirecting
         router.push('/appList');
       // } else {
       //   setErrorMessage('Invalid user type. Only admin users are allowed.');
@@ -76,6 +80,8 @@ export default function LoginForm() {
     
     } catch (error) {
       console.error('Error:', error);
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -83,7 +89,8 @@ export default function LoginForm() {
     <main>
       {/* <LoginLayout/> */}
       <div className="grid place-items-center h-screen justify-center">
-        {!showLoading ? (
+        {!loading ? (
+          // showLoading
           <div className="shadow-lg p-5 rounded-lg border-t-4  border-green-400" >
             <h1 className="text-xl text-center font-bold my-4">Login</h1>
 

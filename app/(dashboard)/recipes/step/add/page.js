@@ -1,3 +1,18 @@
+// import Head from 'next/head';
+// import CreateStep from '../components/addStep';
+// const AddStep = () => {
+//   return (
+//     <div>
+//       <Head>
+//         <title>Create Step</title>
+//       </Head>
+//       {/* <h1>Create Step</h1> */}
+//       <CreateStep/>
+//     </div>
+//   );
+// };
+
+// export default AddStep;
 
 
 'use client'
@@ -5,7 +20,7 @@
 import React, { useState } from 'react';
 import axios from 'axios'; // Import Axios
 // import NavBar from '../NavBar';
-import {baseURL,imageURL } from '../../utils/constants';
+import {baseURL,imageURL } from '../../../../utils/constants';
 import { useRouter ,useSearchParams} from 'next/navigation';
 
 
@@ -53,10 +68,8 @@ const CreateStep = () => {
         .then((response) => {
           console.log('Step created:', response.data);
           toast.success('Step added successfully');
-          setTimeout(() => {
-            window.location.reload();
-          }, 4000);
-          router.push(`/step?id=${recipesId}`);
+          
+          router.push(`/recipes/step?id=${recipesId}`);
         })
         .catch((error) => {
           console.error('Error creating Step:', error);

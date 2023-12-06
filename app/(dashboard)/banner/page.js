@@ -40,7 +40,7 @@ const banner = () => {
       const appId = localStorage.getItem('appId');
       console.log(appId);
       // const response = await fetch(`${baseURL}/banner/getall`, { cache: 'no-store' });
-      const response = await fetch(`${baseURL}/banner/all_by_filter?appID=${appId}&page=${currentPage}`, { cache: 'no-store' });
+      const response = await fetch(`${baseURL}/banner/all_by_filter?appID=${appId}&name=${searchName}&page=${currentPage}`, { cache: 'no-store' });
       const data = await response.json();
       console.log(response);
       setBannerData(data.data);
@@ -52,23 +52,26 @@ const banner = () => {
     }
   };
 
-  const handleSearch = async () => {
-    try {
-      const appId = localStorage.getItem('appId');
-       const response = await fetch(`${baseURL}/banner/all_by_filter?appID=${appId}&page=${currentPage}&name=${searchName}`,{ cache: 'no-store' });
-      const data = await response.json();
-      console.log(response);
-      setBannerData(data.data);
-      setDataResponse(data);
-    } catch (error) {
-      console.error('Error fetching search results:', error);
-    }
-  };
-
-  // const handleBannerClick = (id) => {
-  //   // Store the selected bannerId in localStorage
-  //   localStorage.setItem('bannerId', id);
+  // const handleSearch = async () => {
+    
+  //   try {
+  //     const appId = localStorage.getItem('appId');
+  //      const response = await fetch(`${baseURL}/banner/all_by_filter?appID=${appId}&page=${currentPage}&name=${searchName}`,{ cache: 'no-store' });
+  //     const data = await response.json();
+  //     console.log(response);
+  //     setBannerData(data.data);
+  //     setDataResponse(data);
+  //     // setCurrentPage(1);
+  //   } catch (error) {
+  //     console.error('Error fetching search results:', error);
+  //   }
   // };
+
+  const apply = () => {
+    setCurrentPage(1); 
+    fetchData();
+  };
+  
 
   const handlePremiumChange = async (rcpid,name, isPremium) => {
     try {
@@ -174,7 +177,7 @@ const banner = () => {
     )
     :!token ? (
         <div className='m-7'>
-          <p className='text-2xl'>You are not logged in. Please log in.</p>
+          <p className='flex flex-col items-center text-2xl'>You are not logged in. Please log in.</p>
           <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('/')}>
             Go to Login
           </button>
@@ -182,9 +185,9 @@ const banner = () => {
       ) : (
         <>
         <div className="rounded overflow-hidden m-4">
-            <div className="fixed bottom-8 right-10">
-              <Link href="/addBanner">
-                <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full ">
+            <div className="fixed bottom-6 right-10">
+              <Link href="/banner/add">
+                <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold p-3 rounded-full ">
                   <HiPlus className="text-2xl" />
                 </button>
               </Link>
@@ -202,7 +205,7 @@ const banner = () => {
               />
               <button
                 className="px-4 text-white bg-emerald-600 border-l rounded "
-                onClick={handleSearch}
+                onClick={apply}
               >
                 Search
               </button>
@@ -245,18 +248,18 @@ const banner = () => {
                   >
                     View
                   </span>
-                  <Link href={`/bannerRecipe?bannerId=${data.id}`}>
+                  <Link href={`/banner/bannerRecipe?bannerId=${data.id}`}>
                     <span className="flex justify-center text-emerald-600 hover:text-blue-500 cursor-pointer">
                        Add Recipe
                     </span>
                   </Link>
                 </td>
                     <td colSpan={2} className="flex items-center justify-center gap-4 p-6">
-                      <div className="rounded-full p-2 bg-emerald-100 hover:bg-red-700 hover:text-white transition-colors" onClick={() => deleteBanner(data.id, data.name)}>
+                      <div className="rounded-full p-2 bg-emerald-100 hover:bg-red-700 hover:text-white transition-colors cursor-pointer" onClick={() => deleteBanner(data.id, data.name)}>
                         <AiFillDelete />
                       </div>
-                      <div className="rounded-full p-2 bg-emerald-100 hover:bg-sky-400 hover:text-white transition-colors">
-                        <Link className="" href={`/editBanner/${data.id}`}>
+                      <div className="rounded-full p-2 bg-emerald-100 hover:bg-sky-400 hover:text-white transition-colors cursor-pointer">
+                        <Link className="" href={`/banner/edit/${data.id}`}>
                           <AiTwotoneEdit />
                         </Link>
                       </div>
@@ -305,12 +308,12 @@ const banner = () => {
                     </td>
                                   
                                   <td></td>
-                                  <td className="w-1/4 flex justify-center text-center flex-row gap-4  " colSpan={3}>
+                                  <td className="w-1/4 flex justify-center p-8 text-center flex-row gap-4  " colSpan={3}>
                                     <div className="hover:text-sky-500">
-                                      <Link href={`/ingredients`}>Ingredients</Link>
+                                      <Link href={`/ingredients?id=${recipe.rcpid}`}>Ingredients</Link>
                                     </div>
                                     <div className="hover:text-sky-500">
-                                      <Link href={`/step`}>Steps</Link>
+                                      <Link href={`/step?id=${recipe.rcpid}`}>Steps</Link>
                                     </div>
                                   </td>
                                   <td className='p-4 border'>

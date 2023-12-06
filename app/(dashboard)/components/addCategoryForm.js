@@ -188,16 +188,15 @@ const CreateCategory = () => {
       })
       .catch((error) => {
         if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
+         
           console.error('Response error data:', error.response.data);
           setErrorMessage(error.response.data.message || 'An error occurred.');
         } else if (error.request) {
-          // The request was made but no response was received
+         
           console.error('Request error:', error.request);
           setErrorMessage('Failed to create user. Please try again later.');
         } else {
-          // Something happened in setting up the request that triggered an Error
+         
           console.error('Other error:', error.message);
           setErrorMessage('An unexpected error occurred. Please try again later.');
         }
@@ -205,7 +204,7 @@ const CreateCategory = () => {
   };
 
   return (
-<div className="flex flex-col items-center h-screen justify-center">
+<div className="flex flex-col items-center p-20 mx-auto">
       <form
         className="shadow-2xl bg-white p-8 rounded-md"
         onSubmit={handleSubmit}

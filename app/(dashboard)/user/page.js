@@ -148,7 +148,7 @@ const User = () => {
     )
     :!token ? (
         <div className='m-7'>
-          <p className='text-2xl'>You are not logged in. Please log in.</p>
+          <p className='flex flex-col items-center text-2xl'>You are not logged in. Please log in.</p>
           <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('/')}>
             Go to Login
           </button>
@@ -162,9 +162,9 @@ const User = () => {
         Register user
       </Link> */}
       <div className="rounded overflow-hidden m-4">
-            <div className="fixed bottom-10 right-10">
-              <Link href="/addUser">
-                <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full ">
+            <div className="fixed bottom-7 right-10">
+              <Link href="/user/add">
+                <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold p-3 rounded-full ">
                   <HiPlus className="text-2xl" />
                 </button>
               </Link>
@@ -199,7 +199,7 @@ const User = () => {
                     <AiFillDelete />
                   </div>
                   <div className="rounded-full p-2 bg-emerald-100 hover:bg-sky-400 hover:text-white transition-colors">
-                    <Link className="" href={`/editUser/${data.ruserid}`}>
+                    <Link className="" href={`/user/edit/${data.ruserid}`}>
                       <AiTwotoneEdit/>
                     </Link>
                   </div>

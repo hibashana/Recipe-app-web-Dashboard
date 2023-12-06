@@ -36,7 +36,7 @@ const CategoryRow = ({ data, onDelete, onView }) => (
       <div className="rounded-full p-2 bg-emerald-100 hover:bg-sky-400 hover:text-white transition-colors">
         <Link
           className=""
-          href={`/editCategory/${data.ctgyid}`}
+          href={`/category/edit/${data.ctgyid}`}
         >
           <AiTwotoneEdit />
         </Link>
@@ -66,7 +66,7 @@ const Category = () => {
       setLoading(true);
       const appId = localStorage.getItem("appId");
       const response = await fetch(
-        `${baseURL}/category/all_by_filter?appID=${appId}&page=${currentPage}`,
+        `${baseURL}/category/all_by_filter?appID=${appId}&name=${searchName}&page=${currentPage}`,
         { cache: "no-store" }
       );
       const data = await response.json();
@@ -79,20 +79,29 @@ const Category = () => {
     }
   };
 
-  const handleSearch = async () => {
-    try {
-      const appId = localStorage.getItem("appId");
-      const response = await fetch(
-        `${baseURL}/category/all_by_filter?appID=${appId}&name=${searchName}&page=${currentPage}`,
-        { cache: "no-store" }
-      );
-      const data = await response.json();
-      setCategoryData(data.data);
-      setDataResponse(data);
-    } catch (error) {
-      console.error("Error fetching search results:", error);
-    }
+  // const handleSearch = async () => {
+  //   try {
+  //     const appId = localStorage.getItem("appId");
+  //     const response = await fetch(
+  //       `${baseURL}/category/all_by_filter?appID=${appId}&name=${searchName}&page=${currentPage}`,
+  //       { cache: "no-store" }
+  //     );
+      
+  //     const data = await response.json();
+  //     setCategoryData(data.data);
+  //     setDataResponse(data);
+  //   } catch (error) {
+  //     console.error("Error fetching search results:", error);
+  //   }
+    
+  // };
+
+  const apply = () => {
+    setCurrentPage(1); 
+    fetchData();
+    //handleSearch();
   };
+
 
   const deleteApp = async (id, name) => {
     const confirmDelete = window.confirm(
@@ -135,9 +144,9 @@ const Category = () => {
       if (response.status === 200) {
         toast.success(`Recipes ${name} has been deleted.`);
         console.log(`Recipes ${name} has been deleted.`);
-        setTimeout(() => {
-          window.location.reload();
-        }, 3000); // Reload the page after 3 seconds
+        // setTimeout(() => {
+        //   window.location.reload();
+        // }, 3000); // Reload the page after 3 seconds
       } else {
         // Handle any errors that occur during the API call.
         toast.error(`Failed to delete Recipes ${name}`);
@@ -177,6 +186,11 @@ const handlePremiumChange = async (rcpid,name,isPremium) => {
   };
 
 
+  // const handleRecipesClick = (rcpid) => {
+  //   localStorage.setItem('recipesId', rcpid);
+  //   console.log(rcpid);
+  // };
+
   const nextPage = () => {
     setCurrentPage(currentPage + 1);
   };
@@ -198,8 +212,8 @@ const handlePremiumChange = async (rcpid,name,isPremium) => {
     )
     :
       !token ? (
-        <div className="m-7">
-          <p className="text-2xl">You are not logged in. Please login.</p>
+        <div className="m-7 ">
+          <p className="flex flex-col items-center text-2xl ">You are not logged in. Please login.</p>
           <button
             className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3"
             type="submit"
@@ -211,9 +225,9 @@ const handlePremiumChange = async (rcpid,name,isPremium) => {
       ) : (
         <>
           <div className="rounded overflow-hidden m-4">
-            <div className="fixed bottom-7 right-10">
-              <Link href="/addCategory">
-                <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full ">
+            <div className="fixed bottom-6 right-10">
+              <Link href="/category/add">
+                <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold p-3 rounded-full ">
                   <HiPlus className="text-2xl" />
                 </button>
               </Link>
@@ -227,11 +241,11 @@ const handlePremiumChange = async (rcpid,name,isPremium) => {
                 className="block w-full px-4  text-black bg-white border rounded-md focus:border-emerald-600  focus:outline-none  focus:ring-opacity-40"
                 placeholder="Search..."
                 value={searchName}
-                onChange={(e) => setSearchName(e.target.value)}
+                onChange={(e) => setSearchName(e.target.value??"")}
               />
               <button
                 className="px-4 text-white bg-emerald-600 border-l rounded "
-                onClick={handleSearch}
+                onClick={apply}
               >
                 Search
               </button>
@@ -303,11 +317,11 @@ const handlePremiumChange = async (rcpid,name,isPremium) => {
                                   </td>
                                   <td className="flex flex-row items-center justify-center gap-4 p-8">
                                     <div
-                                      className="rounded-full p-2 bg-white  hover:bg-red-700 hover:text-white transition-colors"
+                                      className="rounded-full p-2 bg-emerald-100  hover:bg-red-700 hover:text-white transition-colors"
                                       onClick={() => deleteRecipes(recipe.rcpid, recipe.name)}>
                                       <AiFillDelete />
                                     </div>
-                                    <div className="rounded-full p-2 bg-white hover:bg-sky-400 hover:text-white transition-colors">
+                                    <div className="rounded-full p-2 bg-emerald-100 hover:bg-sky-400 hover:text-white transition-colors">
                                       <Link
                                         className=""
                                         href={`/editRecipe/${recipe.rcpid}`}
@@ -317,12 +331,13 @@ const handlePremiumChange = async (rcpid,name,isPremium) => {
                                     </div>
                                   </td>
                                   <td></td>
-                                  <td className="w-1/4 flex justify-center text-center flex-row gap-4  " colSpan={3}>
+                                 
+                                  <td className="w-1/4 flex justify-center text-center flex-row gap-4" colSpan={2}>
                                     <div className="hover:text-sky-500">
-                                      <Link href={`/ingredients`}>Ingredients</Link>
+                                      <Link href={`/ingredients?id=${recipe.rcpid}`}>Ingredients</Link>
                                     </div>
                                     <div className="hover:text-sky-500">
-                                      <Link href={`/step`}>Steps</Link>
+                                      <Link href={`/step?id=${recipe.rcpid}`}>Steps</Link>
                                     </div>
                                   </td>
                                 </tr>

@@ -49,9 +49,10 @@ const NavBar = () => {
       localStorage.removeItem('CategoryId');
       toast.success('Logged Out');
       console.log('Logged Out');
-      setTimeout(() => {
+      
+      // setTimeout(() => {
         router.push('/');
-      }, 2000);
+      // }, 2000);
     }
   };
 
