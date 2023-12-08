@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import axios from "axios"; // Import Axios
 import { useRouter,useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
-import { baseURL } from "../../../utils/constants";
+import { baseURL } from "../../../../utils/constants";
 // import NavBar from "../NavBar";
 
 export default function EditIngredients({
@@ -46,7 +46,7 @@ export default function EditIngredients({
       console.log(`Updated ingredient name_qnty: ${result.data.name_qnty}`);
 
       toast.success("ingredient has been updated");
-      router.push(`/ingredients?id=${recipesId}`); 
+      router.push(`/recipes/ingredients/${recipesId}`); 
     } catch (error) {
       console.error("Error updating ingredient:", error);
       toast.error("Error updating ingredient");

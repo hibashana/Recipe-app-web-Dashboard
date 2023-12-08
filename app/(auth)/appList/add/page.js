@@ -82,9 +82,9 @@ const CreateApp = () => {
        
         toast.success(`App  created.`);
 
-        setTimeout(() => {
-          window.location.reload();
-        }, 3000); // Reload the page after 3 seconds
+        // setTimeout(() => {
+        //   window.location.reload();
+        // }, 3000); // Reload the page after 3 seconds
         // console.log('Successful login', data);
         // You can handle success or display a success message here
 

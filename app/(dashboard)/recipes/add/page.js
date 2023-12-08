@@ -169,7 +169,7 @@ const CreateRecipe = () => {
           className="w-full"
         />
       </div>
-      <div className="w-full">
+      {/* <div className="w-full">
         <label className="block">Select a Category:</label>
         <select
           value={selectedCategory}
@@ -184,7 +184,7 @@ const CreateRecipe = () => {
             </option>
           ))}
         </select>
-      </div>
+      </div> */}
       <button
         className=" block mx-auto  bg-emerald-600 text-white font-bold cursor-pointer px-6 py-2 rounded-md"
         type="submit"

@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import axios from "axios"; // Import Axios
-import { useRouter,useSearchParams } from "next/navigation";
+import { useRouter,useSearchParams ,useParams} from "next/navigation";
 import { toast } from "react-toastify";
-import { baseURL } from "../../../../utils/constants";
+import { baseURL } from "../../../../../utils/constants";
 // import NavBar from "../NavBar";
 
 export default function EditSteps({
@@ -14,8 +14,12 @@ export default function EditSteps({
   const [newdescription, setnewdescription] = useState(description);
   const [newID, setId] = useState(stpid);
   const router = useRouter(); 
-  const searchParams = useSearchParams();
-  const recipesId = searchParams.get('id');
+
+  const param=useParams();
+  const recipesId=param.recipesId;
+
+  // const searchParams = useSearchParams();
+  // const recipesId = searchParams.get('id');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,7 +49,7 @@ export default function EditSteps({
       console.log(`Updated step description: ${result.data.description}`);
 
       toast.success("step has been updated");
-      router.push(`/recipes/step?id=${recipesId}`); 
+      router.push(`/recipes/${recipesId}/step`); 
     } catch (error) {
       console.error("Error updating step:", error);
       toast.error("Error updating step");

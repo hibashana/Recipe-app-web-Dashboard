@@ -7,27 +7,32 @@ import { AiFillDelete } from 'react-icons/ai';
 import { AiTwotoneEdit } from 'react-icons/ai';
 import axios from 'axios';
 import Link from 'next/link';
-// import NavBar from '../NavBar';
 import { HiPlus } from "react-icons/hi";
-import { baseURL } from '../../../utils/constants';
+import { baseURL } from '../../../../utils/constants';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import tablesize from "../../../tablestyle.css";
+import tablesize from "../../../../tablestyle.css";
 import { ClipLoader } from 'react-spinners';
 import { useRouter,useSearchParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
 
 const Ingredients = () => {
+  // const{recipesId}=params;
+  // console.log(recipesId);
   const [ingredientsData, setIngredientsData] = useState([]);
   const [token, setToken] = useState('');
   const [dataResponse, setDataResponse] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
+
   
   const router = useRouter();
-  // const itemsPerPage = 3;
-
-  const searchParams = useSearchParams();
-  const recipesId = searchParams.get('id');
+  
+   const param=useParams();
+   const recipesId=param.recipesId;
+  //  console.log(recipesId);
+  // const searchParams = useSearchParams();
+  // const  recipesId = searchParams.get('recipesId');;
 
   useEffect(() => {
     // const recipesId = searchParams.get('id');
@@ -43,7 +48,7 @@ const Ingredients = () => {
       // const recipesId = searchParams.get('id');
       
       const response = await fetch(`${baseURL}/ingredients/all_by_filter?RecipeID=${recipesId}&page=${currentPage}`, { cache: 'no-store' });
-      console.log(recipesId);
+      
       const data = await response.json();
       console.log(response);
       setIngredientsData(data.data);
@@ -68,6 +73,7 @@ const Ingredients = () => {
         });
         if (response.status === 200) {
           toast.success(`Ingredient ${name} has been deleted.`);
+          fetchData();
           // setTimeout(() => {
           //   window.location.reload();
           // }, 3000); // Reload the page after 3 seconds
@@ -111,7 +117,7 @@ const Ingredients = () => {
       </Link> */}
       <div className="rounded overflow-hidden m-4">
             <div className="fixed bottom-6 right-10">
-              <Link href={`/recipes/ingredients/add?id=${recipesId}`}>
+              <Link href={`/recipes/${recipesId}/ingredients/add`}>
                 <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold p-3 rounded-full ">
                   <HiPlus className="text-2xl" />
                 </button>
@@ -136,7 +142,7 @@ const Ingredients = () => {
                     <AiFillDelete />
                   </div>
                   <div className="rounded-full p-2 bg-emerald-100 hover:bg-sky-400 hover:text-white transition-colors cursor-pointer">
-                    <Link className="" href={`/recipes/ingredients/edit/${data.intrdid}?id=${recipesId}`}>
+                    <Link className="" href={`/recipes/${recipesId}/ingredients/${data.intrdid}/edit`}>
                       <AiTwotoneEdit />
                     </Link>
                   </div>

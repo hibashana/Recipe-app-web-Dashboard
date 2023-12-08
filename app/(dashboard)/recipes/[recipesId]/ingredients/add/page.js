@@ -23,8 +23,8 @@
 import React, { useState } from 'react';
 import axios from 'axios'; // Import Axios
 // import NavBar from '../NavBar';
-import {baseURL,imageURL } from '../../../../utils/constants';
-import { useRouter,useSearchParams} from 'next/navigation';
+import {baseURL,imageURL } from '../../../../../utils/constants';
+import { useRouter,useSearchParams,useParams} from 'next/navigation';
 
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -34,8 +34,11 @@ import 'react-toastify/dist/ReactToastify.css';
 const CreateIngredient = () => {
     const router = useRouter();
   
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
   // const recipesId = searchParams.get('id');
+
+  const param=useParams();
+  
 
     const [formData, setFormData] = useState({
       name_qnty: '', 
@@ -54,7 +57,8 @@ const CreateIngredient = () => {
       e.preventDefault();
   
       const token = localStorage.getItem('token');
-      const recipesId = searchParams.get('id');
+      // const recipesId = searchParams.get('id');
+      const recipesId=param.recipesId;
   
       axios
         .post(
@@ -75,7 +79,7 @@ const CreateIngredient = () => {
           toast.success('Ingredient added successfully');
           
           console.log(recipesId);
-          router.push(`/recipes/ingredients?id=${recipesId}`);
+          router.push(`/recipes/${recipesId}/ingredients`);
         })
         .catch((error) => {
           console.error('Error creating Ingredient:', error);

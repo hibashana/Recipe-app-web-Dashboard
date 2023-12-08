@@ -117,6 +117,7 @@ const Recipes = () => {
       if (response.status === 200) {
         toast.success(`Recipes ${name} has been deleted.`);
         console.log(`Recipes ${name} has been deleted.`);
+        fetchData();
         // setTimeout(() => {
         //   window.location.reload();
         // }, 3000); // Reload the page after 3 seconds
@@ -294,10 +295,10 @@ const Recipes = () => {
         <td className="border justify-center flex-row gap-4  relative"  colSpan={2}>
         <div className='flex flex-row gap-4 p-2 justify-center'>
             <div className="hover:text-sky-500">
-              <Link href={`/recipes/ingredients?id=${data.rcpid}`}>Ingredients</Link>
+              <Link href={`/recipes/${data.rcpid}/ingredients`}>Ingredients</Link>
             </div>
             <div className="hover:text-sky-500">
-              <Link href={`/recipes/step?id=${data.rcpid}`}>Steps</Link>
+              <Link href={`/recipes/${data.rcpid}/step`}>Steps</Link>
             </div>
             </div>
         </td>  

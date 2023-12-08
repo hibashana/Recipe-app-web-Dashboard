@@ -7,10 +7,10 @@ import { HiPlus } from "react-icons/hi";
 import axios from 'axios';
 import Link from 'next/link';
 // import NavBar from '../NavBar';
-import { baseURL } from '../../../utils/constants';
-import tablesize from "../../../tablestyle.css";
+import { baseURL } from '../../../../utils/constants';
+import tablesize from "../../../../tablestyle.css";
 import { ClipLoader } from 'react-spinners';
-import { useRouter,useSearchParams } from 'next/navigation';
+import { useRouter,useSearchParams,useParams } from 'next/navigation';
 
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -22,8 +22,10 @@ const step = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
 
-  const searchParams = useSearchParams();
-  const recipesId = searchParams.get('id');
+  const param=useParams();
+  const recipesId=param.recipesId;
+  // const searchParams = useSearchParams();
+  // const recipesId = searchParams.get('id'); //from query
 
 useEffect(() => {
   fetchData();
@@ -118,7 +120,7 @@ useEffect(() => {
       </Link> */}
       <div className="rounded overflow-hidden m-4">
             <div className="fixed bottom-6 right-10">
-              <Link href={`/recipes/step/add?id=${recipesId}`}>
+              <Link href={`/recipes/${recipesId}/step/add`}>
                 <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold p-3 rounded-full ">
                   <HiPlus className="text-2xl" />
                 </button>
@@ -145,7 +147,7 @@ useEffect(() => {
                     <AiFillDelete />
                   </div>
                   <div className="rounded-full p-2 bg-emerald-100 hover:bg-sky-400 hover:text-white transition-colors cursor-pointer">
-                    <Link className="" href={`/recipes/step/edit/${data.stpid}?id=${recipesId}`}>
+                    <Link className="" href={`/recipes/${recipesId}/step/${data.stpid}/edit`}>
                       <AiTwotoneEdit />
                     </Link>
                   </div>

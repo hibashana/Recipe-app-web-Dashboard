@@ -23,7 +23,7 @@
 import React, { useState } from 'react';
 import axios from 'axios'; // Import Axios
 // import NavBar from '../NavBar';
-import {baseURL,imageURL } from '../../../utils/constants';
+import {baseURL,imageURL } from '../../../../utils/constants';
 import { useRouter,useSearchParams} from 'next/navigation';
 
 import { toast, ToastContainer } from 'react-toastify';
@@ -73,11 +73,9 @@ const CreateIngredient = () => {
         .then((response) => {
           console.log('Ingredient created:', response.data);
           toast.success('Ingredient added successfully');
-          setTimeout(() => {
-            window.location.reload();
-          }, 4000);
+          
           console.log(recipesId);
-          router.push(`/ingredients?id=${recipesId}`);
+          router.push(`/recipes/ingredients?id=${recipesId}`);
         })
         .catch((error) => {
           console.error('Error creating Ingredient:', error);

@@ -20,8 +20,8 @@
 import React, { useState } from 'react';
 import axios from 'axios'; // Import Axios
 // import NavBar from '../NavBar';
-import {baseURL,imageURL } from '../../../../utils/constants';
-import { useRouter ,useSearchParams} from 'next/navigation';
+import {baseURL,imageURL } from '../../../../../utils/constants';
+import { useRouter ,useSearchParams,useParams} from 'next/navigation';
 
 
 import { toast, ToastContainer } from 'react-toastify';
@@ -30,7 +30,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const CreateStep = () => {
     const router = useRouter();
-    const searchParams = useSearchParams();
+    // const searchParams = useSearchParams();
+    const param=useParams();
 
     const [formData, setFormData] = useState({
       description: '', 
@@ -49,7 +50,8 @@ const CreateStep = () => {
       e.preventDefault();
   
       const token = localStorage.getItem('token');
-      const recipesId = searchParams.get('id');
+      const recipesId=param.recipesId;
+      // const recipesId = searchParams.get('id');
   
       axios
         .post(
@@ -69,7 +71,7 @@ const CreateStep = () => {
           console.log('Step created:', response.data);
           toast.success('Step added successfully');
           
-          router.push(`/recipes/step?id=${recipesId}`);
+          router.push(`/recipes/${recipesId}/step`);
         })
         .catch((error) => {
           console.error('Error creating Step:', error);

@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import axios from "axios"; // Import Axios
-import { useRouter,useSearchParams } from "next/navigation";
+import { useRouter,useSearchParams,useParams } from "next/navigation";
 import { toast } from "react-toastify";
-import { baseURL } from "../../../../utils/constants";
+import { baseURL } from "../../../../../utils/constants";
 // import NavBar from "../NavBar";
 
 export default function EditIngredients({
@@ -14,9 +14,12 @@ export default function EditIngredients({
   const [newname_qnty, setnewname_qnty] = useState(name_qnty);
   const [newID, setId] = useState(intrdid);
   const router = useRouter(); 
+ 
+  // const searchParams = useSearchParams();
+  // const recipesId = searchParams.get('id');
 
-  const searchParams = useSearchParams();
-  const recipesId = searchParams.get('id');
+  const param=useParams();
+  const recipesId=param.recipesId;
   
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,7 +49,7 @@ export default function EditIngredients({
       console.log(`Updated ingredient name_qnty: ${result.data.name_qnty}`);
 
       toast.success("ingredient has been updated");
-      router.push(`/recipes/ingredients?id=${recipesId}`); 
+      router.push(`/recipes/${recipesId}/ingredients`); 
     } catch (error) {
       console.error("Error updating ingredient:", error);
       toast.error("Error updating ingredient");

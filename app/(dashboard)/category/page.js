@@ -17,14 +17,25 @@ import tablesize from "../../tablestyle.css";
 const CategoryRow = ({ data, onDelete, onView }) => (
   <tr className="border p-4" key={data.ctgyid}>
     <td className="border p-6">{data.name}</td>
-    <td className="border p-6">
-      {data.Recipes.length} Recipes {" "}
-      <span
-        className="flex justify-center text-emerald-600 hover:text-blue-500 cursor-pointer"
+    <td className="border p-3">
+    <div className={data.Recipes.length === 0 ? 'text-red-500' : ''}>
+        {data.Recipes.length} Recipes
+      </div>{" "}
+      {/* {data.Recipes.length} Recipes {" "} */}
+      <div className="flex gap-11 flex-row justify-center p-1">
+      <div
+        className="flex text-lg justify-center text-emerald-600 hover:text-blue-500 cursor-pointer "
         onClick={() => onView(data.ctgyid)}
       >
         View
-      </span>
+        </div>
+      <Link href={`/category/categoryRecipe?categoryId=${data.ctgyid}`}>
+                    <div className="flex  rounded-full justify-center text-emerald-600 hover:text-blue-500 cursor-pointer">
+                       Add 
+                    </div>
+                  </Link>
+                 
+                  </div>
     </td>
     <td colSpan={2} className="flex items-center justify-center gap-4 p-6">
       <div
