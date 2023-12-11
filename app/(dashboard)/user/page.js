@@ -46,12 +46,12 @@ const User = () => {
     setToken(tokenFromStorage);
   }, [currentPage]);
 
-  const deleteuser = async (ruserid, name) => {
+  const deleteuser = async (id, name) => {
     const confirmDelete = window.confirm(`Are you sure you want to delete the User "${name}"?`);
     if (confirmDelete) {
     try {
       const token = localStorage.getItem('token');
-      const URL = `${baseURL}/user/${ruserid}`;
+      const URL = `${baseURL}/user/${id}`;
       const response = await axios.delete(URL, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -71,10 +71,10 @@ const User = () => {
   }
   };
 
-  const handleIsActive = async (ruserid, isactive) => {
+  const handleIsActive = async (id, isactive) => {
     try {
       const token = localStorage.getItem('token');
-      const URL = `${baseURL}/user/changeIsActive/${ruserid}`;
+      const URL = `${baseURL}/user/changeIsActive/${id}`;
       const response = await axios.put(
         URL,
         {},
@@ -85,11 +85,11 @@ const User = () => {
         }
       );
       if (response.status === 200) {
-        toast.success(`Active status updated for User ${ruserid}`);
+        toast.success(`Active status updated for User ${id}`);
         fetchData(); // Refresh the data after the update
       } else {
-        toast.error(`Failed to update Active status for User ${ruserid}`);
-        console.error(`Failed to update Active status for User ${ruserid}`);
+        toast.error(`Failed to update Active status for User ${id}`);
+        console.error(`Failed to update Active status for User ${id}`);
       }
     } catch (error) {
       toast.error(`An error occurred: ${error.message}`);
@@ -146,14 +146,15 @@ const User = () => {
       <ClipLoader color={'#3d9f49'} size={100} />
       </div>
     )
-    :!token ? (
-        <div className='m-7'>
-          <p className='flex flex-col items-center text-2xl'>You are not logged in. Please log in.</p>
-          <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('/')}>
-            Go to Login
-          </button>
-        </div>
-      ) : (
+    // :!token ? (
+    //     <div className='m-7'>
+    //       <p className='flex flex-col items-center text-2xl'>You are not logged in. Please log in.</p>
+    //       <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('/')}>
+    //         Go to Login
+    //       </button>
+    //     </div>
+    //   ) 
+      : (
         <>
       {/* <Link
         href="/addUser"
@@ -185,7 +186,7 @@ const User = () => {
           </thead>
           <tbody className="text-cyan-900 bg-white text-center">
             {usersData.map((data) => (
-              <tr className="border p-2" key={data.ruserid}>
+              <tr className="border p-2" key={data.id}>
                 <td className="border p-2">{data.name}</td>
                 <td className="border p-2">{data.email}</td>
                 <td className="border p-2">{data.contact}</td>
@@ -195,18 +196,18 @@ const User = () => {
                 </td> */}
 
                 <td  className="flex items-center border  p-2 justify-center gap-4">
-                  <div className="rounded-full p-2 bg-emerald-100 hover:bg-red-700 hover:text-white transition-colors" onClick={() => deleteuser(data.ruserid, data.name)}>
+                  <div className="rounded-full p-2 bg-emerald-100 hover:bg-red-700 hover:text-white transition-colors" onClick={() => deleteuser(data.id, data.name)}>
                     <AiFillDelete />
                   </div>
                   <div className="rounded-full p-2 bg-emerald-100 hover:bg-sky-400 hover:text-white transition-colors">
-                    <Link className="" href={`/user/edit/${data.ruserid}`}>
+                    <Link className="" href={`/user/edit/${data.id}`}>
                       <AiTwotoneEdit/>
                     </Link>
                   </div>
                   </td>
                   <td>
                   <button
-            onClick={() => handleIsActive(data.ruserid, data.isactive)}
+            onClick={() => handleIsActive(data.id, data.isactive)}
             className={`p-2 w-20 rounded-lg hover:text-white transition-colors ${
             data.isactive ? 'bg-emerald-500 text-black' : 'bg-red-500 text-black'
                           }`}>

@@ -209,7 +209,7 @@ const BannerRecipes = () => {
         <>  
           <div className="rounded overflow-hidden m-4">
             <div className="fixed bottom-6 right-10">
-              <Link href="/addRecipes">
+              <Link href="/recipes/add">
                 <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold p-3 rounded-full ">
                   <HiPlus className="text-2xl" />
                 </button>

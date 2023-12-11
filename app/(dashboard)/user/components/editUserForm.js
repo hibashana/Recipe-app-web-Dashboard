@@ -8,7 +8,7 @@ import { ClipLoader } from 'react-spinners';
 // import NavBar from "../NavBar";
 
 export default function EditaUser({
-  ruserid,
+  id,
   name,
   email,
   contact,
@@ -20,7 +20,7 @@ export default function EditaUser({
   const [newContact, setnewContact] = useState(contact);
   const [newUsername, setnewUsername] = useState(username);
   const [newPassword, setnewPassword] = useState(password);
-  // const [newID, setID] = useState(ruserid);
+  // const [newID, setID] = useState(id);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -29,11 +29,11 @@ export default function EditaUser({
   //   const token = localStorage.getItem('token');
 
   //   try {
-  //     // console.log(ruserid);
+  //     // console.log(id);
   //     const response = await axios.put(
   //       passwordURL,
   //       {
-  //         userId: ruserid,
+  //         userId: id,
   //         password: newPassword,
   //       },
   //       {
@@ -63,7 +63,7 @@ export default function EditaUser({
     e.preventDefault();
   
     const token = localStorage.getItem('token');
-    const userURL = `${baseURL}/user/${ruserid}`;
+    const userURL = `${baseURL}/user/${id}`;
 
     try {
       // setLoading(true);
@@ -90,9 +90,11 @@ export default function EditaUser({
       // Check if a new password is provided and update it
 
       // if (newPassword) {
-      //   await handlePasswordUpdate(ruserid, newPassword, token);
+      //   await handlePasswordUpdate(id, newPassword, token);
       // }
-      
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
       router.push('/user');
       // setLoading(false);
     } catch (error) {

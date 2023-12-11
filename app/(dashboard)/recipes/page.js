@@ -12,9 +12,10 @@ import { MdFilterListAlt } from "react-icons/md";
 import tablesize from "../../tablestyle.css";
 import { ClipLoader } from 'react-spinners';
 import { useRouter } from 'next/navigation';
+import { Toaster, toast } from "sonner";
 
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+// import { toast, ToastContainer } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -191,14 +192,15 @@ const Recipes = () => {
       <ClipLoader color={'#3d9f49'} size={100} />
       </div>
     )
-    :!token ? (
-        <div className='m-7'>
-        <p className='flex flex-col items-center text-2xl'>You are not logged in. Please log in.</p>
-        <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('/')}>
-          Go to Login
-        </button>
-      </div>
-    ) : (
+    // :!token ? (
+    //     <div className='m-7'>
+    //     <p className='flex flex-col items-center text-2xl'>You are not logged in. Please log in.</p>
+    //     <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('/')}>
+    //       Go to Login
+    //     </button>
+    //   </div>
+    // ) 
+    : (
       <>  
       <div className="rounded overflow-hidden">
             <div className="fixed bottom-5  right-10">
@@ -337,7 +339,8 @@ const Recipes = () => {
       </div>
       
       {/* <NavBar /> */}
-      <ToastContainer autoClose={3000} />
+      <Toaster richColors autoClose={3000}/>
+      {/* <ToastContainer autoClose={3000} /> */}
       </>
       )}
     </div>

@@ -156,7 +156,7 @@ useEffect(() => {
             ))}
           </tbody>
         </table>
-        <div className="mx-2 flex ">
+        <div className="mx-2 p-2 flex ">
         <button onClick={prevPage} disabled={currentPage === 1} className={`mx-2 p-2 border rounded-lg ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}>
             Previous
           </button>

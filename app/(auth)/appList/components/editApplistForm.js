@@ -2,8 +2,9 @@
 import React, { useState } from "react";
 import axios from "axios"; // Import Axios
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import { baseURL } from "../../../utils/constants";
+import { Toaster, toast } from "sonner";
 // import NavBar from "../NavBar";
 
 export default function Editapp({
@@ -154,6 +155,7 @@ export default function Editapp({
     <button className="block mx-auto bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded" type="submit">
       Update App
     </button>
+    <Toaster richColors  autoClose={3000}/>
     {errorMessage && (
           <div className="text-red-600 text-center m-2">
             {/* bg-red-500 text-white m-1 rounded-md */}
@@ -161,6 +163,7 @@ export default function Editapp({
           </div>
         )}
   </form>
+  
 </div>
 
   );

@@ -2,7 +2,7 @@
 
 // import LoginForm from "./components/login";
 
-import LoginForm from "./(auth)/login/login";
+import LoginForm from "./(auth)/login/page";
 
 // import LoginForm from "./login/page";
 

@@ -9,9 +9,11 @@ import { FaHome } from "react-icons/fa";
 import { AiOutlineHome, AiOutlineBook, AiOutlineTags, AiOutlinePicRight, AiOutlineUser } from 'react-icons/ai';
 import { IoIosArrowBack } from 'react-icons/io';
 import classnames from 'classnames';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+// import { toast, ToastContainer } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
 import { useEffect, useState } from 'react';
+import { Toaster, toast } from "sonner";
+import { deleteCookie } from "cookies-next";
 import AppBar from './AppBar';
 
 
@@ -47,7 +49,9 @@ const NavBar = () => {
       localStorage.removeItem('token');
       localStorage.removeItem('appName');
       localStorage.removeItem('CategoryId');
+      deleteCookie("islogin");
       toast.success('Logged Out');
+      console.log("Logged Out");
       console.log('Logged Out');
       
       // setTimeout(() => {

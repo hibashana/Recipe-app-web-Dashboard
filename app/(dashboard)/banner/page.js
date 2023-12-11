@@ -112,9 +112,9 @@ const banner = () => {
       if (response.status === 200) {
         toast.success(`Banner ${name} has been deleted.`);
         console.log(`Banner ${name} has been deleted.`);
-        setTimeout(() => {
-          window.location.reload();
-        }, 3000); 
+        // setTimeout(() => {
+        //   window.location.reload();
+        // }, 3000); 
       } else {
         
         toast.error(`Failed to delete Banner ${name}`);
@@ -154,9 +154,9 @@ const banner = () => {
         if (response.status === 200) {
           toast.success(`Recipe ${id} has been removed from the banner.`);
           console.log(`Recipe ${id} has been removed from the banner.`);
-          setTimeout(() => {
-            window.location.reload();
-          }, 3000); // Reload the page after 3 seconds
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 3000); // Reload the page after 3 seconds
         } else {
           toast.error(`Failed to remove recipe ${id} from the banner.`);
           console.error(`Failed to remove recipe ${id} from the banner.`);
@@ -175,14 +175,15 @@ const banner = () => {
       <ClipLoader color={'#3d9f49'} size={100} />
       </div>
     )
-    :!token ? (
-        <div className='m-7'>
-          <p className='flex flex-col items-center text-2xl'>You are not logged in. Please log in.</p>
-          <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('/')}>
-            Go to Login
-          </button>
-        </div>
-      ) : (
+    // :!token ? (
+    //     <div className='m-7'>
+    //       <p className='flex flex-col items-center text-2xl'>You are not logged in. Please log in.</p>
+    //       <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('/')}>
+    //         Go to Login
+    //       </button>
+    //     </div>
+      // ) 
+      : (
         <>
         <div className="rounded overflow-hidden m-4">
             <div className="fixed bottom-6 right-10">
@@ -242,17 +243,19 @@ const banner = () => {
                     </td>
                     <td className='border p-2'>
                   {data.Recipes.length} Recipes{' '}
+                  <div className="flex gap-11 flex-row justify-center p-2">
                   <span
-                    className="flex justify-center text-emerald-600 hover:text-blue-500 cursor-pointer"
+                    className="flex flex-row justify-center text-emerald-600 hover:text-blue-500 cursor-pointer"
                     onClick={() => viewRecipes(data.id)}
                   >
                     View
                   </span>
                   <Link href={`/banner/bannerRecipe?bannerId=${data.id}`}>
                     <span className="flex justify-center text-emerald-600 hover:text-blue-500 cursor-pointer">
-                       Add Recipe
+                       Add 
                     </span>
                   </Link>
+                  </div>
                 </td>
                     <td colSpan={2} className="flex items-center justify-center gap-4 p-6">
                       <div className="rounded-full p-2 bg-emerald-100 hover:bg-red-700 hover:text-white transition-colors cursor-pointer" onClick={() => deleteBanner(data.id, data.name)}>
@@ -310,10 +313,10 @@ const banner = () => {
                                   <td></td>
                                   <td className="w-1/4 flex justify-center p-8 text-center flex-row gap-4  " colSpan={3}>
                                     <div className="hover:text-sky-500">
-                                      <Link href={`/ingredients?id=${recipe.rcpid}`}>Ingredients</Link>
+                                      <Link href={`/recipes/${recipe.rcpid}/ingredients`}>Ingredients</Link>
                                     </div>
                                     <div className="hover:text-sky-500">
-                                      <Link href={`/step?id=${recipe.rcpid}`}>Steps</Link>
+                                      <Link href={`/recipes/${recipe.rcpid}/step`}>Steps</Link>
                                     </div>
                                   </td>
                                   <td className='p-4 border'>

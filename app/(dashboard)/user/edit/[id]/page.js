@@ -7,9 +7,12 @@ import EditaUser from "../../components/editUserForm";
 
 
 export default async function EditUser({ params }) {
-  const { ruserid} = params;
-  console.log(`idid=${ruserid}`);
-  const userData = await getUserById(ruserid);
+  // setTimeout(() => {
+  //   window.location.reload();
+  // }, 3000);
+  const { id} = params;
+  console.log(`idid=${id}`);
+  const userData = await getUserById(id);
   console.log(`userData=${userData}`);
   if (!userData) {
     return null; // Render loading or error state while fetching data
@@ -18,6 +21,7 @@ export default async function EditUser({ params }) {
   return <EditaUser{...userData}/>;
 }
 const getUserById = async (idn) => {
+  
   try {
     console.log(`idid=${idn}`);
 
@@ -45,11 +49,11 @@ const getUserById = async (idn) => {
       console.error("User data is undefined");  
     }
 
-    const { ruserid, name,email,contact,username,password,} = user;
-    console.log(`name=${ruserid}`);
+    const { id, name,email,contact,username,password,} = user;
+    console.log(`name=${id}`);
 
     return {
-      ruserid,
+      id,
       name,
       email,
       contact,

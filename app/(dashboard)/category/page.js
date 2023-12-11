@@ -8,8 +8,9 @@ import axios from "axios";
 import Link from "next/link";
 // import NavBar from "../NavBar";
 import { baseURL, imageURL } from "../../utils/constants";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { Toaster, toast } from 'sonner'
+// import { toast, ToastContainer } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 import tablesize from "../../tablestyle.css";
 
@@ -197,6 +198,35 @@ const handlePremiumChange = async (rcpid,name,isPremium) => {
   };
 
 
+  const deleteRecipeFromCategory = async (id, name) => {
+    const confirmDelete = window.confirm(`Are you sure you want to delete the recipe "${name}"?`);
+    if (confirmDelete) {
+      try {
+        const token = localStorage.getItem('token');
+        const URL = `${baseURL}/category/delete_category_recipe/${id}`;
+        const response = await axios.delete(`${URL}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        if (response.status === 200) {
+          toast.success(`Recipe ${name} has been removed from the category.`);
+          console.log(`Recipe ${name} has been removed from the category.`);
+          // fetchData();
+          setTimeout(() => {
+            window.location.reload();
+          }, 3000); // Reload the page after 3 seconds
+        } else {
+          toast.error(`Failed to remove recipe ${name} from the category.`);
+          console.error(`Failed to remove recipe ${name} from the category.`);
+        }
+      } catch (error) {
+        toast.error(`An error occurred: ${error.message}`);
+        console.error(`An error occurred: ${error.message}`);
+      }
+    }
+  };
+
   // const handleRecipesClick = (rcpid) => {
   //   localStorage.setItem('recipesId', rcpid);
   //   console.log(rcpid);
@@ -220,20 +250,7 @@ const handlePremiumChange = async (rcpid,name,isPremium) => {
      <div className="flex h-screen justify-center my-32">
       <ClipLoader color={'#36d7b7'} size={100} />
       </div>
-    )
-    :
-      !token ? (
-        <div className="m-7 ">
-          <p className="flex flex-col items-center text-2xl ">You are not logged in. Please login.</p>
-          <button
-            className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3"
-            type="submit"
-            onClick={() => router.push("/")}
-          >
-            Go to Login
-          </button>
-        </div>
-      ) : (
+    ) : (
         <>
           <div className="rounded overflow-hidden m-4">
             <div className="fixed bottom-6 right-10">
@@ -297,9 +314,11 @@ const handlePremiumChange = async (rcpid,name,isPremium) => {
                                 <th className="border w-1/6">Name</th>
                                 <th className="border w-3/6">Description</th>
                                 <th className="border w-1/6">Premium</th>
-                                <th className="border w-1/6">Action</th>
+                                {/* <th className="border w-1/6">Action</th> */}
                                 <th className=" w-1/6"></th>
                                 <th className="w-1/6"></th>
+                                <th className="border w-1/6">Remove</th>
+                                
                               </tr>
                             </thead>
                             <tbody>
@@ -326,7 +345,7 @@ const handlePremiumChange = async (rcpid,name,isPremium) => {
                                       
                                     </label>
                                   </td>
-                                  <td className="flex flex-row items-center justify-center gap-4 p-8">
+                                  {/* <td className="flex flex-row items-center justify-center gap-4 p-8">
                                     <div
                                       className="rounded-full p-2 bg-emerald-100  hover:bg-red-700 hover:text-white transition-colors"
                                       onClick={() => deleteRecipes(recipe.rcpid, recipe.name)}>
@@ -340,17 +359,26 @@ const handlePremiumChange = async (rcpid,name,isPremium) => {
                                         <AiTwotoneEdit />
                                       </Link>
                                     </div>
-                                  </td>
+                                  </td> */}
                                   <td></td>
                                  
-                                  <td className="w-1/4 flex justify-center text-center flex-row gap-4" colSpan={2}>
+                                  <td className=" w-1/6 p-8 flex justify-center text-center flex-row gap-4" colSpan={2}>
                                     <div className="hover:text-sky-500">
-                                      <Link href={`/ingredients?id=${recipe.rcpid}`}>Ingredients</Link>
+                                      <Link href={`/recipes/${recipe.rcpid}/ingredients`}>Ingredients</Link>
                                     </div>
                                     <div className="hover:text-sky-500">
-                                      <Link href={`/step?id=${recipe.rcpid}`}>Steps</Link>
+                                      <Link href={`/recipes/${recipe.rcpid}/step`}>Steps</Link>
                                     </div>
                                   </td>
+                                  <td className='p-4 border'>
+                                  <div
+                                  
+                               className="w-20 justify-center rounded-full text-red-500 border hover:bg-white border-red-500 transition-colors hover:text-red-700 cursor-pointer"
+                               onClick={() =>deleteRecipeFromCategory(recipe.CategoryRecipes.id, recipe.name)}
+                               >
+                               Remove
+                              </div>
+                              </td>
                                 </tr>
                               ))}
                             </tbody>
@@ -386,7 +414,8 @@ const handlePremiumChange = async (rcpid,name,isPremium) => {
           </div>
 
           {/* <NavBar /> */}
-          <ToastContainer autoClose={3000} />
+          <Toaster richColors autoClose={3000} />
+          {/* <ToastContainer autoClose={3000} /> */}
         </>
       )}
     </div>

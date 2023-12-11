@@ -20,9 +20,10 @@
 
 import { useState } from 'react';
 import axios from 'axios';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+// import { toast, ToastContainer } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/navigation';
+import { Toaster, toast } from "sonner";
 import { baseURL } from '../../../utils/constants';
 // import NavBar from '../NavBar';
 
@@ -150,7 +151,7 @@ const CreateApp = () => {
         >
           Add App
         </button>
-        <ToastContainer autoClose={3000} />
+       
         {/* Add this line to display toasts */}
       </form>
       {errorMessage && (
@@ -160,6 +161,7 @@ const CreateApp = () => {
           </div>
         )}
     </div>
+    <Toaster richColors autoClose={3000}/>
     {/* <NavBar/> */}
   </div>
   

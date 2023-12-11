@@ -19,10 +19,11 @@
 
 import { useState,useEffect } from 'react';
 import axios from 'axios';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+// import { toast, ToastContainer } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/navigation';
 import { baseURL } from '../../../utils/constants';
+import { Toaster, toast } from "sonner";
 // import NavBar from '../NavBar';
 
 const CreateRecipe = () => {
@@ -191,7 +192,7 @@ const CreateRecipe = () => {
       >
         Add Recipe
       </button>
-      <ToastContainer autoClose={3000} />
+     
       {errorMessage && (
           <div className="text-red-600 text-center m-2">
             {/* bg-red-500 text-white m-1 rounded-md */}
@@ -202,6 +203,7 @@ const CreateRecipe = () => {
     
   </div>
   {/* <NavBar/> */}
+  <Toaster richColors  />
 </div>
 
   );

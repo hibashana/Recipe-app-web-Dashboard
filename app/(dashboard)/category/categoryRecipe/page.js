@@ -23,15 +23,17 @@ const CategoryRecipes = () => {
   const [token, setToken] = useState('');
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [loading, setLoading] = useState(true);
- 
+  const [categoryData, setCategoryData] = useState([]);  // Add this line
+  const [categoryId, setCategoryId] = useState('');  // Add this line
+
   const searchParams = useSearchParams();
-  
-  const categoryId = searchParams.get('categoryId');
 
   useEffect(() => {
     fetchData();
     const tokenFromStorage = localStorage.getItem('token');
     setToken(tokenFromStorage);
+    const categoryId = searchParams.get('categoryId');
+    setCategoryId(categoryId);
   }, [currentPage, searchParams]);
 
   const fetchData = async () => {
@@ -43,17 +45,23 @@ const CategoryRecipes = () => {
         selectedFilter === 'premium'
           ? `${baseURL}/recipes/all_by_filter?appID=${appId}&page=${currentPage}&premium=true`
           : selectedFilter === 'nonPremium'
-          ? `${baseURL}/recipes/all_by_filter?appID=${appId}&page=${currentPage}&premium=false`
-          : selectedFilter === 'all'
-          ?`${baseURL}/recipes/all_by_filter?appID=${appId}&page=${currentPage}`
-          : `${baseURL}/recipes/all_by_filter?appID=${appId}&sortBy=name&page=${currentPage}`;
+            ? `${baseURL}/recipes/all_by_filter?appID=${appId}&page=${currentPage}&premium=false`
+            : selectedFilter === 'all'
+              ? `${baseURL}/recipes/all_by_filter?appID=${appId}&page=${currentPage}`
+              : `${baseURL}/recipes/all_by_filter?appID=${appId}&sortBy=name&page=${currentPage}`;
 
       const response = await fetch(url, { cache: 'no-store' });
 
       const data = await response.json();
       setRecipesData(data.data);
       setDataResponse(data);
-      localStorage.setItem('dataId', data.rcpid);
+
+      // Fetch category data
+      const categoryUrl = `${baseURL}/category/all_by_filter?appID=${appId}&page=${currentPage}&categoryId=${categoryId}`;
+      const categoryResponse = await fetch(categoryUrl, { cache: 'no-store' });
+      const categoryData = await categoryResponse.json();
+      setCategoryData(categoryData.data);
+
       setLoading(false);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -98,7 +106,7 @@ const CategoryRecipes = () => {
     }
   };
 
-  const handlePremiumChange = async (rcpid,name,isPremium) => {
+  const handlePremiumChange = async (rcpid, name, isPremium) => {
     try {
       const token = localStorage.getItem('token');
       const URL = `${baseURL}/recipes/change_premium_status/?id=${rcpid}`;
@@ -131,15 +139,17 @@ const CategoryRecipes = () => {
     setCurrentPage(currentPage - 1);
   };
 
-  const addRecipeToCategory = async (rcpid,name) => {
+  const addRecipeToCategory = async (rcpid, name) => {
     try {
       const token = localStorage.getItem('token');
-      const categoryId = searchParams.get('categoryId'); 
+      const categoryId = searchParams.get('categoryId');
+      console.log(categoryId);
+      console.log(rcpid);
       const URL = `${baseURL}/category/create_category_recipe`;
-  
+
       const response = await axios.post(
         URL,
-        { 
+        {
           categoryId: categoryId,
           recipeId: rcpid,
         },
@@ -149,7 +159,7 @@ const CategoryRecipes = () => {
           },
         }
       );
-  
+
       if (response.status === 200) {
         toast.success(`Recipe ${name} has been added to the category.`);
         fetchData();
@@ -163,11 +173,14 @@ const CategoryRecipes = () => {
   };
 
   const deleteRecipeFromCategory = async (id, name) => {
+    console.log(id);
     const confirmDelete = window.confirm(`Are you sure you want to delete the recipe "${name}"?`);
     if (confirmDelete) {
       try {
         const token = localStorage.getItem('token');
+
         const URL = `${baseURL}/category/delete_category_recipe/${id}`;
+
         const response = await axios.delete(`${URL}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -193,137 +206,139 @@ const CategoryRecipes = () => {
   return (
     <div className="flex flex-col">
       {loading ? (
-     <div className="flex h-screen justify-center my-32">
-      <ClipLoader color={'#3d9f49'} size={100} />
-      </div>
-    )
-    :
-      !token ? (
-        <div className='m-7'>
-          <p className='text-2xl'>You are not logged in. Please log in.</p>
-          <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('/')}>
-            Go to Login
-          </button>
+        <div className="flex h-screen justify-center my-32">
+          <ClipLoader color={'#3d9f49'} size={100} />
         </div>
-      ) : (
-        <>  
-          <div className="rounded overflow-hidden m-4">
-            <div className="fixed bottom-6 right-10">
-              <Link href="/addRecipes">
-                <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold p-3 rounded-full ">
-                  <HiPlus className="text-2xl" />
-                </button>
-              </Link>
-            </div>
+      )
+        :
+        !token ? (
+          <div className='m-7'>
+            <p className='text-2xl'>You are not logged in. Please log in.</p>
+            <button className="block mx-auto bg-emerald-600 text-white px-4 py-2 rounded-md m-3" type="submit" onClick={() => router.push('/')}>
+              Go to Login
+            </button>
           </div>
-          <div className='flex p-2'>
-            <div className="flex">
-              <select
-                value={selectedFilter}
-                onChange={(e) => setSelectedFilter(e.target.value)}
-                className="p-2 ml-auto border rounded-md"
-              >
-                <option value="all">All Recipes</option>
-                <option value="premium">Premium Recipes</option>
-                <option value="nonPremium">Free Recipes</option>
-                <option value="sortbyname">Sort by Name</option>
-              </select>
-              <button
-                onClick={applyFilter}
-                className="ml-2 p-2 bg-emerald-600 text-white rounded-md flex items-center "
-              >
-                <MdFilterListAlt className="mr-2" />Filter 
-              </button>
+        ) : (
+          <>
+            <div className="rounded overflow-hidden m-4">
+              <div className="fixed bottom-6 right-10">
+                <Link href="/recipes/add">
+                  <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold p-3 rounded-full ">
+                    <HiPlus className="text-2xl" />
+                  </button>
+                </Link>
+              </div>
+            </div>
+            <div className='flex p-2'>
+              <div className="flex">
+                <select
+                  value={selectedFilter}
+                  onChange={(e) => setSelectedFilter(e.target.value)}
+                  className="p-2 ml-auto border rounded-md"
+                >
+                  <option value="all">All Recipes</option>
+                  <option value="premium">Premium Recipes</option>
+                  <option value="nonPremium">Free Recipes</option>
+                  <option value="sortbyname">Sort by Name</option>
+                </select>
+                <button
+                  onClick={applyFilter}
+                  className="ml-2 p-2 bg-emerald-600 text-white rounded-md flex items-center "
+                >
+                  <MdFilterListAlt className="mr-2" />Filter
+                </button>
               </div>
               <h1 className="text-xl ml-auto items-center font-bold p-2">{dataResponse.totalCount}  Recipes</h1>
-          </div>
-          
-      
-          <div className={tablesize.fullWidthTable}>
-            <table className="w-full table-fixed border p-2 ">
-              <thead>
-                <tr className="border p-2 bg-emerald-600 text-white">
-                  <th className="border w-1/6">Image</th>
-                  <th className="border w-1/6">Name</th>
-                  <th className="border w-3/6">Description</th>
-                  <th className="border w-1/6">Premium</th>
-                  <th className="w-1/6"></th>
-                  <th className="w-1/6"></th>
-                  <th className="border w-1/6">Action</th>
-                </tr>
-              </thead>
-              <tbody className="border text-center bg-white p-2">
-                {recipesData.map((data) => (
-                  <tr className="border p-2" key={data.rcpid}>
-                    <td className="border p-2">
-                      <img src={`${imageURL}${data.image}`} className="w-20 h-20 object-cover" />
-                    </td>
-                    <td className="border p-2">{data.name}</td>
-                    <td className="border p-2">{data.description}</td>
-                    <td className="border p-2">
-                      <label className="flex  cursor-pointer">
-                        <input
-                          className='cursor-pointer'
-                          type="checkbox"
-                          checked={data.premium}
-                          onChange={() => handlePremiumChange(data.rcpid,data.name,data.premium)}
-                        />
-                      </label>
-                    </td>
-                    <td className="border justify-center flex-row gap-4  relative" onClick={() => handleRecipesClick(data.rcpid)} colSpan={2}>
-                      <div className='flex flex-row gap-4 p-2 justify-center'>
-                        <div className="hover:text-sky-500">
-                          <Link href={`/ingredients?id=${data.rcpid}`}>Ingredients</Link>
-                        </div>
-                        <div className="hover:text-sky-500">
-                          <Link href={`/step?id=${data.rcpid}`}>Steps</Link>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="flex flex-col items-center gap-2 p-8">
-  {data.CategoryRecipe && data.CategoryRecipe.some(item => item.id === categoryId) ? (
-    data.CategoryRecipe.map((item) => (
-      item.id === categoryId ? (
-        <div
-          className="w-20 rounded-full text-red-500 border hover:border-red-500 transition-colors hover:text-red-700 justify-center cursor-pointer"
-          key={item.id}
-          onClick={() => deleteRecipeFromCategory(item.CategoryRecipes.id, data.name)}
-        >
-          Remove
-        </div>
-      ) : null
-    ))
-  ) : (
-    <div
-      className="w-20 justify-center rounded-full text-emerald-600 border  hover:border-emerald-600 transition-colors cursor-pointer"
-      onClick={() => addRecipeToCategory(data.rcpid, data.name)}
-    >
-      Add
-    </div>
-  )}
-</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <div className="mt-4 flex">
-              <button onClick={prevPage} disabled={currentPage === 1} className={`mx-2 p-2 border rounded-lg ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                Previous
-              </button>
-              <button
-                onClick={nextPage}
-                disabled={!dataResponse.hasNext}
-                className={`mx-2 p-2 border rounded-lg ${!dataResponse.hasNext ?'opacity-50 cursor-not-allowed' : ''}`}
-              >
-                Next
-              </button>
             </div>
-          </div>
-      
-          {/* <NavBar /> */}
-          <ToastContainer autoClose={3000} />
-        </>
-      )}
+
+
+            <div className={tablesize.fullWidthTable}>
+              <table className="w-full table-fixed border p-2 ">
+                <thead>
+                  <tr className="border p-2 bg-emerald-600 text-white">
+                    <th className="border w-1/6">Image</th>
+                    <th className="border w-1/6">Name</th>
+                    <th className="border w-3/6">Description</th>
+                    <th className="border w-1/6">Premium</th>
+                    <th className="w-1/6"></th>
+                    <th className="w-1/6"></th>
+                    <th className="border w-1/6">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="border text-center bg-white p-2">
+                  {recipesData.map((data) =>
+                  (
+                    <tr className="border p-2" key={data.rcpid}>
+                      <td className="border p-2">
+                        <img src={`${imageURL}${data.image}`} className="w-20 h-20 object-cover" />
+                      </td>
+                      <td className="border p-2">{data.name}</td>
+                      <td className="border p-2">{data.description}</td>
+                      <td className="border p-2">
+                        <label className="flex  cursor-pointer">
+                          <input
+                            className='cursor-pointer'
+                            type="checkbox"
+                            checked={data.premium}
+                            onChange={() => handlePremiumChange(data.rcpid, data.name, data.premium)}
+                          />
+                        </label>
+                      </td>
+                      <td className="border justify-center flex-row gap-4  relative" onClick={() => handleRecipesClick(data.rcpid)} colSpan={2}>
+                        <div className='flex flex-row gap-4 p-2 justify-center'>
+                          <div className="hover:text-sky-500">
+                            <Link href={`/ingredients?id=${data.rcpid}`}>Ingredients</Link>
+                          </div>
+                          <div className="hover:text-sky-500">
+                            <Link href={`/step?id=${data.rcpid}`}>Steps</Link>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="flex flex-col items-center gap-2 p-8">
+                        {data.Categories !== null && data.Categories.some(item => item.ctgyid === categoryId) ? (
+                          data.Categories.map((item) => (
+                            item.ctgyid === categoryId ? (
+                              <div
+                                className="w-20 rounded-full text-red-500 border hover:border-red-500 transition-colors hover:text-red-700 justify-center cursor-pointer"
+                                key={item.ctgyid}
+                                onClick={() => deleteRecipeFromCategory(item.CategoryRecipes.id, data.name)}
+                              >
+                                Remove
+                              </div>
+                            ) : null
+                          ))
+                        ) : (
+                          <div
+                            className="w-20 justify-center rounded-full text-emerald-600 border hover:border-emerald-600 transition-colors cursor-pointer"
+                            onClick={() => addRecipeToCategory(data.rcpid, data.name)}
+                          >
+                            Add
+                          </div>
+                        )}
+                      </td>
+
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <div className="mt-4 flex">
+                <button onClick={prevPage} disabled={currentPage === 1} className={`mx-2 p-2 border rounded-lg ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                  Previous
+                </button>
+                <button
+                  onClick={nextPage}
+                  disabled={!dataResponse.hasNext}
+                  className={`mx-2 p-2 border rounded-lg ${!dataResponse.hasNext ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+
+            {/* <NavBar /> */}
+            <ToastContainer autoClose={3000} />
+          </>
+        )}
     </div>
   );
 };

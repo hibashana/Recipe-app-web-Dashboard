@@ -2,7 +2,8 @@
 import React, { useState } from "react";
 import axios from "axios"; // Import Axios
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
+import { Toaster, toast } from "sonner";
 import { baseURL } from "../../../utils/constants";
 // import NavBar from "../NavBar";
 
@@ -74,6 +75,7 @@ export default function EditCategorylist({
         </button>
         {/* <NavBar /> */}
       </form>
+      <Toaster richColors />
     </div>
   </div>
   

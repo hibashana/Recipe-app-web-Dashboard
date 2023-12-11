@@ -6,6 +6,8 @@ import { FaRegCircleUser } from 'react-icons/fa6';
 import { RiEyeCloseFill, RiEyeFill, RiLockPasswordLine } from 'react-icons/ri';
 import { FaEyeSlash } from 'react-icons/fa';
 import { ClipLoader } from 'react-spinners';
+import { setCookie } from 'cookies-next';
+import { Toaster, toast } from "sonner";
 
 // import LoginLayout from '../login/layout';
 
@@ -64,7 +66,8 @@ export default function LoginForm() {
         console.log('Successful login', data);
 
         setLoading(true);
-        
+        setCookie("islogin", "true");
+        toast.success("Logged In ");
         // setShowLoading(true); // Show loading spinner when redirecting
         router.push('/appList');
       // } else {

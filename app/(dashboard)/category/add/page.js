@@ -118,9 +118,9 @@ const CreateCategory = () => {
             {errorMessage}
           </div>
         )}
-        <Toaster richColors  />
+        
       </form>
-      
+      <Toaster richColors autoClose={3000} />
       {/* <ToastContainer autoClose={3000} /> */}
       {/* <NavBar /> */}
     </div>
