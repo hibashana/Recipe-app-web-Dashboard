@@ -273,10 +273,10 @@ const BannerRecipes = () => {
                     <td className="border justify-center flex-row gap-4  relative" onClick={() => handleRecipesClick(data.rcpid)} colSpan={2}>
                       <div className='flex flex-row gap-4 p-2 justify-center'>
                         <div className="hover:text-sky-500">
-                          <Link href={`/ingredients?id=${data.rcpid}`}>Ingredients</Link>
+                          <Link href={`/recipes/${data.rcpid}/ingredients`}>Ingredients</Link>
                         </div>
                         <div className="hover:text-sky-500">
-                          <Link href={`/step?id=${data.rcpid}`}>Steps</Link>
+                          <Link href={`/recipes/${data.rcpid}/step`}>Steps</Link>
                         </div>
                       </div>
                     </td>

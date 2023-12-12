@@ -92,9 +92,7 @@ export default function EditaUser({
       // if (newPassword) {
       //   await handlePasswordUpdate(id, newPassword, token);
       // }
-      setTimeout(() => {
-        window.location.reload();
-      }, 3000);
+     
       router.push('/user');
       // setLoading(false);
     } catch (error) {
