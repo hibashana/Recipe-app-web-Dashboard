@@ -129,56 +129,56 @@ return (
  (
         <>
           {/* <h1 className="text-center text-xl font-bold">App List</h1> */}
-          <div className="rounded overflow-hidden m-4">
-  <div className="fixed bottom-6 right-10">
-    <Link href="/appList/add">
-      <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold p-3 rounded-full ">
-        <HiPlus className="text-2xl" />
-      </button>
-    </Link>
-  </div>
-</div>
-
-<div className="flex flex-wrap justify-center p-4">
-  {appObjects.map((app) => (
-    <div key={app.id} className="max-w-sm rounded overflow-hidden shadow-lg m-4 w-60">
-      <div className="relative">
-        <img
-          src={`${imageURL}${app.image}`}
-          alt={app.name}
-          className="w-full h-40 object-cover cursor-pointer"
-          onClick={() => handleOnClick(app)}
-        />
-         <div className="absolute top-0 right-0  flex flex-col gap-2 p-2 ">
-    <div className="">
-      <div className=" rounded-full p-2 bg-white  hover:bg-red-700 hover:text-white transition-colors cursor-pointer" onClick={() => deleteApp(app.id, app.name)}>
-        <AiFillDelete />
-      </div>
+            <div className="rounded overflow-hidden m-4">
+    <div className="fixed bottom-6 right-10">
+      <Link href="/appList/add">
+        <button className="bg-emerald-600 hover:bg-green-700 text-white font-bold p-3 rounded-full ">
+          <HiPlus className="text-2xl" />
+        </button>
+      </Link>
     </div>
-    <Link href={`/appList/edit/${app.id}`}>
-      <div className="rounded-full  p-2 bg-white hover:bg-sky-400 hover:text-white transition-colors cursor-pointer">
-        <AiTwotoneEdit />
-      </div>
-    </Link>
   </div>
-</div>
-      <div className="px-6 py-4">
-        <div className="font-bold text-xl mb-2" onClick={() => handleOnClick(app)}>
-          {app.name}
+
+  <div className="flex flex-wrap justify-center p-4">
+    {appObjects.map((app) => (
+      <div key={app.id} className="max-w-sm rounded overflow-hidden shadow-lg m-4 w-60">
+        <div className="relative">
+          <img
+            src={`${imageURL}${app.image}`}
+            alt={app.name}
+            className="w-full h-40 object-cover cursor-pointer"
+            onClick={() => handleOnClick(app)}
+          />
+          <div className="absolute top-0 right-0  flex flex-col gap-2 p-2 ">
+      <div className="">
+        <div className=" rounded-full p-2 bg-white  hover:bg-red-700 hover:text-white transition-colors cursor-pointer" onClick={() => deleteApp(app.id, app.name)}>
+          <AiFillDelete />
         </div>
-        <p className="text-sm mb-2" onClick={() => handleOnClick(app)}>
-          {app.description}
-        </p>
       </div>
-      <Toaster richColors autoClose={3000} />
+      <Link href={`/appList/edit/${app.id}`}>
+        <div className="rounded-full  p-2 bg-white hover:bg-sky-400 hover:text-white transition-colors cursor-pointer">
+          <AiTwotoneEdit />
+        </div>
+      </Link>
     </div>
-  ))}
-</div>
+  </div>
+        <div className="px-6 py-4">
+          <div className="font-bold text-xl mb-2" onClick={() => handleOnClick(app)}>
+            {app.name}
+          </div>
+          <p className="text-sm mb-2" onClick={() => handleOnClick(app)}>
+            {app.description}
+          </p>
+        </div>
+        <Toaster richColors autoClose={3000} />
+      </div>
+    ))}
+  </div>
 
-{/* <ToastContainer autoClose={3000} /> */}
-        </>
-      )}
-    </div>
+  {/* <ToastContainer autoClose={3000} /> */}
+          </>
+        )}
+      </div>
   );
   
 };
