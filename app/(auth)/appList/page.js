@@ -65,7 +65,7 @@ const AppList = () => {
     name: app.name,
     id: app.id,
     image:app.image,
-    description:app.description,
+    description:app.description,  
   }));
 
   // const handleOnClick = (id) => {
